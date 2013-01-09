@@ -1033,6 +1033,23 @@ namespace EveModel
                         ).OrderBy(en => en.Distance).ToList<EveEntity>();
         }
 
+
+        public double getcargousedback()
+        {
+             EveInventoryContainer cargoho2 = Frame.Client.GetPrimaryInventoryWindow.OreHoldOfActiveShip;           //  Container wird erstellt "cargoho" und wird mit aktivem Cargohold verknüpft
+             double usedcargo = cargoho2.UsedCapacity;                                                                     // Variablen werden gesetzt Verbrauchtes Cargo <--
+             return usedcargo;
+           
+        }
+
+        public double getcargofullback()
+        {
+          EveInventoryContainer cargoho2 = Frame.Client.GetPrimaryInventoryWindow.OreHoldOfActiveShip;           //  Container wird erstellt "cargoho" und wird mit aktivem Cargohold verknüpft
+          double fullcargo = cargoho2.UsedCapacity;                                                                     // Variablen werden gesetzt Verbrauchtes Cargo <--
+          return fullcargo;
+
+        }
+
         #region External Resources
         static string _innerspacePath = @"C:\Program Files (x86)\InnerSpace\.NET Programs";
         static System.Runtime.Serialization.Formatters.Binary.BinaryFormatter formatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();

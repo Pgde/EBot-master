@@ -31,10 +31,12 @@ namespace Controllers
         int miningcount = 0;
         long itemzahl = 0;
         long itemwert = 0;
-
-
+        string minersactiv = "Aus";
+        int stationtrip = 0;
         List<string> skilltotrainid = new List<string>();
         List<string> skillZ = new List<string>();
+
+
 
 
 
@@ -58,25 +60,7 @@ namespace Controllers
         int RichPlagioclase = 25;
 
 
-        ////////////////////////////////////////////////////////
-        ///////////          MySql VARIABLEN        ////////
 
-        int stationtrip = 0;
-        int charid;
-        bool charon = false;
-        bool needupdate = false;
-        string row = "";
-        string rowid = "";
-
-        string minersactiv = "Aus";
-        string shipname = "";
-        string stringstate = "";
-        string aktime = "";
-        string starttime = "";
-
-
-        ////////////////////////////////////////////////////////
-        ///////////          MySql VARIABLEN        ////////
 
         public MiningController()
         {
@@ -121,30 +105,12 @@ namespace Controllers
                     Frame.Log(fullcapcargo);
 
 
-                    /////////////////////////////////////////////////////////////////////////////////////////
-
-
-                    ///   MySql INIZALISIERN ///
-
-                    stringstate = _state.ToString();
-                    shipname = Frame.Client.GetActiveShip.GivenName;
-                    charid = Frame.Client.Session.CharId;
-
-
-                    // Test
-
-
-                    /////////////////////////////////////////////////////////////////////////////////////////
-
-
-
 
                     if (Frame.Client.Session.InSpace)                                                                           // Wenn wir im WEltraum sind gehe zur mining State
                     {
                         _state = TravelStates.letzgo;
                         Frame.Log("State zu letzgo");
-                        stringstate = _state.ToString();
-                        break;
+                         break;
                     }
 
 
@@ -152,8 +118,7 @@ namespace Controllers
                     {
                         _state = TravelStates.letzgo;
                         Frame.Log("State zu letzgo");
-                        stringstate = _state.ToString();
-                        break;
+                         break;
                     }
 
 
@@ -161,12 +126,10 @@ namespace Controllers
                     {
                         _state = TravelStates.unload;                                                                               // Abladen
                         Frame.Log("State zu unload");
-                        stringstate = _state.ToString();
                         break;
                     }
                     _state = TravelStates.letzgo;                                                                            //  Losfliegen minen gehen :D
                     Frame.Log("State zu letzgo");
-                    stringstate = _state.ToString();
                     break;
                 /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -204,8 +167,7 @@ namespace Controllers
                         {
                             Frame.Log("TravelState.Warphome");
                             _state = TravelStates.warphome;                                                                     // State um zurück zur Stations Bookmark zu warpen
-                            stringstate = _state.ToString();
-                            break;
+                             break;
                         }
                     }
 
@@ -291,14 +253,12 @@ namespace Controllers
                                 minersactiv = "Aus";
                                 EmptyBelts.Add(currentbelt);
                                 _state = TravelStates.warphome;                                                                     // State um zurück zur Stations Bookmark zu warpen
-                                stringstate = _state.ToString();
                                 break;
                             }
                             else
                             {
                                 minersactiv = "Aus";
                                 _state = TravelStates.warptobelt;                                                                 // Warpe zum nächsten Mining Belt Bookmark
-                                stringstate = _state.ToString();
                                 break;
                             }
                         }
@@ -339,7 +299,6 @@ namespace Controllers
                         }
                     }
                     _state = TravelStates.Mining;                                                                                    // Wieder zu Mining gehen
-                    stringstate = _state.ToString();
                     break;
                 /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -359,8 +318,7 @@ namespace Controllers
                     {                                                                                                                // Wenn ja
                         Frame.Log("In Station angekommen");                                                                          // Log
                         _state = TravelStates.unload;                                                                                // setze state zu unload
-                        stringstate = _state.ToString();
-                        _localPulse = DateTime.Now.AddMilliseconds(GetRandom(4500, 6500));                                           // Warte zwischen 4,5 und 6,5 secunden
+                       _localPulse = DateTime.Now.AddMilliseconds(GetRandom(4500, 6500));                                           // Warte zwischen 4,5 und 6,5 secunden
                         break;                                                                                                      // Breake
                     }                                                                                                               // Wenn nicht in Station
                     if (Frame.Client.GetActiveShip.ToEntity.MovementMode != EveEntity.EntityMovementState.InWarp)                    // UND nicht im Warp
@@ -372,7 +330,6 @@ namespace Controllers
                             station.Dock();                                                                                         // Docke an dieser station/Warp dahin
                             _localPulse = DateTime.Now.AddMilliseconds(GetRandom(3000, 5000));                                      // Warte zwischen 3 und 5 Sekunden
                             _state = TravelStates.warphome;                                                                         // Setze state auf warphome
-                            stringstate = _state.ToString();
                             break;                                                                                                  // break
                         }
                         else
@@ -383,12 +340,10 @@ namespace Controllers
                             statbm.WarpTo();
                             _localPulse = DateTime.Now.AddMilliseconds(GetRandom(4500, 6500));                                     // Warte zwischen 4.5 und 6.5 Secunden
                             _state = TravelStates.warphome;
-                            stringstate = _state.ToString();
-                            break;
+                          break;
                         }
                     }
                     _state = TravelStates.warphome;
-                    stringstate = _state.ToString();
                     break;
                 /////////////////////////////////////////////////////////////////////////////////////////
 
@@ -402,8 +357,7 @@ namespace Controllers
                     }
                     Frame.Log("wechsel state zu mining state");
                     _state = TravelStates.Mining;
-                    stringstate = _state.ToString();
-                    Frame.Log("Starte SQLtimecheck");
+                   Frame.Log("Starte SQLtimecheck");
                     //          sqltimecheck();
                     break;
                 /////////////////////////////////////////////////////////////////////////////////////////
@@ -423,8 +377,7 @@ namespace Controllers
                     {
                         if (Frame.Client.Session.InSpace)
                             _state = TravelStates.warptobelt;
-                        stringstate = _state.ToString();
-                    }
+                      }
 
                     Frame.Log("Starte SQLtimecheck");
                     //      sqltimecheck();
@@ -466,7 +419,6 @@ namespace Controllers
                     {
                         Frame.Log("Fertig gewarpt weiter zur Warping State");
                         _state = TravelStates.warping;
-                        stringstate = _state.ToString();
                         break;
                     }
 
@@ -482,14 +434,12 @@ namespace Controllers
                             belt.WarpTo();
                             _localPulse = DateTime.Now.AddMilliseconds(GetRandom(10000, 15000));
                             _state = TravelStates.warptobelt;
-                            stringstate = _state.ToString();
-                            break;
+                           break;
                         }
                         else
                         {
                             _state = TravelStates.Mining;
-                            stringstate = _state.ToString();
-                        }
+                         }
                     }
 
                     break;
@@ -598,8 +548,7 @@ namespace Controllers
                         Frame.Client.GetPrimaryInventoryWindow.ItemHangar.StackAll();
                         Frame.Log("Stackall");
                         _state = TravelStates.unload;                                                                                              // wiederhole unload
-                        stringstate = _state.ToString();
-                        break;
+                       break;
                     }                                                                                                                               // Wenn kein items mehr da ist / oder da war 
 
 
@@ -607,7 +556,7 @@ namespace Controllers
                     stationtrip = (stationtrip + 1);
                     Frame.Log("keine items mehr wieder losfliegen");                                                                                // Log buchausgabe
                     _state = TravelStates.letzgo;                                                                                                   // Abdocken und losfliegen
-                    stringstate = _state.ToString();
+                  
                     break;
 
 
@@ -628,14 +577,12 @@ namespace Controllers
                         Frame.Log("booky == momentane Loc");
                         Emptysys.Add(bookmaid);
                         _state = TravelStates.changebook;                                                                                                   // Abdocken und losfliegen
-                        stringstate = _state.ToString();
                         break;
                     }
 
                     booky1.SetDestination();
 
                     _state = TravelStates.travStart;
-                    stringstate = _state.ToString();
                     break;
 
 
@@ -663,7 +610,6 @@ namespace Controllers
                     }
 
                     _state = TravelStates.Start;
-                    stringstate = _state.ToString();
                     break;
 
 
@@ -680,51 +626,69 @@ namespace Controllers
                     if (_destinationId == -1 || Frame.Client.Session.LocationId == _destinationId)
                     {
                         _state = TravelStates.ArrivedAtDestination;
-                        stringstate = _state.ToString();
-                        return;
-                    }
-                    EveEntity destEntity = Frame.Client.Entities.Where(ent => ent.Id == _currentDestGateId).FirstOrDefault();
 
-                    if (Frame.Client.Session.LocationId != _currentLocation && Frame.Client.Session.IsItSafe)
-                    {
-                        if (_waitforsessionChange)
+                        EveEntity destEntity = Frame.Client.Entities.Where(ent => ent.Id == _currentDestGateId).FirstOrDefault();
+
+                        if (Frame.Client.Session.LocationId != _currentLocation && Frame.Client.Session.IsItSafe)
                         {
-                            Frame.Log("Session changed");
-                            _localPulse = DateTime.Now.AddMilliseconds(GetRandom(4000, 6000));
-                            _waitforsessionChange = false;
-                            return;
+                            if (_waitforsessionChange)
+                            {
+                                Frame.Log("Session changed");
+                                _localPulse = DateTime.Now.AddMilliseconds(GetRandom(4000, 6000));
+                                _waitforsessionChange = false;
+                                return;
+                            }
+                            _waitforsessionChange = true;
+                            destEntity = Frame.Client.GetNextWaypointStargate();
+                            _currentDestGateId = destEntity.Id;
+                            if (destEntity.Group == Group.Stargate)
+                            {
+                                destEntity.JumpStargate();
+                                Frame.Log("Warping to and jumping through stargate - " + destEntity.Name);
+                            }
+                            else if (destEntity.Group == Group.Station)
+                            {
+                                destEntity.Dock();
+                                Frame.Log("Warping to and docking at station - " + destEntity.Name);
+                            }
+                            _currentLocation = Frame.Client.Session.LocationId;
                         }
-                        _waitforsessionChange = true;
-                        destEntity = Frame.Client.GetNextWaypointStargate();
-                        _currentDestGateId = destEntity.Id;
-                        if (destEntity.Group == Group.Stargate)
-                        {
-                            destEntity.JumpStargate();
-                            Frame.Log("Warping to and jumping through stargate - " + destEntity.Name);
-                        }
-                        else if (destEntity.Group == Group.Station)
-                        {
-                            destEntity.Dock();
-                            Frame.Log("Warping to and docking at station - " + destEntity.Name);
-                        }
-                        _currentLocation = Frame.Client.Session.LocationId;
                     }
+
                     break;
+
                 case TravelStates.ArrivedAtDestination:
                     Frame.Log("Destination reached");
                     _state = TravelStates.letzgo;
-                    stringstate = _state.ToString();
                     break;
 
 
 
             }
 
+
+        }
+
+             public double fullcapcargoback()
+        {
+            double a = fullcapcargo;
+             return a;
+        }
+
+             public double usdcapcargoback()
+             {
+                 double a = usdcapcargo;
+                 return a;
+             }
+
+
+
+
         }
 
 
     }
 
-}
+
 
 

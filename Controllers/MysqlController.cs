@@ -12,7 +12,7 @@ namespace Controllers
     {
         long _destinationId, _currentLocation, _currentDestGateId;
         bool _waitforsessionChange;
-        enum TravelStates { Initialise, Start, Travel, ArrivedAtDestination, sqlsettime, sqlstarttime }
+        enum TravelStates { Initialise, Start, Travel, ArrivedAtDestination, sqlsettime, sqlstarttime, sqlcheck }
 
 
 
@@ -35,6 +35,13 @@ namespace Controllers
         string aktime = "";
         string starttime = "";
 
+        int miningcount = 0;
+        long itemzahl = 0;
+        long itemwert = 0;
+
+
+        double usdcapcargo = 0;
+        double fullcapcargo = 0;
 
         ////////////////////////////////////////////////////////
         ///////////          MySql VARIABLEN        ////////
@@ -69,6 +76,15 @@ namespace Controllers
             {
                 case TravelStates.Initialise:
 
+
+
+                    ///   MySql INIZALISIERN ///
+
+                    stringstate = _state.ToString();
+                    shipname = Frame.Client.GetActiveShip.GivenName;
+                    charid = Frame.Client.Session.CharId;
+
+
                     DateTime currentDate = DateTime.Now;
                     int h = currentDate.Hour;
                     int m = currentDate.Minute;
@@ -83,8 +99,87 @@ namespace Controllers
 
 
 
-                case TravelStates.Start:
+                case TravelStates.sqlcheck:
 
+                    if (Frame.Client.IsUnifiedInventoryOpen == false)                                                          // checken ob das Inventory geöffnet ist
+                    {                                                                                                          // Wenn ja
+                        Frame.Log(Frame.Client.IsUnifiedInventoryOpen);                                                        // Logbuchausgabe ob das inv geöffnet ist False/true
+                        Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenInventory);                                          // Öffnet das Inventory
+                        Frame.Log("Open Cargo of Activ Ship");
+
+                        break;
+                    }
+
+                    Frame.Client.
+       //     fullcapcargo = 
+
+
+
+            string connString = "Server=127.0.0.1;Uid=root;Pwd=;Database=evetest;";
+            MySqlConnection connection = new MySqlConnection(connString);
+             MySqlCommand command = connection.CreateCommand();
+            command.CommandText = "SELECT id FROM evedaten";
+            MySqlDataReader Reader;
+                  connection.Open();
+            Reader = command.ExecuteReader();
+           
+            while (Reader.Read())
+            {
+               string row = "";
+               for (int i = 0; i < Reader.FieldCount; i++)
+                   row = Reader.GetValue(i).ToString();
+                           if (row == charid.ToString())
+                 {
+                     Frame.Log("Gefunden");
+                     charon = true;
+                     rowid = row;
+                 }   
+            }
+            connection.Close();
+
+            connection.Open();
+       
+
+               if (charon == true)
+            {
+               //  sqlsettime();
+                 command.CommandText = "Update evedaten SET id='" + charid.ToString() +"' WHERE id='" + rowid +"'";
+                 command.ExecuteNonQuery();
+                 command.CommandText = "Update evedaten SET name='testjehaha' WHERE id='" + rowid + "'";
+                 command.ExecuteNonQuery();
+                 command.CommandText = "Update evedaten SET state='" + stringstate.ToString() + "' WHERE id='" + rowid + "'";
+                 command.ExecuteNonQuery();
+                 command.CommandText = "Update evedaten SET shipname='test' WHERE id='" + rowid + "'";
+                 command.ExecuteNonQuery();
+                 command.CommandText = "Update evedaten SET cargmax='" +  fullcapcargo.ToString() + "' WHERE id='" + rowid + "'";
+                 command.ExecuteNonQuery();
+                 command.CommandText = "Update evedaten SET cargousd='" + usdcapcargo.ToString() + "' WHERE id='" + rowid + "'";
+                 command.ExecuteNonQuery();
+                 command.CommandText = "Update evedaten SET minersactive='" + minersactiv.ToString() + "' WHERE id='" + rowid + "'";
+                 command.ExecuteNonQuery();
+                 command.CommandText = "Update evedaten SET time='" + aktime.ToString() + "' WHERE id='" + rowid + "'";
+                 command.ExecuteNonQuery();
+                 command.CommandText = "Update evedaten SET itemzahl='" + itemzahl.ToString() + "' WHERE id='" + rowid + "'";
+                 command.ExecuteNonQuery();
+                 command.CommandText = "Update evedaten SET itemwert='" + itemwert.ToString() + "' WHERE id='" + rowid + "'";
+                 command.ExecuteNonQuery();
+                 command.CommandText = "Update evedaten SET starttime='" + starttime.ToString() + "' WHERE id='" + rowid + "'";
+                 command.ExecuteNonQuery();
+                 command.CommandText = "Update evedaten SET stationtrip='" + stationtrip.ToString() + "' WHERE id='" + rowid + "'";
+                 command.ExecuteNonQuery();
+      
+            }
+            if (charon == false)
+            {
+       //         sqlsettime();
+                Frame.Log("Char id nicht Gefunden INSERT INTO");
+                command.CommandText = "INSERT INTO evedaten (id,name,state,shipname,cargmax,cargousd,minersactive,time,itemzahl) VALUES ('" + charid.ToString() + "','Hans','" + stringstate.ToString() + "','shipname','" + usdcapcargo.ToString() + "', '" + fullcapcargo.ToString() + "', '" + minersactiv.ToString() + "','" + aktime.ToString() + "','" + itemwert.ToString() + "', '" + itemzahl.ToString() + "', '" + starttime.ToString() + "','" + stationtrip.ToString() + "')";
+                command.ExecuteNonQuery();                                                                                
+            }
+               connection.Close();
+              // return;
+              _state = TravelStates.Start;
+               break;
 
 
 
