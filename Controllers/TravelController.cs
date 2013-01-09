@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Globalization;
 using EveModel;
+using global::Controllers.states;
 
 namespace Controllers
 {
@@ -11,9 +13,9 @@ namespace Controllers
         
         long _destinationId, _currentLocation, _currentDestGateId;
         bool _waitforsessionChange;
-        enum TravelStates { Initialise, Start, Travel, ArrivedAtDestination }
-
-        TravelStates _state;
+       
+       
+        
 
         public TravelController()
         {
@@ -22,6 +24,7 @@ namespace Controllers
         public TravelController(long destinationId)
             : this()
         {
+           // _States.TravelerState = TravelerState.Initialise;
             _destinationId = destinationId;
         }
 
@@ -31,9 +34,9 @@ namespace Controllers
             {
                 return;
             }
-            switch (_state)
+            switch (_States.TravelerState)
             {
-                case TravelStates.Initialise:
+                case TravelerState.Initialise:
 
 
 
@@ -67,7 +70,7 @@ namespace Controllers
                     if (_destinationId == -1 || Frame.Client.Session.LocationId == _destinationId)
                     {
                         Frame.Log("No destination found, shutting down");
-                        _state = TravelStates.ArrivedAtDestination;
+                        _States.TravelerState = TravelerState.ArrivedAtDestination;
                         return;
                     }
                     if (Frame.Client.GetLastWaypointLocationId() == -1)
@@ -76,10 +79,10 @@ namespace Controllers
                        
                         Frame.Client.SetDestination(_destinationId);
                     }
-                    _state = TravelStates.Start;
+                    _States.TravelerState = TravelerState.Start;
                     break;
-                case TravelStates.Start:
-                    _state = TravelStates.Travel;
+                case TravelerState.Start:
+                    _States.TravelerState = TravelerState.Travel;
                     if (Frame.Client.Session.InStation)
                     {
                         Frame.Client.ExecuteCommand(EveModel.EveCommand.CmdExitStation);
@@ -87,10 +90,10 @@ namespace Controllers
                         _localPulse = DateTime.Now.AddMilliseconds(GetRandom(18000, 25000));
                     }
                     break;
-                case TravelStates.Travel:
+                case TravelerState.Travel:
                     if (_destinationId == -1 || Frame.Client.Session.LocationId == _destinationId)
                     {
-                        _state = TravelStates.ArrivedAtDestination;
+                        _States.TravelerState = TravelerState.ArrivedAtDestination;
                         return;
                     }
                     EveEntity destEntity = Frame.Client.Entities.Where(ent => ent.Id == _currentDestGateId).FirstOrDefault();
@@ -131,7 +134,7 @@ namespace Controllers
                         _currentLocation = Frame.Client.Session.LocationId;
                     }
                     break;
-                case TravelStates.ArrivedAtDestination:
+                case TravelerState.ArrivedAtDestination:
                     Frame.Log("Destination reached");
                     IsWorkDone = true;
                     break;
