@@ -12,7 +12,7 @@ namespace Controllers
     {
         long _destinationId, _currentLocation, _currentDestGateId;
         bool _waitforsessionChange;
-        enum TravelStates { Initialise, Start, Travel, ArrivedAtDestination, sqlsettime, sqlstarttime, sqlcheck }
+        enum TravelStates { Initialise, Start, Travel, ArrivedAtDestination, sqlsettime, sqlstarttime, sqlcheck, sqltimecheck }
 
 
 
@@ -79,7 +79,7 @@ namespace Controllers
 
 
                     ///   MySql INIZALISIERN ///
-
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(20000, 35000));  
                     stringstate = _state.ToString();
                     shipname = Frame.Client.GetActiveShip.GivenName;
                     charid = Frame.Client.Session.CharId;
@@ -91,30 +91,52 @@ namespace Controllers
                     Frame.Log(h + ":" + m);
                     starttime = (h + ":" + m);
 
+ 
+
 
 
                     _state = TravelStates.Start;
                     break;
 
 
-
-
-                case TravelStates.sqlcheck:
-
-                    if (Frame.Client.IsUnifiedInventoryOpen == false)                                                          // checken ob das Inventory geöffnet ist
-                    {                                                                                                          // Wenn ja
-                        Frame.Log(Frame.Client.IsUnifiedInventoryOpen);                                                        // Logbuchausgabe ob das inv geöffnet ist False/true
-                        Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenInventory);                                          // Öffnet das Inventory
-                        Frame.Log("Open Cargo of Activ Ship");
-
-                        break;
-                    }
-
-                    Frame.Client.
-       //     fullcapcargo = 
+                case TravelStates.Start:
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(20000, 35000));  
+                    sqlsettime();
+                    sqlcheck();
+                    break;
 
 
 
+            }
+        }
+
+          public void sqlsettime()
+        {
+
+            DateTime currentDate = DateTime.Now;
+            int h = currentDate.Hour;
+            int m = currentDate.Minute;
+            Frame.Log(h + ":" + m);
+            aktime = (h + ":" + m);
+        }
+
+
+        public void sqlstarttime()
+        {
+
+            DateTime currentDate = DateTime.Now;
+            int h = currentDate.Hour;
+            int m = currentDate.Minute;
+            Frame.Log(h + ":" + m);
+            starttime = (h + ":" + m);
+        }
+
+
+
+        
+    
+        public void sqlcheck()
+        {
             string connString = "Server=127.0.0.1;Uid=root;Pwd=;Database=evetest;";
             MySqlConnection connection = new MySqlConnection(connString);
              MySqlCommand command = connection.CreateCommand();
@@ -142,7 +164,7 @@ namespace Controllers
 
                if (charon == true)
             {
-               //  sqlsettime();
+                 sqlsettime();
                  command.CommandText = "Update evedaten SET id='" + charid.ToString() +"' WHERE id='" + rowid +"'";
                  command.ExecuteNonQuery();
                  command.CommandText = "Update evedaten SET name='testjehaha' WHERE id='" + rowid + "'";
@@ -151,7 +173,7 @@ namespace Controllers
                  command.ExecuteNonQuery();
                  command.CommandText = "Update evedaten SET shipname='test' WHERE id='" + rowid + "'";
                  command.ExecuteNonQuery();
-                 command.CommandText = "Update evedaten SET cargmax='" +  fullcapcargo.ToString() + "' WHERE id='" + rowid + "'";
+                 command.CommandText = "Update evedaten SET cargmax='" + fullcapcargo.ToString() + "' WHERE id='" + rowid + "'";
                  command.ExecuteNonQuery();
                  command.CommandText = "Update evedaten SET cargousd='" + usdcapcargo.ToString() + "' WHERE id='" + rowid + "'";
                  command.ExecuteNonQuery();
@@ -171,45 +193,23 @@ namespace Controllers
             }
             if (charon == false)
             {
-       //         sqlsettime();
+                sqlsettime();
                 Frame.Log("Char id nicht Gefunden INSERT INTO");
                 command.CommandText = "INSERT INTO evedaten (id,name,state,shipname,cargmax,cargousd,minersactive,time,itemzahl) VALUES ('" + charid.ToString() + "','Hans','" + stringstate.ToString() + "','shipname','" + usdcapcargo.ToString() + "', '" + fullcapcargo.ToString() + "', '" + minersactiv.ToString() + "','" + aktime.ToString() + "','" + itemwert.ToString() + "', '" + itemzahl.ToString() + "', '" + starttime.ToString() + "','" + stationtrip.ToString() + "')";
-                command.ExecuteNonQuery();                                                                                
+                command.ExecuteNonQuery();
+                                                                                          
             }
-               connection.Close();
-              // return;
-              _state = TravelStates.Start;
-               break;
+            
+           
+            connection.Close();
+                return;
+            }
+
+       
 
 
 
-                case TravelStates.sqlstarttime:
-
-
-                case TravelStates.sqlsettime:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                case TravelStates.ArrivedAtDestination:
-                    Frame.Log("Destination reached");
-                    IsWorkDone = true;
-                    break;
             }
         }
-    }
-}
+
 

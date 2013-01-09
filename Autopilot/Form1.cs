@@ -48,6 +48,7 @@ namespace EBotPilot
 
         private void button2_Click(object sender, EventArgs e)
         {
+            _manager.AddController(new MysqlController());
             _manager.AddController(new MiningController());
         }
 
