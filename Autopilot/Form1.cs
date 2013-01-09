@@ -50,7 +50,7 @@ namespace EBotPilot
         {
             _manager.AddController(new MysqlController());
             _manager.AddController(new MiningController());
-            _manager.AddController(new SkillController());
+      //      _manager.AddController(new SkillController());
         }
 
         #region Old Code

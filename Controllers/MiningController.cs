@@ -148,6 +148,7 @@ namespace Controllers
                         Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenInventory);                                          // Öffnet das Inventory
                         Frame.Log("Open Cargo of Activ Ship");                                                                 // Logbuchausgabe das das inventory geöffnet wurde
                         _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 3500));                                     // Warte zwischen 2 und 3.5 Secunden
+                        break;
                     }
 
                     if (Frame.Client.IsUnifiedInventoryOpen == true)                                                            // Checken ob Inventory Fenster geöffnet ist 
@@ -157,8 +158,8 @@ namespace Controllers
                         fullcapcargo = cargoho2.Capacity;                                                                        // Variablen werden gesetzen Cargo insgesammt <---
                         Frame.Log(usdcapcargo);
                         Frame.Log(fullcapcargo);
-                        double carggoo = (fullcapcargo * 0.90);
-                        Frame.Log("Maximal ladung(90% vom cargo" + carggoo);
+                        double carggoo = (fullcapcargo * 0.95);
+                        Frame.Log("Maximal ladung(95% vom cargo" + carggoo);
                         if (usdcapcargo > carggoo)                                                                          // Wenn das cargo voll gehe heim
                         {
                             Frame.Log("TravelState.Warphome");
@@ -231,6 +232,7 @@ namespace Controllers
                             Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenInventory);                                          // Öffnet das Inventory
                             Frame.Log("Open Cargo of Activ Ship / Mining");                                                                 // Logbuchausgabe das das inventory geöffnet wurde
                             _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 3500));                                     // Warte zwischen 2 und 3.5 Secunden
+                            break;
                         }
 
                         if (Frame.Client.IsUnifiedInventoryOpen == true)                                                            // Checken ob Inventory Fenster geöffnet ist 
@@ -241,8 +243,8 @@ namespace Controllers
                             fullcapcargo = cargoho3.Capacity;                                                                        // Variablen werden gesetzen Cargo insgesammt <---
                             Frame.Log(" Used Cargo " + usdcapcargo);                                                                // Logausgabe Verbrauchtes Cargo
                             Frame.Log(" Used Cargo " + fullcapcargo);                                                               // Logausgabe Cargo insgesammt
-                            restofcargo = (fullcapcargo * 0.9);                                                                     // Berechne 80% Des gesamten Cargos
-                            Frame.Log(" 90% Cargo entspricht " + restofcargo);                                                       // Logausgabe Cargo insgesammt
+                            restofcargo = (fullcapcargo * 0.95);                                                                     // Berechne 80% Des gesamten Cargos
+                            Frame.Log(" 95% Cargo entspricht " + restofcargo);                                                       // Logausgabe Cargo insgesammt
                             if (usdcapcargo > restofcargo)                                                                          // Wenn das benutze cargo 80% übersteigt
                             {
                                 Frame.Log("");
@@ -308,6 +310,7 @@ namespace Controllers
                         Frame.Log(Frame.Client.IsUnifiedInventoryOpen);                                                        // Logbuchausgabe ob das inv geöffnet ist False/true
                         Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenInventory);                                          // Öffnet das Inventory
                         Frame.Log("Open Cargo of Activ Ship / Mining");                                                                 // Logbuchausgabe das das inventory geöffnet wurde
+                        break;
 
                     }
                     if (Frame.Client.Session.InStation)                                                                             // Bin ich in der station? 
@@ -388,7 +391,8 @@ namespace Controllers
                     {                                                                                                          // Wenn ja
                         Frame.Log(Frame.Client.IsUnifiedInventoryOpen);                                                        // Logbuchausgabe ob das inv geöffnet ist False/true
                         Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenInventory);                                          // Öffnet das Inventory
-                        Frame.Log("Open Cargo of Activ Ship / Mining");                                                                 // Logbuchausgabe das das inventory geöffnet wurde
+                        Frame.Log("Open Cargo of Activ Ship / Mining");
+                        break;                              // Logbuchausgabe das das inventory geöffnet wurde
 
                     }
 

@@ -12,7 +12,7 @@ namespace Controllers
     {
         long _destinationId, _currentLocation, _currentDestGateId;
         bool _waitforsessionChange;
-        enum TravelStates { Initialise, Start, Travel, ArrivedAtDestination, sqlsettime, sqlstarttime, sqlcheck, sqltimecheck }
+        enum TravelStates { Initialise, Start, Travel, ArrivedAtDestination, sqlsettime, sqlstarttime, sqlcheck, sqltimecheck, buyskill }
 
 
         //   List<string> skilltotrainid = new List<string>();        
@@ -92,7 +92,7 @@ namespace Controllers
 
                     //     List<string> skilltotrainid = new List<string>();                                                                                                 // Skill liste die wir brauchen 
                     int skillsinlist = skilltotrainid.Count();
-                    skilltotrainid.Insert(skillsinlist, skillsminingfrigat + " " + "5"); skillsinlist = skilltotrainid.Count();  // Miningfrigate 2
+                    skilltotrainid.Insert(skillsinlist, skillsminingfrigat + " " + "2"); skillsinlist = skilltotrainid.Count();  // Miningfrigate 2
                     skilltotrainid.Insert(skillsinlist, skillmining + " " + "3"); skillsinlist = skilltotrainid.Count(); // Mining 3
                     skilltotrainid.Insert(skillsinlist, skillminingup + " " + "1"); skillsinlist = skilltotrainid.Count(); // Miningupgrade 1
                     skilltotrainid.Insert(skillsinlist, skillsminingfrigat + " " + "3"); skillsinlist = skilltotrainid.Count();  // Mining frigate 3
@@ -112,10 +112,17 @@ namespace Controllers
 
 
                 case TravelStates.Start:
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 3500));  
 
-
-                        List<EveSkill> neueskill2 = Frame.Client.GetMySkills();
-
+                    double debugg = Frame.Client.qlengdouble;
+                    Frame.Log("Debugg float lenge = " + debugg);
+                    if (!Frame.Client.placeinq())
+                    {
+                        Frame.Log("platz in q");
+                        break;
+                    }
+                    List<EveSkill> neueskill2 = Frame.Client.GetMySkills();
+                    List<EveQskill> neueQskill2 = Frame.Client.GetMyQueue();
 
 
                     string buk = skilltotrainid.FirstOrDefault();                                                               // ersten skill inder liste 
@@ -127,12 +134,51 @@ namespace Controllers
                     Frame.Log("Skillz gewuenschter lvl = " + a2);                                                                              // log
                     long? blub = long.Parse(a1);
                     EveSkill bugg = neueskill2.Where(i => i.typeID == blub).FirstOrDefault();
-                    if (bugg != null)
+                    if (bugg == null)
                     {
-
-
+                        Frame.Log("Skill nicht vorhanden muss einkaufen");
+                        // Funktion zum einkaufen schreiben
+                        _state = TravelStates.buyskill;
+                        break;
 
                     }
+                    if (bugg.Skilllvl > int.Parse(a2)) 
+                    {
+                        int remove = Math.Min(skilltotrainid.Count, 1);
+                        skilltotrainid.RemoveRange(0, remove);
+                        Frame.Log("Remove First entry of list ");
+                        break;
+                    }
+
+                    int? bugskilllvl = bugg.Skilllvl;
+                    Frame.Log("Skill vorhanden Level =  " + bugskilllvl);
+                    EveQskill buggy2 = neueQskill2.Where(i => i.typeID == blub).FirstOrDefault();
+                    if (buggy2 == null)
+                    {
+                        Frame.Client.AddSkillToEnd(bugg, bugg.Skilllvl);
+                        Frame.Log("Skill vorhanden aber nicht in der Skillque");
+                        Frame.Log("Skill hinzugefügt");
+
+
+                        break;
+                    }
+                    else
+                    {
+                        EveQskill buggy = neueQskill2.Where(i => i.typeID == blub).OrderByDescending(i => i.Skilllvl).FirstOrDefault();
+                        Frame.Log("Skill level hoechster zuerst " + buggy.Skilllvl);
+                        Frame.Log("DEBUGG  " + buggy.Skilllvl + "  +  " + int.Parse(a2));
+                        if (buggy.Skilllvl < int.Parse(a2))
+                        {
+                            Frame.Client.AddSkillToEnd(bugg, bugg.Skilllvl);
+                            Frame.Log("DEBUGG Aktueller skill level =   " + buggy.Skilllvl + "  + gewünschtes level =  " + int.Parse(a2) + " Skill hinzugefügt ");
+                            break;
+                        }
+                        int remove = Math.Min(skilltotrainid.Count, 1);
+                        skilltotrainid.RemoveRange(0, remove);
+                        Frame.Log("Remove First entry of list ");
+                    }
+
+
                     break;
 
             }

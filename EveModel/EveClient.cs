@@ -836,15 +836,27 @@ namespace EveModel
             }
         }
 
-        public float qlengfloat
+        public double qlengdouble
         {
             get
             {
-                return Frame.Client.GetService("skillqueue").CallMethod("GetTrainingLengthOfQueue", new object[] { }).GetValueAs<float>();
+                double tmp = Frame.Client.GetService("skillqueue").CallMethod("GetTrainingLengthOfQueue", new object[] { }).GetValueAs<double>();
+                TimeSpan tmp2 = TimeSpan.FromTicks((long)tmp);
+                return tmp2.TotalDays;//Frame.Client.GetService("skillqueue").CallMethod("GetTrainingLengthOfQueue", new object[] { }).GetValueAs<double>();
             }
         }
 
+        public bool placeinq()
+        {
 
+            double qlen = qlengdouble;
+             if (qlen < 1)
+             {
+                 return true;
+             }
+            return false;
+
+        }
         public List<EveBookmark> GetMyBookmarks()
         {
             Dictionary<long, EveObject> bms;
