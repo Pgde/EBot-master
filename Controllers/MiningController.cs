@@ -91,11 +91,12 @@ namespace Controllers
 
 
                     if (Frame.Client.IsUnifiedInventoryOpen == false)                                                          // checken ob das Inventory geöffnet ist
-                    {                                                                                                          // Wenn ja
+                    {
+                        Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenOreHoldOfActiveShip);// Wenn ja
                         Frame.Log(Frame.Client.IsUnifiedInventoryOpen);                                                        // Logbuchausgabe ob das inv geöffnet ist False/true
                         Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenInventory);                                          // Öffnet das Inventory
                         Frame.Log("Open Cargo of Activ Ship");                                                                  // Logbuchausgabe das das inventory geöffnet wurde             
-                        _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 3500));                                     // Warte zwischen 2 und 3.5 Secunden
+                        break;
                     }
 
                     EveInventoryContainer cargoho = Frame.Client.GetPrimaryInventoryWindow.OreHoldOfActiveShip;           //  Container wird erstellt "cargoho" und wird mit aktivem Cargohold verknüpft
