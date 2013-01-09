@@ -35,12 +35,7 @@ namespace Controllers
         int stationtrip = 0;
         List<string> skilltotrainid = new List<string>();
         List<string> skillZ = new List<string>();
-
-
-
-
-
-
+     
 
 
         int Veldsparwert = 15;
@@ -481,64 +476,76 @@ namespace Controllers
                         {
                             itemwert = itemwert + (itemzahl * Veldsparwert);
                             Frame.Log(namee + " = " + (itemzahl * Veldsparwert) + " = " + itemwert);
+                            MysqlController.itemwert = itemwert;
                         }
                         if (namee == "Concentrated Veldspar")
                         {
                             itemwert = itemwert + (itemzahl * ConcentratedVeldsparwert);
                             Frame.Log(namee + " = " + (itemzahl * ConcentratedVeldsparwert) + " = " + itemwert);
+                            MysqlController.itemwert = itemwert;
                         }
                         if (namee == "Dense Veldspar")
                         {
                             itemwert = itemwert = itemwert + (itemzahl * DenseVeldsparwert);
                             Frame.Log(namee + " = " + (itemzahl * DenseVeldsparwert) + " = " + itemwert);
+                            MysqlController.itemwert = itemwert;
                         }
 
                         if (namee == "Scordite")
                         {
                             itemwert = itemwert = itemwert + (itemzahl * Scorditewert);
                             Frame.Log(namee + " = " + (itemzahl * Scorditewert) + " = " + itemwert);
+                            MysqlController.itemwert = itemwert;
                         }
                         if (namee == "Condensed Scordite")
                         {
                             itemwert = itemwert = itemwert + (itemzahl * CondensedScordite);
                             Frame.Log(namee + " = " + (itemzahl * CondensedScordite) + " = " + itemwert);
+                            MysqlController.itemwert = itemwert;
                         }
                         if (namee == "Massive Scordite")
                         {
                             itemwert = itemwert = itemwert + (itemzahl * MassiveScordite);
                             Frame.Log(namee + " = " + (itemzahl * MassiveScordite) + " = " + itemwert);
+                            MysqlController.itemwert = itemwert;
                         }
 
                         if (namee == "Pyroxeres")
                         {
                             itemwert = itemwert = itemwert + (itemzahl * Pyroxeres);
                             Frame.Log(namee + " = " + (itemzahl * Pyroxeres) + " = " + itemwert);
+                            MysqlController.itemwert = itemwert;
                         }
                         if (namee == "Solid Pyroxeres")
                         {
                             itemwert = itemwert = itemwert + (itemzahl * SolidPyroxeres);
                             Frame.Log(namee + " = " + (itemzahl * SolidPyroxeres) + " = " + itemwert);
+                            MysqlController.itemwert = itemwert;
                         }
                         if (namee == "Viscous Pyroxeres")
                         {
                             itemwert = itemwert = itemwert + (itemzahl * ViscousPyroxeres);
                             Frame.Log(namee + " = " + (itemzahl * ViscousPyroxeres) + " = " + itemwert);
+                            MysqlController.itemwert = itemwert;
                         }
 
                         if (namee == "Plagioclase")
                         {
                             itemwert = itemwert = itemwert + (itemzahl * Plagioclase);
                             Frame.Log(namee + " = " + (itemzahl * Plagioclase) + " = " + itemwert);
+                            MysqlController.itemwert = itemwert;
                         }
                         if (namee == "Azure Plagioclase")
                         {
                             itemwert = itemwert = itemwert + (itemzahl * AzurePlagioclase);
                             Frame.Log(namee + " = " + (itemzahl * AzurePlagioclase) + " = " + itemwert);
+                            MysqlController.itemwert = itemwert;
                         }
                         if (namee == "Rich Plagioclase")
                         {
                             itemwert = itemwert = itemwert + (itemzahl * RichPlagioclase);
                             Frame.Log(namee + " = " + (itemzahl * RichPlagioclase) + " = " + itemwert);
+                            MysqlController.itemwert = itemwert;
                         }
 
 

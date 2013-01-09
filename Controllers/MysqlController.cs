@@ -36,8 +36,8 @@ namespace Controllers
         string starttime = "";
 
         int miningcount = 0;
-        long itemzahl = 0;
-        long itemwert = 0;
+      //   itemzahl = 0;
+      //   itemwert = 0;
 
 
         double usdcapcargo = 0;
@@ -48,6 +48,9 @@ namespace Controllers
 
 
 
+
+        public static  long itemzahl { get; set; }
+        public static long itemwert { get; set; }
 
 
 
