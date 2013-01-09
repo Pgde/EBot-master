@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{12972130-FC02-4D7B-8E8B-08FDC9EC9D48}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EveModel</RootNamespace>
+    <AssemblyName>EveModel</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\Output\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Lavish.InnerSpace, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9029a3ab4cbe108d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\InnerSpace\Lavish.InnerSpace.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CategoryIds.cs" />
+    <Compile Include="Charslot.cs" />
+    <Compile Include="EveActiveShip.cs" />
+    <Compile Include="EveAgent.cs" />
+    <Compile Include="EveAgentBookmark.cs" />
+    <Compile Include="EveAgentDialogWindow.cs" />
+    <Compile Include="EveAgentMission.cs" />
+    <Compile Include="EveBookmark.cs" />
+    <Compile Include="EveCharacter.cs" />
+    <Compile Include="EveChatWindow.cs" />
+    <Compile Include="EveClient.cs" />
+    <Compile Include="EveCommands.cs" />
+    <Compile Include="EveEntity.cs" />
+    <Compile Include="EveInventoryContainer.cs" />
+    <Compile Include="EveInventoryWindow.cs" />
+    <Compile Include="EveInvType.cs" />
+    <Compile Include="EveItem.cs" />
+    <Compile Include="EveMarketOrder.cs" />
+    <Compile Include="EveMe.cs" />
+    <Compile Include="EveModule.cs" />
+    <Compile Include="EveObject.cs" />
+    <Compile Include="EveOwner.cs" />
+    <Compile Include="EveQskill.cs" />
+    <Compile Include="EveScanResult.cs" />
+    <Compile Include="EveSession.cs" />
+    <Compile Include="eveSkill.cs" />
+    <Compile Include="EveWindow.cs" />
+    <Compile Include="FlagIds.cs" />
+    <Compile Include="Frame.cs" />
+    <Compile Include="GroupIds.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PyCall.cs" />
+    <Compile Include="PyType.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy "$(TargetPath)" "C:\Program Files (x86)\InnerSpace\.NET Programs" /y</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
