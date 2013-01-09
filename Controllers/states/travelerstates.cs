@@ -8,10 +8,10 @@ namespace Controllers.states
  
     public enum TravelerState
     {
-        Idle,
-        Traveling,
-        AtDestination,
-        Error
+        Initialise,
+        Start,
+        Travel,
+        ArrivedAtDestination
     
     }
 
