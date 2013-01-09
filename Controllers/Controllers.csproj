@@ -53,7 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseController.cs" />
-    <Compile Include="Class1.cs" />
+    <Compile Include="skillcontroller.cs" />
     <Compile Include="MysqlController.cs" />
     <Compile Include="MiningController.cs" />
     <Compile Include="EBotManager.cs" />
