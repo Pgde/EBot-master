@@ -85,6 +85,31 @@ namespace Controllers
                 case TravelStates.Initialise:
 
 
+
+                    /*
+                    List<EveMarketOrder> markyord = Frame.Client.GetCachedOrders();
+                    EveMarketOrder marketitem = markyord.Where(x => x.Name.Contains("Scordite")).OrderByDescending(x => x.jumps).LastOrDefault();
+                              
+                    Frame.Log("Marketitem Name =  " + marketitem.Name);                                                                                                // Funktion für verkaufen infos
+                    Frame.Log("Marketitem Price =  " + marketitem.price);
+                    Frame.Log("Marketitem Volentered =  " + marketitem.volEntered);
+                    Frame.Log("Marketitem Remain =  " + marketitem.volRemaining);
+                    Frame.Log("Marketitem OrderId =  " + marketitem.orderID);
+                    Frame.Log("Marketitem Jumpes =  " + marketitem.jumps);
+*/
+
+                    List<EveItem> bugitems = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;
+                                                                   
+                        EveItem itemZ = items.OrderBy(x => x.ItemId).FirstOrDefault();                                                            
+                        itemzahl = (itemZ.Quantity);
+                        Frame.Log("itemzahl = " + itemzahl);
+                        string namee = itemZ.TypeName;
+                        Frame.Log("givenname = " + namee);
+
+
+           
+
+
                     if (Frame.Client.IsUnifiedInventoryOpen == false)                                                          // checken ob das Inventory geöffnet ist
                     {
                         Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenOreHoldOfActiveShip);// Wenn ja
