@@ -923,6 +923,15 @@ namespace EveModel
         }
 
 
+        //def InjectSkillIntoBrain(self, invItems):     untested
+
+        public void InjectSkillIntoBrain(List<EveItem> invitems)
+        {
+            Frame.Client.GetService("menu").CallMethod("InjectSkillIntoBrain", new object[] { invitems });
+            return;
+        }
+
+
 
         public List<EveQskill> GetMyQueue()
         {
