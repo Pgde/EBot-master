@@ -1115,6 +1115,22 @@ namespace EveModel
             return true;
         }
 
+
+
+        public bool getdronbay()
+        {
+            List<EveWindow> mywindow;
+            mywindow = Frame.Client.GetWindows;
+            EveWindow winni;
+
+            winni = mywindow.Where(x => x.Name.Contains("ShipDroneBay")).FirstOrDefault();
+            if (winni == null)
+            {
+                Frame.Log("dronebay name nicht gefunden");
+                return false;
+            }
+            return true;
+        }
       
    
 

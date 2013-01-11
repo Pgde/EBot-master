@@ -101,6 +101,19 @@ namespace Controllers
                 /////////////////////////////////////////////////////////////////////////////////////////
                 case TravelStates.Initialise:
     
+           //         Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenDroneBayOfActiveShip);
+       /*
+                     List<EveWindow> mywindow;
+                  mywindow = Frame.Client.GetWindows;
+                  foreach (EveWindow tmp in mywindow)
+                  {
+                      Frame.Log("window name =  " + tmp.Name);
+                  }
+                    */
+          
+        
+
+
 
                     if (Frame.Client.getoreopen() == false)
                     {
@@ -175,6 +188,7 @@ namespace Controllers
                             if (Frame.Client.GetActiveShip.DronesInBay < 0 && DroneController.dronen == true)
                             {
                                 _States.DroneState = states.DroneState.dronesback;
+                                break;
                             }
                             Frame.Log("TravelState.Warphome");
                             _state = TravelStates.warphome;                                                                     // State um zurück zur Stations Bookmark zu warpen
@@ -191,11 +205,16 @@ namespace Controllers
                     }
                     if (targetda == false)
                     {
-                        _States.DroneState = states.DroneState.dronesback;
+                 //       _States.DroneState = states.DroneState.dronesback;
                         targetast = null;
                     }
                     if (targetast == null)
                     {
+                        if (Frame.Client.GetActiveShip.DronesInBay < 0 && DroneController.dronen == true)
+                        {
+                            _States.DroneState = states.DroneState.dronesback;
+                            break;
+                        }
                         Frame.Log("suche asteroiden");
                         targetast = test3.Where(i =>
                         i.Distance < 65000
@@ -263,6 +282,7 @@ namespace Controllers
                                 if (Frame.Client.GetActiveShip.DronesInBay < 0 && DroneController.dronen == true)
                                 {
                                     _States.DroneState = states.DroneState.dronesback;
+                                    break;
                                 }
                                 Frame.Log("");
                                 minersactiv = "Aus";
@@ -275,6 +295,7 @@ namespace Controllers
                                 if (Frame.Client.GetActiveShip.DronesInBay < 0 && DroneController.dronen == true)
                                 {
                                     _States.DroneState = states.DroneState.dronesback;
+                                    break;
                                 }
                                 minersactiv = "Aus";
                                 _state = TravelStates.warptobelt;                                                                 // Warpe zum nächsten Mining Belt Bookmark
@@ -298,6 +319,7 @@ namespace Controllers
                         if (Frame.Client.GetActiveShip.DronesInBay < 0 && DroneController.dronen == true)
                         {
                             _States.DroneState = states.DroneState.dronesback;
+                            break;
                         }
                         if (Frame.Client.GetActiveTargetId == -1)
                         {

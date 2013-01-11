@@ -34,6 +34,13 @@ namespace Controllers
             switch (_States.DroneState)
             {
                 case DroneState.Initialise:
+
+                    if (Frame.Client.getdronbay() == false)
+                    {
+                        Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenDroneBayOfActiveShip);
+                        break;
+                    }
+
                     if (Frame.Client.Session.InStation == true)
                     {
                          _localPulse = DateTime.Now.AddMilliseconds(GetRandom(3000, 3500));
@@ -58,7 +65,13 @@ namespace Controllers
 
 
                 case DroneState.Startdrones:
+                   
                  _localPulse = DateTime.Now.AddMilliseconds(GetRandom(3000, 3500));
+               if (Frame.Client.getdronbay() == false)
+                 {
+                     Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenDroneBayOfActiveShip);
+                     break;
+                 }
                  dronesinbay = Frame.Client.GetActiveShip.DronesInBay;
                  if (dronesinbay > 0)
                  {
