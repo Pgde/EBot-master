@@ -90,27 +90,9 @@ namespace Controllers
                 case TravelStates.Initialise:
 
 
-                  Frame.Client.refreshorders(minertest);
-                  List<EveMarketOrder> markyord = Frame.Client.GetCachedOrders();
-
-                  List<EveMarketOrder> marketitemZ = markyord.Where(x => x.typeID == minertest).Where(x => x.jumps == 0).Where(x => x.bid == true).ToList();
-                 EveMarketOrder marketitem = marketitemZ.OrderByDescending(x => x.price).LastOrDefault();
-                 
-                 if (marketitemZ == null)
-                 {
-                     marketitemZ = markyord.Where(x => x.typeID == minertest).OrderByDescending(x => x.jumps).Where(x => x.bid == true).ToList();
-                     marketitem = marketitemZ.OrderByDescending(x => x.price).LastOrDefault();
-                 }
-
-                 Frame.Log("Marketitem Name =  " + marketitem.Name);                                                                                                // Funktion für verkaufen infos
-                 Frame.Log("Marketitem Price =  " + marketitem.price);
-                 Frame.Log("Marketitem Volentered =  " + marketitem.volEntered);
-                 Frame.Log("Marketitem Remain =  " + marketitem.volRemaining);
-                 Frame.Log("Marketitem OrderId =  " + marketitem.orderID);
-                 Frame.Log("Marketitem Jumpes =  " + marketitem.jumps);
-           
 
 
+                    Frame.Client.OreHoldOfActiveShip();
                     if (Frame.Client.IsUnifiedInventoryOpen == false)                                                          // checken ob das Inventory geöffnet ist
                     {
                         Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenOreHoldOfActiveShip);// Wenn ja
@@ -174,7 +156,7 @@ namespace Controllers
                         _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 3500));                                     // Warte zwischen 2 und 3.5 Secunden
                         break;
                     }
-
+                    Frame.Client.OreHoldOfActiveShip();
                     if (Frame.Client.IsUnifiedInventoryOpen == true)                                                            // Checken ob Inventory Fenster geöffnet ist 
                     {                                                                                                           // Wenn ja
                         EveInventoryContainer cargoho2 = Frame.Client.GetPrimaryInventoryWindow.OreHoldOfActiveShip;           //  Container wird erstellt "cargoho" und wird mit aktivem Cargohold verknüpft
@@ -258,7 +240,7 @@ namespace Controllers
                             _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 3500));                                     // Warte zwischen 2 und 3.5 Secunden
                             break;
                         }
-
+                        Frame.Client.OreHoldOfActiveShip();
                         if (Frame.Client.IsUnifiedInventoryOpen == true)                                                            // Checken ob Inventory Fenster geöffnet ist 
                         {                                                                                                           // Wenn ja
 
@@ -470,8 +452,7 @@ namespace Controllers
 
 
                 case TravelStates.unload:
-
-
+                    Frame.Client.OreHoldOfActiveShip();
                     if (Frame.Client.IsUnifiedInventoryOpen == false)                                                          // checken ob das Inventory geöffnet ist
                     {
                         Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenInventory); // Wenn ja
@@ -576,7 +557,7 @@ namespace Controllers
                             MysqlController.itemwert = itemwert;
                         }
 
-
+                        Frame.Client.GetItemHangar();
                         Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Add(itemZ);                                                               // und füge es dem itemshangar hinzu
                         items.Remove(itemZ);
                         Frame.Client.GetPrimaryInventoryWindow.ItemHangar.StackAll();
@@ -597,6 +578,7 @@ namespace Controllers
                         
                         if (itemsZZ != null)
                         {
+                            
                             int verkaufsintemszahl = (itemsZZ.Quantity);
                             sellitemsZ(verkaufsintemszahl, itemsZZ);
                             Frame.Log("Verkaufe itemZZ typ id =  " + itemsZZ.TypeId);
@@ -724,7 +706,9 @@ namespace Controllers
 
         public void buyitems(int typid,int menge)
         {
+            Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenMarket);
 
+            Frame.Client.refreshorders(typid);
             List<EveMarketOrder> markyord = Frame.Client.GetCachedOrders();
 
             List<EveMarketOrder> marketitemZ = markyord.Where(x => x.typeID == typid).Where(x => x.jumps == 0).Where(x => x.bid == false).ToList();
@@ -756,6 +740,7 @@ namespace Controllers
 
              public void sellitemsZ(int menge, EveItem typeid)
              {
+              
                  Frame.Client.refreshorders(typeid);
                  List<EveMarketOrder> markyord = Frame.Client.GetCachedOrders();
 
@@ -764,9 +749,10 @@ namespace Controllers
 
                  if (marketitemZ == null)
                  {
-                     marketitemZ = markyord.Where(x => x.typeID == typeid.TypeId).OrderByDescending(x => x.jumps).Where(x => x.bid == false).ToList();
+                     marketitemZ = markyord.Where(x => x.typeID == typeid.TypeId).OrderByDescending(x => x.jumps).Where(x => x.bid == true).ToList();
                      marketitem = marketitemZ.OrderByDescending(x => x.price).FirstOrDefault();
                  }
+
 
                  Frame.Log("Marketitem Name =  " + marketitem.Name);                                                                                                // Funktion für verkaufen infos
                  Frame.Log("Marketitem Price =  " + marketitem.price);

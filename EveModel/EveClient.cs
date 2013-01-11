@@ -629,6 +629,7 @@ namespace EveModel
         {
             return IsUnifiedInventoryOpen ? GetPrimaryInventoryWindow.ShipHangar : null;
         }
+
         #endregion
 
         #region Scanner
