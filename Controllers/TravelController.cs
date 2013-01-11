@@ -54,10 +54,12 @@ namespace Controllers
                 //    {
                   //      break;
                    // }
-                    List<EveItem> items = new List<EveItem>();
-                    items = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;
-                    Frame.Client.tryfit(items);
-                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2500, 5000));
+                //    List<EveItem> items = new List<EveItem>();
+               //     items = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;
+                //    Frame.Client.tryfit(items);
+
+                    Frame.Client.StripFitting(Frame.Client.GetActiveShip.ItemId);
+                _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2500, 5000));
                    
             //    test3 =   Frame.Client.GetCharslots();
            //         if (Frame.Client.selectchar("teslon mawa"))

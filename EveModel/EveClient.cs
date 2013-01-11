@@ -922,6 +922,16 @@ namespace EveModel
             return;
         }
 
+        // self.invCache.GetInventoryFromId(shipID).StripFitting()   tested/working
+
+        public void StripFitting(long shipid)
+        {
+            EveObject tmp = new EveObject();
+
+            tmp = Frame.Client.GetService("invCache").CallMethod("GetInventoryFromId", new object[] { shipid }).GetValueAs<EveObject>();
+                tmp.CallMethod("StripFitting", new object[] { });
+                return;
+        }
 
         //def InjectSkillIntoBrain(self, invItems):     untested
 
