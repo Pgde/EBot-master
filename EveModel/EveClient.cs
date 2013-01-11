@@ -904,33 +904,50 @@ namespace EveModel
         //  def TryFit(self, invItems, shipID = None):  tested/working
         public bool tryfit(List<EveItem> invitems)
         {
-            Frame.Client.GetService("menu").CallMethod("TryFit", new object[] { invitems, GetActiveShip.ItemId });
-            return true;
-        }
+            if (Frame.Client.Session.InStation)
+            {
+                Frame.Client.GetService("menu").CallMethod("TryFit", new object[] { invitems, GetActiveShip.ItemId });
+                return true;
+            }
+            return false
+            }
 
         //  def TryFit(self, invItems, shipID = None):  tested/working
         public bool tryfit(List<EveItem> invitems, long shipid)
         {
-            Frame.Client.GetService("menu").CallMethod("TryFit", new object[] { invitems, shipid });
-            return true;
+            if (Frame.Client.Session.InStation)
+            {
+                Frame.Client.GetService("menu").CallMethod("TryFit", new object[] { invitems, shipid });
+                return true;
+            }
+            return false
         }
 
         //def AssembleShip(self, invItems):     untested, should work
-        public void AssembleShip(List<EveItem> invitems)
+        public bool AssembleShip(List<EveItem> invitems)
         {
-            Frame.Client.GetService("menu").CallMethod("AssembleShip", new object[] { invitems });
-            return;
+            if (Frame.Client.Session.InStation)
+            {
+                Frame.Client.GetService("menu").CallMethod("AssembleShip", new object[] { invitems });
+                return true;
+            }
+            return false;
         }
 
         // self.invCache.GetInventoryFromId(shipID).StripFitting()   tested/working
 
-        public void StripFitting(long shipid)
+        public bool StripFitting(long shipid)
         {
-            EveObject tmp = new EveObject();
 
-            tmp = Frame.Client.GetService("invCache").CallMethod("GetInventoryFromId", new object[] { shipid }).GetValueAs<EveObject>();
+            if (Frame.Client.Session.InStation)
+            {
+                EveObject tmp = new EveObject();
+
+                tmp = Frame.Client.GetService("invCache").CallMethod("GetInventoryFromId", new object[] { shipid }).GetValueAs<EveObject>();
                 tmp.CallMethod("StripFitting", new object[] { });
-                return;
+                return true;
+            }
+            return false;
         }
 
         //def InjectSkillIntoBrain(self, invItems):     untested
