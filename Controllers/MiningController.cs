@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using EveModel;
 using MySql.Data.MySqlClient;
+using Controllers.states;
 
 
 namespace Controllers
@@ -100,12 +101,8 @@ namespace Controllers
                 /////////////////////////////////////////////////////////////////////////////////////////
                 case TravelStates.Initialise:
 
+                    
 
-                   droneninbay =  Frame.Client.GetActiveShip.DronesInBay;
-                   if (droneninbay == 0)
-                   {
-                       dronen = false;
-                   }
                     
                     Frame.Client.OreHoldOfActiveShip();
                     if (Frame.Client.IsUnifiedInventoryOpen == false)                                                          // checken ob das Inventory geöffnet ist
@@ -388,6 +385,7 @@ namespace Controllers
                 case TravelStates.letzgo:
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(18000, 50000));
                     targetast = null;                                                                                       // Setze Astroiden Target == Null
+                    _States.DroneState = DroneState.Startdrones;
                     if (Frame.Client.Session.InStation)
                     {
 

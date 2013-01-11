@@ -1013,6 +1013,50 @@ namespace EveModel
             return true;
         }
 
+        
+        public void Getandopenwindow(string name)
+        {
+            List<EveWindow> mywindow;
+            mywindow = Frame.Client.GetWindows;
+            EveWindow winni;
+            if (Frame.Client.Session.InSpace == true)
+            {
+                mywindow = Frame.Client.GetWindows;
+                winni = mywindow.Where(x => x.Name.Contains("InventorySpace")).FirstOrDefault();
+                if (winni == null)
+                {
+                    Frame.Log("Kein inv gefunden öffne");
+                    Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenInventory);
+                }
+            }
+            if (Frame.Client.Session.InStation == true)
+            {
+                mywindow = Frame.Client.GetWindows;
+                winni = mywindow.Where(x => x.Name.Contains("InventoryStation")).FirstOrDefault();
+                if (winni == null)
+                {
+                    Frame.Log("Kein inv gefunden öffne");
+                    Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenInventory);
+                }
+             }
+            mywindow = Frame.Client.GetWindows;
+            winni = mywindow.Where(x => x.Name.Contains(name)).FirstOrDefault();
+            if (name == "Orehold" && winni == null)
+            {
+                Frame.Log("Öffne Orehold");
+                Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenOreHoldOfActiveShip);
+                return;
+            }
+            if (name == "StationItems" && winni == null)
+            {
+                Frame.Log("Öffne Itemhanger");
+                Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenHangarFloor);
+                return;
+            }
+            Frame.Log("Kein Befehl gefunden oder schon offen");
+
+            return;
+        }
       
    
 
