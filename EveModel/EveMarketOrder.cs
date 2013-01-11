@@ -81,5 +81,14 @@ namespace EveModel
             }
             Frame.Client.GetService("marketQuote").CallMethod("SellStuff", new object[] { stationID, typeID, itemsell.ItemId, price, quant });
         }
+
+
+
+        /*
+         * rangeConstellation = 4
+rangeRegion = 32767
+rangeSolarSystem = 0
+rangeStation = -1
+          */
     }
 }
