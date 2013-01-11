@@ -90,7 +90,7 @@ namespace Controllers
                     break;
 
                 case DroneState.dronesback:
-                    if (Frame.Client.GetActiveShip.DronesInBay != 0)
+                    if (Frame.Client.GetActiveShip.DronesInBay < 2)
                     {
                         _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                         Frame.Log("Hole dronen zurück");

@@ -184,8 +184,8 @@ namespace Controllers
                         Frame.Log("Maximal ladung(95% vom cargo" + carggoo);
                         if (usdcapcargo > carggoo)                                                                          // Wenn das cargo voll gehe heim
                         {
-                            
-                            if (Frame.Client.GetActiveShip.DronesInBay < 0 && DroneController.dronen == true)
+
+                            if (Frame.Client.GetActiveShip.DronesInBay < 2 && DroneController.dronen == true)
                             {
                                 _States.DroneState = states.DroneState.dronesback;
                                 break;
@@ -210,7 +210,7 @@ namespace Controllers
                     }
                     if (targetast == null)
                     {
-                        if (Frame.Client.GetActiveShip.DronesInBay < 0 && DroneController.dronen == true)
+                        if (Frame.Client.GetActiveShip.DronesInBay < 2 && DroneController.dronen == true)
                         {
                             _States.DroneState = states.DroneState.dronesback;
                             break;
@@ -279,7 +279,7 @@ namespace Controllers
                             Frame.Log(" 95% Cargo entspricht " + restofcargo);                                                       // Logausgabe Cargo insgesammt
                             if (usdcapcargo > restofcargo)                                                                          // Wenn das benutze cargo 80% übersteigt
                             {
-                                if (Frame.Client.GetActiveShip.DronesInBay < 0 && DroneController.dronen == true)
+                                if (Frame.Client.GetActiveShip.DronesInBay < 2 && DroneController.dronen == true)
                                 {
                                     _States.DroneState = states.DroneState.dronesback;
                                     break;
@@ -292,7 +292,7 @@ namespace Controllers
                             }
                             else
                             {
-                                if (Frame.Client.GetActiveShip.DronesInBay < 0 && DroneController.dronen == true)
+                                if (Frame.Client.GetActiveShip.DronesInBay < 2 && DroneController.dronen == true)
                                 {
                                     _States.DroneState = states.DroneState.dronesback;
                                     break;
@@ -316,17 +316,15 @@ namespace Controllers
                                 break;
                             }
                         }
-                        if (Frame.Client.GetActiveShip.DronesInBay < 0 && DroneController.dronen == true)
-                        {
-                            _States.DroneState = states.DroneState.dronesback;
-                            break;
-                        }
+                     
                         if (Frame.Client.GetActiveTargetId == -1)
                         {
                             if (!targetast.IsBeingTargeted)
                             {
-                                targetast.LockTarget();                                                                                 // Target Locken
+                                targetast.LockTarget();
+                                _States.DroneState = states.DroneState.Startdrones;   // Target Locken
                                 Frame.Log("Locke Target");
+                                break;
                             }
                         }
                         ////// Miner
@@ -336,7 +334,8 @@ namespace Controllers
                         int cnt = minerlist.Where(i => (i.IsActive == true)).Count();
                         if (minerlist.Count > cnt)
                         {
-                            _States.DroneState = states.DroneState.Startdrones;
+                          
+                         //   _States.DroneState = states.DroneState.Startdrones;
                             if (minersactiv == "Aus") { minersactiv = "An"; }
 
                             minerlist.Where(i => (i.IsActive == false)).FirstOrDefault().Activate(targetast.Id);
