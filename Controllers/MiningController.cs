@@ -36,7 +36,18 @@ namespace Controllers
         List<string> skilltotrainid = new List<string>();
         List<string> skillZ = new List<string>();
 
-        bool sellitems = false;
+
+        /////////////////////////////////////////////                           Dronen
+
+        int dronenanzahl = 0;
+        int droneninbay = 0;
+
+
+
+        /////////////////////////////////////////////                           Verkaufspreise ca.
+
+
+
 
         int Veldsparwert = 15;
         int ConcentratedVeldsparwert = 15;
@@ -101,8 +112,8 @@ namespace Controllers
                         Frame.Log("Open Cargo of Activ Ship");                                                                  // Logbuchausgabe das das inventory geöffnet wurde             
                         break;
                     }
-
-                    EveInventoryContainer cargoho = Frame.Client.GetPrimaryInventoryWindow.OreHoldOfActiveShip;           //  Container wird erstellt "cargoho" und wird mit aktivem Cargohold verknüpft
+                    Frame.Client.OreHoldOfActiveShip();
+                   EveInventoryContainer cargoho = Frame.Client.GetPrimaryInventoryWindow.OreHoldOfActiveShip;           //  Container wird erstellt "cargoho" und wird mit aktivem Cargohold verknüpft
                     usdcapcargo = cargoho.UsedCapacity;                                                                     // Variablen werden gesetzt Verbrauchtes Cargo <--
                     fullcapcargo = cargoho.Capacity;                                                                        // Variablen werden gesetzen Cargo insgesammt <---
                     Frame.Log(usdcapcargo);
@@ -452,6 +463,7 @@ namespace Controllers
 
 
                 case TravelStates.unload:
+               
                     Frame.Client.OreHoldOfActiveShip();
                     if (Frame.Client.IsUnifiedInventoryOpen == false)                                                          // checken ob das Inventory geöffnet ist
                     {
@@ -711,12 +723,12 @@ namespace Controllers
             Frame.Client.refreshorders(typid);
             List<EveMarketOrder> markyord = Frame.Client.GetCachedOrders();
 
-            List<EveMarketOrder> marketitemZ = markyord.Where(x => x.typeID == typid).Where(x => x.jumps == 0).Where(x => x.bid == false).ToList();
+            List<EveMarketOrder> marketitemZ = markyord.Where(x => x.typeID == typid).Where(x => x.jumps < 5).Where(x => x.bid == false).Where(x => x.range == -1).ToList();
             EveMarketOrder marketitem = marketitemZ.OrderByDescending(x => x.price).LastOrDefault();
 
             if (marketitemZ == null)
             {
-                marketitemZ = markyord.Where(x => x.typeID == minertest).OrderByDescending(x => x.jumps).Where(x => x.bid == false).ToList();
+                marketitemZ = markyord.Where(x => x.typeID == minertest).OrderByDescending(x => x.jumps).Where(x => x.bid == false).Where(x => x.range == -1).ToList();
                 marketitem = marketitemZ.OrderByDescending(x => x.price).LastOrDefault();
             }
             if (marketitemZ == null)
@@ -742,19 +754,23 @@ namespace Controllers
              public void sellitemsZ(int menge, EveItem typeid)
              {
 
-                 
+
                  Frame.Client.refreshorders(typeid);
                  List<EveMarketOrder> markyord = Frame.Client.GetCachedOrders();
 
-                 List<EveMarketOrder> marketitemZ = markyord.Where(x => x.typeID == typeid.TypeId).Where(x => x.jumps == 0).Where(x => x.bid == false).ToList();
+                 List<EveMarketOrder> marketitemZ = markyord.Where(x => x.typeID == typeid.TypeId).Where(x => x.jumps < 5).Where(x => x.bid == true).Where(x => x.range == -1).ToList();
                  EveMarketOrder marketitem = marketitemZ.OrderByDescending(x => x.price).FirstOrDefault();
 
-                 if (marketitemZ == null)
+                 if (marketitem == null)
                  {
-                     marketitemZ = markyord.Where(x => x.typeID == typeid.TypeId).OrderByDescending(x => x.jumps).Where(x => x.bid == false).ToList();
+                     marketitemZ = markyord.Where(x => x.typeID == typeid.TypeId).OrderByDescending(x => x.jumps).Where(x => x.bid == true).Where(x => x.range == -1).ToList();
                      marketitem = marketitemZ.OrderByDescending(x => x.price).FirstOrDefault();
                  }
-
+                 if (marketitem == null)
+                 {
+                     Frame.Log("kein eintrag mit -1");
+                     return;
+                 }
 
                  Frame.Log("Marketitem Name =  " + marketitem.Name);                                                                                                // Funktion für verkaufen infos
                  Frame.Log("Marketitem Price =  " + marketitem.price);
@@ -762,13 +778,16 @@ namespace Controllers
                  Frame.Log("Marketitem Remain =  " + marketitem.volRemaining);
                  Frame.Log("Marketitem OrderId =  " + marketitem.orderID);
                  Frame.Log("Marketitem Jumpes =  " + marketitem.jumps);
-
+                 Frame.Log("Marketitem Range =  " + marketitem.range);
                  marketitem.sell(menge, typeid);
 
              }
         
 
-
+           public void dronencheck()
+        {
+            
+        }
 
 
         }
