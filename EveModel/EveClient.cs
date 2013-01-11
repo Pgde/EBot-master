@@ -908,6 +908,21 @@ namespace EveModel
             return true;
         }
 
+        //  def TryFit(self, invItems, shipID = None):  tested/working
+        public bool tryfit(List<EveItem> invitems, long shipid)
+        {
+            Frame.Client.GetService("menu").CallMethod("TryFit", new object[] { invitems, shipid });
+            return true;
+        }
+
+        //def AssembleShip(self, invItems):     untested, should work
+        public void AssembleShip(List<EveItem> invitems)
+        {
+            Frame.Client.GetService("menu").CallMethod("AssembleShip", new object[] { invitems });
+            return;
+        }
+
+
 
         public List<EveQskill> GetMyQueue()
         {
