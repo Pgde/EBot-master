@@ -901,6 +901,12 @@ namespace EveModel
            return mys.ConvertAll<EveSkill>(EveObject2EveSkill);
         }
 
+        //  def TryFit(self, invItems, shipID = None):
+        public bool tryfit(List<EveItem> invitems)
+        {
+            return true;
+        }
+
         public List<EveQskill> GetMyQueue()
         {
             List<EveObject> myqs;
