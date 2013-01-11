@@ -15,5 +15,15 @@ namespace Controllers.states
     
     }
 
+    public enum DroneState
+    {
+        Initialise,
+        Idle,
+        Start,
+        Travel,
+        ArrivedAtDestination
+
+    }
+
     }
 

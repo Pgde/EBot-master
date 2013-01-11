@@ -38,11 +38,11 @@ namespace Controllers
 
 
         /////////////////////////////////////////////                           Dronen
-
+        float maxactivdronen = 0;
         int dronenanzahl = 0;
         int droneninbay = 0;
 
-
+        bool dronen = false;
 
         /////////////////////////////////////////////                           Verkaufspreise ca.
 
@@ -101,8 +101,12 @@ namespace Controllers
                 case TravelStates.Initialise:
 
 
-
-
+                   droneninbay =  Frame.Client.GetActiveShip.DronesInBay;
+                   if (droneninbay == 0)
+                   {
+                       dronen = false;
+                   }
+                    
                     Frame.Client.OreHoldOfActiveShip();
                     if (Frame.Client.IsUnifiedInventoryOpen == false)                                                          // checken ob das Inventory geöffnet ist
                     {
@@ -312,6 +316,7 @@ namespace Controllers
                             Frame.Log("Miner Aktiviern");                                                               // Logausgabe Miner aktviviern
                             break;
                         }
+
                     }
                     _state = TravelStates.Mining;                                                                                    // Wieder zu Mining gehen
                     break;
@@ -786,9 +791,11 @@ namespace Controllers
 
            public void dronencheck()
         {
-            
+          maxactivdronen =  Frame.Client.maxActiveDrones;
+          Frame.Client.DroneMineRepeatedly();
+          
         }
-
+           
 
         }
 
