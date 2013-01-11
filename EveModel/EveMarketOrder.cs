@@ -79,7 +79,7 @@ namespace EveModel
             {
                 quant = itemsell.Quantity;
             }
-            Frame.Client.GetService("marketquote").CallMethod("SellStuff", new object[] { stationID, typeID, itemsell.ItemId, price, quant});
+            Frame.Client.GetService("marketQuote").CallMethod("SellStuff", new object[] { stationID, typeID, itemsell.ItemId, price, quant });
         }
     }
 }
