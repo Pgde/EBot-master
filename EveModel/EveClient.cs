@@ -1045,6 +1045,7 @@ namespace EveModel
             {
                 Frame.Log("Öffne Orehold");
                 Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenOreHoldOfActiveShip);
+                
                 return;
             }
             if (name == "StationItems" && winni == null)

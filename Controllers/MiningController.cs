@@ -100,9 +100,7 @@ namespace Controllers
             {
                 /////////////////////////////////////////////////////////////////////////////////////////
                 case TravelStates.Initialise:
-
-
-
+    
 
                     if (Frame.Client.getoreopen() == false)
                     {
@@ -173,6 +171,11 @@ namespace Controllers
                         Frame.Log("Maximal ladung(95% vom cargo" + carggoo);
                         if (usdcapcargo > carggoo)                                                                          // Wenn das cargo voll gehe heim
                         {
+                            
+                            if (Frame.Client.GetActiveShip.DronesInBay < 0 && DroneController.dronen == true)
+                            {
+                                _States.DroneState = states.DroneState.dronesback;
+                            }
                             Frame.Log("TravelState.Warphome");
                             _state = TravelStates.warphome;                                                                     // State um zurück zur Stations Bookmark zu warpen
                              break;
@@ -188,6 +191,7 @@ namespace Controllers
                     }
                     if (targetda == false)
                     {
+                        _States.DroneState = states.DroneState.dronesback;
                         targetast = null;
                     }
                     if (targetast == null)
@@ -256,6 +260,10 @@ namespace Controllers
                             Frame.Log(" 95% Cargo entspricht " + restofcargo);                                                       // Logausgabe Cargo insgesammt
                             if (usdcapcargo > restofcargo)                                                                          // Wenn das benutze cargo 80% übersteigt
                             {
+                                if (Frame.Client.GetActiveShip.DronesInBay < 0 && DroneController.dronen == true)
+                                {
+                                    _States.DroneState = states.DroneState.dronesback;
+                                }
                                 Frame.Log("");
                                 minersactiv = "Aus";
                                 EmptyBelts.Add(currentbelt);
@@ -264,6 +272,10 @@ namespace Controllers
                             }
                             else
                             {
+                                if (Frame.Client.GetActiveShip.DronesInBay < 0 && DroneController.dronen == true)
+                                {
+                                    _States.DroneState = states.DroneState.dronesback;
+                                }
                                 minersactiv = "Aus";
                                 _state = TravelStates.warptobelt;                                                                 // Warpe zum nächsten Mining Belt Bookmark
                                 break;
@@ -283,7 +295,10 @@ namespace Controllers
                                 break;
                             }
                         }
-
+                        if (Frame.Client.GetActiveShip.DronesInBay < 0 && DroneController.dronen == true)
+                        {
+                            _States.DroneState = states.DroneState.dronesback;
+                        }
                         if (Frame.Client.GetActiveTargetId == -1)
                         {
                             if (!targetast.IsBeingTargeted)
@@ -293,10 +308,13 @@ namespace Controllers
                             }
                         }
                         ////// Miner
+                        
+                        
                         List<EveModule> minerlist = Frame.Client.GetActiveShip.Miners;
                         int cnt = minerlist.Where(i => (i.IsActive == true)).Count();
                         if (minerlist.Count > cnt)
                         {
+                            _States.DroneState = states.DroneState.Startdrones;
                             if (minersactiv == "Aus") { minersactiv = "An"; }
 
                             minerlist.Where(i => (i.IsActive == false)).FirstOrDefault().Activate(targetast.Id);
@@ -375,8 +393,7 @@ namespace Controllers
                 case TravelStates.letzgo:
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(18000, 50000));
                     targetast = null;                                                                                       // Setze Astroiden Target == Null
-                    _States.DroneState = DroneState.Startdrones;
-                    if (Frame.Client.Session.InStation)
+                   if (Frame.Client.Session.InStation)
                     {
 
                         Frame.Client.ExecuteCommand(EveModel.EveCommand.CmdExitStation);
@@ -742,11 +759,17 @@ namespace Controllers
              {
 
 
+            //     return what == 'sell' and (order.jumps <= order.range or eve.session.stationid and order.range == -1 and order.stationID == eve.session.stationid or eve.session.solarsystemid and order.jumps == 0)
+
                  Frame.Client.refreshorders(typeid);
                  List<EveMarketOrder> markyord = Frame.Client.GetCachedOrders();
 
                  List<EveMarketOrder> marketitemZ = markyord.Where(x => x.typeID == typeid.TypeId).Where(x => x.jumps < 5).Where(x => x.bid == true).Where(x => x.range == -1).ToList();
                  EveMarketOrder marketitem = marketitemZ.OrderByDescending(x => x.price).FirstOrDefault();
+
+
+           //      List<EveMarketOrder> marketitemZ = markyord.Where(x => x.typeID == typeid.TypeId).Where(x => x.jumps < 5).Where(x => x.bid == true).Where(x => x.range == -1).ToList();
+           //      EveMarketOrder marketitem = marketitemZ.OrderByDescending(x => x.price).FirstOrDefault();
 
                  if (marketitem == null)
                  {
