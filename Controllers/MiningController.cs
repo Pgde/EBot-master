@@ -731,6 +731,7 @@ namespace Controllers
             Frame.Log("Marketitem Remain =  " + marketitem.volRemaining);
             Frame.Log("Marketitem OrderId =  " + marketitem.orderID);
             Frame.Log("Marketitem Jumpes =  " + marketitem.jumps);
+            Frame.Log("Marketitem Range =  " + marketitem.range);
             marketitem.buy(menge);
 
 
@@ -740,16 +741,17 @@ namespace Controllers
 
              public void sellitemsZ(int menge, EveItem typeid)
              {
-              
+
+                 string stadid = Frame.Client.
                  Frame.Client.refreshorders(typeid);
                  List<EveMarketOrder> markyord = Frame.Client.GetCachedOrders();
 
-                 List<EveMarketOrder> marketitemZ = markyord.Where(x => x.typeID == typeid.TypeId).Where(x => x.jumps == 0).Where(x => x.bid == true).ToList();
+                 List<EveMarketOrder> marketitemZ = markyord.Where(x => x.typeID == typeid.TypeId).Where(x => x.jumps == 0).Where(x => x.bid == false).ToList();
                  EveMarketOrder marketitem = marketitemZ.OrderByDescending(x => x.price).FirstOrDefault();
 
                  if (marketitemZ == null)
                  {
-                     marketitemZ = markyord.Where(x => x.typeID == typeid.TypeId).OrderByDescending(x => x.jumps).Where(x => x.bid == true).ToList();
+                     marketitemZ = markyord.Where(x => x.typeID == typeid.TypeId).OrderByDescending(x => x.jumps).Where(x => x.bid == false).ToList();
                      marketitem = marketitemZ.OrderByDescending(x => x.price).FirstOrDefault();
                  }
 

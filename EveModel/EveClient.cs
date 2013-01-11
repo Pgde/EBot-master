@@ -910,7 +910,7 @@ namespace EveModel
                 Frame.Client.GetService("menu").CallMethod("TryFit", new object[] { invitems, GetActiveShip.ItemId });
                 return true;
             }
-            return false
+            return false;
             }
 
         //  def TryFit(self, invItems, shipID = None):  tested/working
@@ -921,7 +921,7 @@ namespace EveModel
                 Frame.Client.GetService("menu").CallMethod("TryFit", new object[] { invitems, shipid });
                 return true;
             }
-            return false
+            return false;
         }
 
         //def AssembleShip(self, invItems):     untested, should work
