@@ -49,9 +49,9 @@ namespace EBotPilot
         private void button2_Click(object sender, EventArgs e)
         {
       //      _manager.AddController(new MysqlController());
-      //      _manager.AddController(new MiningController());
+            _manager.AddController(new MiningController());
       //      _manager.AddController(new SkillController());
-            _manager.AddController(new DroneController());
+      //      _manager.AddController(new DroneController());
         }
 
         private void button3_Click(object sender, EventArgs e)

@@ -101,19 +101,15 @@ namespace Controllers
                 /////////////////////////////////////////////////////////////////////////////////////////
                 case TravelStates.Initialise:
 
-                    
 
-                    
-                    Frame.Client.OreHoldOfActiveShip();
-                    if (Frame.Client.IsUnifiedInventoryOpen == false)                                                          // checken ob das Inventory geöffnet ist
+
+
+                    if (Frame.Client.getoreopen() == false)
                     {
-                        Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenOreHoldOfActiveShip);// Wenn ja
-                        Frame.Log(Frame.Client.IsUnifiedInventoryOpen);                                                        // Logbuchausgabe ob das inv geöffnet ist False/true
-                        Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenInventory);                                          // Öffnet das Inventory
-                        Frame.Log("Open Cargo of Activ Ship");                                                                  // Logbuchausgabe das das inventory geöffnet wurde             
+
+                        Frame.Client.Getandopenwindow("Orehold");
                         break;
                     }
-                    Frame.Client.OreHoldOfActiveShip();
                    EveInventoryContainer cargoho = Frame.Client.GetPrimaryInventoryWindow.OreHoldOfActiveShip;           //  Container wird erstellt "cargoho" und wird mit aktivem Cargohold verknüpft
                     usdcapcargo = cargoho.UsedCapacity;                                                                     // Variablen werden gesetzt Verbrauchtes Cargo <--
                     fullcapcargo = cargoho.Capacity;                                                                        // Variablen werden gesetzen Cargo insgesammt <---

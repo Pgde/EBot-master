@@ -1057,6 +1057,63 @@ namespace EveModel
 
             return;
         }
+
+        public bool getinvopen()
+        {
+            List<EveWindow> mywindow;
+            mywindow = Frame.Client.GetWindows;
+            EveWindow winni;
+            if (Frame.Client.Session.InSpace == true)
+            {
+                mywindow = Frame.Client.GetWindows;
+                winni = mywindow.Where(x => x.Name.Contains("InventorySpace")).FirstOrDefault();
+                if (winni == null)
+                {
+                    Frame.Log("Kein inv gefunden öffne");
+                    return false;
+                }
+            }
+            if (Frame.Client.Session.InStation == true)
+            {
+                mywindow = Frame.Client.GetWindows;
+                winni = mywindow.Where(x => x.Name.Contains("InventoryStation")).FirstOrDefault();
+                if (winni == null)
+                {
+                    Frame.Log("Kein inv gefunden öffne");
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public bool getoreopen()
+        {
+            List<EveWindow> mywindow;
+            mywindow = Frame.Client.GetWindows;
+            EveWindow winni;
+
+            winni = mywindow.Where(x => x.Name.Contains("ShipOreHold")).FirstOrDefault();
+            if (winni == null)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public bool getitemopen()
+        {
+            List<EveWindow> mywindow;
+            mywindow = Frame.Client.GetWindows;
+            EveWindow winni;
+
+            winni = mywindow.Where(x => x.Name.Contains("StationItems")).FirstOrDefault();
+            if (winni == null)
+            {
+                return false;
+            }
+            return true;
+        }
+
       
    
 
