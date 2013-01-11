@@ -35,8 +35,8 @@ namespace Controllers
         int stationtrip = 0;
         List<string> skilltotrainid = new List<string>();
         List<string> skillZ = new List<string>();
-     
 
+        bool sellitems = false;
 
         int Veldsparwert = 15;
         int ConcentratedVeldsparwert = 15;
@@ -54,6 +54,11 @@ namespace Controllers
         int AzurePlagioclase = 66;
         int RichPlagioclase = 25;
 
+     //   int verkaufsintemszahl = 0;
+
+
+        int sinctest = 3402;   // Skill sience
+        int minertest = 483;
 
 
 
@@ -85,28 +90,24 @@ namespace Controllers
                 case TravelStates.Initialise:
 
 
+                  Frame.Client.refreshorders(minertest);
+                  List<EveMarketOrder> markyord = Frame.Client.GetCachedOrders();
 
-                    /*
-                    List<EveMarketOrder> markyord = Frame.Client.GetCachedOrders();
-                    EveMarketOrder marketitem = markyord.Where(x => x.Name.Contains("Scordite")).OrderByDescending(x => x.jumps).LastOrDefault();
-                              
-                    Frame.Log("Marketitem Name =  " + marketitem.Name);                                                                                                // Funktion für verkaufen infos
-                    Frame.Log("Marketitem Price =  " + marketitem.price);
-                    Frame.Log("Marketitem Volentered =  " + marketitem.volEntered);
-                    Frame.Log("Marketitem Remain =  " + marketitem.volRemaining);
-                    Frame.Log("Marketitem OrderId =  " + marketitem.orderID);
-                    Frame.Log("Marketitem Jumpes =  " + marketitem.jumps);
-*/
+                  List<EveMarketOrder> marketitemZ = markyord.Where(x => x.typeID == minertest).Where(x => x.jumps == 0).Where(x => x.bid == true).ToList();
+                 EveMarketOrder marketitem = marketitemZ.OrderByDescending(x => x.price).LastOrDefault();
+                 
+                 if (marketitemZ == null)
+                 {
+                     marketitemZ = markyord.Where(x => x.typeID == minertest).OrderByDescending(x => x.jumps).Where(x => x.bid == true).ToList();
+                     marketitem = marketitemZ.OrderByDescending(x => x.price).LastOrDefault();
+                 }
 
-                    List<EveItem> bugitems = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;
-                                                                   
-                        EveItem itemZ = items.OrderBy(x => x.ItemId).FirstOrDefault();                                                            
-                        itemzahl = (itemZ.Quantity);
-                        Frame.Log("itemzahl = " + itemzahl);
-                        string namee = itemZ.TypeName;
-                        Frame.Log("givenname = " + namee);
-
-
+                 Frame.Log("Marketitem Name =  " + marketitem.Name);                                                                                                // Funktion für verkaufen infos
+                 Frame.Log("Marketitem Price =  " + marketitem.price);
+                 Frame.Log("Marketitem Volentered =  " + marketitem.volEntered);
+                 Frame.Log("Marketitem Remain =  " + marketitem.volRemaining);
+                 Frame.Log("Marketitem OrderId =  " + marketitem.orderID);
+                 Frame.Log("Marketitem Jumpes =  " + marketitem.jumps);
            
 
 
@@ -137,21 +138,19 @@ namespace Controllers
 
                     if (Frame.Client.Session.InStation)                                                                           // Wenn wir im WEltraum sind gehe zur mining State
                     {
-                        _state = TravelStates.letzgo;
+                        if (usdcapcargo != 0)                                                                          // Wenn das cargo voll gehe heim
+                        {
+                            _state = TravelStates.unload;                                                                               // Abladen
+                            Frame.Log("State zu unload");
+                            break;
+                        }
+                        _state = TravelStates.letzgo;                                                                            //  Losfliegen minen gehen :D
                         Frame.Log("State zu letzgo");
-                         break;
-                    }
-
-
-                    if (usdcapcargo != 0)                                                                          // Wenn das cargo voll gehe heim
-                    {
-                        _state = TravelStates.unload;                                                                               // Abladen
-                        Frame.Log("State zu unload");
                         break;
                     }
-                    _state = TravelStates.letzgo;                                                                            //  Losfliegen minen gehen :D
-                    Frame.Log("State zu letzgo");
                     break;
+
+               
                 /////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -578,16 +577,33 @@ namespace Controllers
                         }
 
 
-
-
                         Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Add(itemZ);                                                               // und füge es dem itemshangar hinzu
                         items.Remove(itemZ);
                         Frame.Client.GetPrimaryInventoryWindow.ItemHangar.StackAll();
                         Frame.Log("Stackall");
+              
+
                         _state = TravelStates.unload;                                                                                              // wiederhole unload
                        break;
                     }                                                                                                                               // Wenn kein items mehr da ist / oder da war 
 
+                        Frame.Client.GetItemHangar();
+                        List<EveItem> itemlischt = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;
+                        EveItem itemsZZ = itemlischt.Where(x => x.Stacksize > 20000).FirstOrDefault();
+                        if (itemsZZ == null)
+                        {
+                            Frame.Log("Keine items in der menge vorrätig");
+                        }
+                        
+                        if (itemsZZ != null)
+                        {
+                            int verkaufsintemszahl = (itemsZZ.Quantity);
+                            sellitemsZ(verkaufsintemszahl, itemsZZ);
+                            Frame.Log("Verkaufe itemZZ typ id =  " + itemsZZ.TypeId);
+                            Frame.Log("Verkaufe items" + verkaufsintemszahl + "  " + itemsZZ.Quantity);
+                        }
+                     
+                        
 
 
                     stationtrip = (stationtrip + 1);
@@ -706,17 +722,63 @@ namespace Controllers
 
         }
 
-             public double fullcapcargoback()
+        public void buyitems(int typid,int menge)
         {
-            double a = fullcapcargo;
-             return a;
+
+            List<EveMarketOrder> markyord = Frame.Client.GetCachedOrders();
+
+            List<EveMarketOrder> marketitemZ = markyord.Where(x => x.typeID == typid).Where(x => x.jumps == 0).Where(x => x.bid == false).ToList();
+            EveMarketOrder marketitem = marketitemZ.OrderByDescending(x => x.price).LastOrDefault();
+
+            if (marketitemZ == null)
+            {
+                marketitemZ = markyord.Where(x => x.typeID == minertest).OrderByDescending(x => x.jumps).Where(x => x.bid == false).ToList();
+                marketitem = marketitemZ.OrderByDescending(x => x.price).LastOrDefault();
+            }
+            if (marketitemZ == null)
+            {
+                Frame.Log("Kein items in der Station und auchnicht in der nähe (nicht im Storecach)");
+                return;
+            }
+                       
+            Frame.Log("Marketitem Name =  " + marketitem.Name);                                                                                                // Funktion für verkaufen infos
+            Frame.Log("Marketitem Price =  " + marketitem.price);
+            Frame.Log("Marketitem Volentered =  " + marketitem.volEntered);
+            Frame.Log("Marketitem Remain =  " + marketitem.volRemaining);
+            Frame.Log("Marketitem OrderId =  " + marketitem.orderID);
+            Frame.Log("Marketitem Jumpes =  " + marketitem.jumps);
+            marketitem.buy(menge);
+
+
+          
+
         }
 
-             public double usdcapcargoback()
+             public void sellitemsZ(int menge, EveItem typeid)
              {
-                 double a = usdcapcargo;
-                 return a;
+                 Frame.Client.refreshorders(typeid);
+                 List<EveMarketOrder> markyord = Frame.Client.GetCachedOrders();
+
+                 List<EveMarketOrder> marketitemZ = markyord.Where(x => x.typeID == typeid.TypeId).Where(x => x.jumps == 0).Where(x => x.bid == true).ToList();
+                 EveMarketOrder marketitem = marketitemZ.OrderByDescending(x => x.price).FirstOrDefault();
+
+                 if (marketitemZ == null)
+                 {
+                     marketitemZ = markyord.Where(x => x.typeID == typeid.TypeId).OrderByDescending(x => x.jumps).Where(x => x.bid == false).ToList();
+                     marketitem = marketitemZ.OrderByDescending(x => x.price).FirstOrDefault();
+                 }
+
+                 Frame.Log("Marketitem Name =  " + marketitem.Name);                                                                                                // Funktion für verkaufen infos
+                 Frame.Log("Marketitem Price =  " + marketitem.price);
+                 Frame.Log("Marketitem Volentered =  " + marketitem.volEntered);
+                 Frame.Log("Marketitem Remain =  " + marketitem.volRemaining);
+                 Frame.Log("Marketitem OrderId =  " + marketitem.orderID);
+                 Frame.Log("Marketitem Jumpes =  " + marketitem.jumps);
+
+                 marketitem.sell(menge, typeid);
+
              }
+        
 
 
 
@@ -729,3 +791,14 @@ namespace Controllers
 
 
 
+/*
+                                                                                                                        items chekcne id etc die im hangar liegen
+  List<EveItem> bugitems = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;
+
+
+            foreach (EveItem tmp in bugitems)
+            {
+                Frame.Log("typenamename = " + tmp.TypeName + ",  " + "typid " + tmp.TypeId + " , " + "Givenname  = " + tmp.GivenName);
+            }
+
+*/

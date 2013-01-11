@@ -1023,14 +1023,14 @@ namespace EveModel
 
         public void refreshorders(int typeid)
         {
-            Frame.Client.GetService("marketQuote").CallMethod("RefreshOrderCache", new object[] { typeid });
-            Frame.Client.GetService("marketQuote").CallMethod("RefreshJumps", new object[] { typeid });
+            Frame.Client.GetService("marketQuote").CallMethod("RefreshOrderCache", new object[] { typeid }, true);
+            Frame.Client.GetService("marketQuote").CallMethod("RefreshJumps", new object[] { typeid }, true);
         }
 
         public void refreshorders(EveItem item)
         {
-            Frame.Client.GetService("marketQuote").CallMethod("RefreshOrderCache", new object[] { item.TypeId });
-            Frame.Client.GetService("marketQuote").CallMethod("RefreshJumps", new object[] { item.TypeId });
+            Frame.Client.GetService("marketQuote").CallMethod("RefreshOrderCache", new object[] { item.TypeId }, true);
+            Frame.Client.GetService("marketQuote").CallMethod("RefreshJumps", new object[] { item.TypeId }, true);
         }
 
         public List<EveEntity> GetNPCTargets()
