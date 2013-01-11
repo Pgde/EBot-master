@@ -901,7 +901,7 @@ namespace EveModel
            return mys.ConvertAll<EveSkill>(EveObject2EveSkill);
         }
 
-        //  def TryFit(self, invItems, shipID = None):
+        //  def TryFit(self, invItems, shipID = None):  tested/working
         public bool tryfit(List<EveItem> invitems)
         {
             Frame.Client.GetService("menu").CallMethod("TryFit", new object[] { invitems, GetActiveShip.ItemId });

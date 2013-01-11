@@ -54,6 +54,9 @@ namespace Controllers
                 //    {
                   //      break;
                    // }
+                    List<EveItem> items = new List<EveItem>();
+                    items = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;
+                    Frame.Client.tryfit(items);
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2500, 5000));
                    
             //    test3 =   Frame.Client.GetCharslots();
@@ -62,7 +65,7 @@ namespace Controllers
                  //       _localPulse = DateTime.Now.AddMilliseconds(GetRandom(5000, 8000));
                //         break;
                    // }
-                    Frame.Client.DroneMineRepeatedly();
+              //      Frame.Client.DroneMineRepeatedly();
 
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(8000, 8000));
                   break;
