@@ -907,7 +907,7 @@ namespace EveModel
         {
             if (Frame.Client.Session.InStation)
             {
-                Frame.Client.GetService("menu").CallMethod("TryFit", new object[] { invitems, GetActiveShip.ItemId });
+                Frame.Client.GetService("menu").CallMethod("TryFit", new object[] { invitems, GetActiveShip.ItemId },true);
                 return true;
             }
             return false;
@@ -961,9 +961,9 @@ namespace EveModel
 
         //  sm.StartService('station').TryActivateShip(invItem) (checked invItem = itemid of a ship) dunno if this works
 
-        public void TryActivateShip(long itemid)
+        public void TryActivateShip(EveObject ship)
         {
-            Frame.Client.GetService("station").CallMethod("TryActivateShip", new object[] { itemid });
+            Frame.Client.GetService("station").CallMethod("TryActivateShip", new object[] { ship } ,true);
             return;
         }
 

@@ -742,7 +742,7 @@ namespace Controllers
              public void sellitemsZ(int menge, EveItem typeid)
              {
 
-                 string stadid = Frame.Client.
+                 
                  Frame.Client.refreshorders(typeid);
                  List<EveMarketOrder> markyord = Frame.Client.GetCachedOrders();
 
