@@ -904,8 +904,10 @@ namespace EveModel
         //  def TryFit(self, invItems, shipID = None):
         public bool tryfit(List<EveItem> invitems)
         {
+            Frame.Client.GetService("menu").CallMethod("TryFit", new object[] { invitems, GetActiveShip.ItemId });
             return true;
         }
+
 
         public List<EveQskill> GetMyQueue()
         {
