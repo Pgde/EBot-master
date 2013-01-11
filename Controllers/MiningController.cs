@@ -156,17 +156,14 @@ namespace Controllers
 
                     Frame.Log("Travelstate.Mining");
                     Frame.Log("Miningcount " + miningcount.ToString());
-                    if (Frame.Client.IsUnifiedInventoryOpen == false)                                                          // checken ob das Inventory geöffnet ist
-                    {                                                                                                          // Wenn ja
-                        Frame.Log(Frame.Client.IsUnifiedInventoryOpen);                                                        // Logbuchausgabe ob das inv geöffnet ist False/true
-                        Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenInventory);                                          // Öffnet das Inventory
-                        Frame.Log("Open Cargo of Activ Ship");                                                                 // Logbuchausgabe das das inventory geöffnet wurde
-                        _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 3500));                                     // Warte zwischen 2 und 3.5 Secunden
+
+
+                        if (Frame.Client.getoreopen() == false)
+                              {
+
+                        Frame.Client.Getandopenwindow("Orehold");
                         break;
-                    }
-                    Frame.Client.OreHoldOfActiveShip();
-                    if (Frame.Client.IsUnifiedInventoryOpen == true)                                                            // Checken ob Inventory Fenster geöffnet ist 
-                    {                                                                                                           // Wenn ja
+                          }                                                       
                         EveInventoryContainer cargoho2 = Frame.Client.GetPrimaryInventoryWindow.OreHoldOfActiveShip;           //  Container wird erstellt "cargoho" und wird mit aktivem Cargohold verknüpft
                         usdcapcargo = cargoho2.UsedCapacity;                                                                     // Variablen werden gesetzt Verbrauchtes Cargo <--
                         fullcapcargo = cargoho2.Capacity;                                                                        // Variablen werden gesetzen Cargo insgesammt <---
@@ -180,7 +177,7 @@ namespace Controllers
                             _state = TravelStates.warphome;                                                                     // State um zurück zur Stations Bookmark zu warpen
                              break;
                         }
-                    }
+                    
 
                     // Wenn nicht suche iene liste mit Asterioden raus
                     List<EveEntity> test3 = Frame.Client.Entities;                                                                   // Und sortier sie nach namen distanz etc
@@ -240,17 +237,15 @@ namespace Controllers
                     if (targetast == null)
                     {
                         EmptyBelts.Add(currentbelt);
-                        if (Frame.Client.IsUnifiedInventoryOpen == false)                                                          // checken ob das Inventory geöffnet ist
-                        {                                                                                                          // Wenn ja
-                            Frame.Log(Frame.Client.IsUnifiedInventoryOpen);                                                        // Logbuchausgabe ob das inv geöffnet ist False/true
-                            Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenInventory);                                          // Öffnet das Inventory
-                            Frame.Log("Open Cargo of Activ Ship / Mining");                                                                 // Logbuchausgabe das das inventory geöffnet wurde
-                            _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 3500));                                     // Warte zwischen 2 und 3.5 Secunden
+
+
+
+                                if (Frame.Client.getoreopen() == false)
+                               {
+
+                            Frame.Client.Getandopenwindow("Orehold");
                             break;
-                        }
-                        Frame.Client.OreHoldOfActiveShip();
-                        if (Frame.Client.IsUnifiedInventoryOpen == true)                                                            // Checken ob Inventory Fenster geöffnet ist 
-                        {                                                                                                           // Wenn ja
+                              }
 
                             EveInventoryContainer cargoho3 = Frame.Client.GetPrimaryInventoryWindow.OreHoldOfActiveShip;           //  Container wird erstellt "cargoho" und wird mit aktivem Cargohold verknüpft
                             usdcapcargo = cargoho3.UsedCapacity;                                                                     // Variablen werden gesetzt Verbrauchtes Cargo <--
@@ -273,7 +268,6 @@ namespace Controllers
                                 _state = TravelStates.warptobelt;                                                                 // Warpe zum nächsten Mining Belt Bookmark
                                 break;
                             }
-                        }
                     }
                     else
                     {
@@ -320,14 +314,14 @@ namespace Controllers
 
                 case TravelStates.warphome:                                                                                         // Heimwarpen
                     minersactiv = "Aus";
-                    if (Frame.Client.IsUnifiedInventoryOpen == false)                                                          // checken ob das Inventory geöffnet ist
-                    {                                                                                                          // Wenn ja
-                        Frame.Log(Frame.Client.IsUnifiedInventoryOpen);                                                        // Logbuchausgabe ob das inv geöffnet ist False/true
-                        Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenInventory);                                          // Öffnet das Inventory
-                        Frame.Log("Open Cargo of Activ Ship / Mining");                                                                 // Logbuchausgabe das das inventory geöffnet wurde
-                        break;
 
+                    if (Frame.Client.getoreopen() == false)
+                    {
+
+                        Frame.Client.Getandopenwindow("Orehold");
+                        break;
                     }
+
                     if (Frame.Client.Session.InStation)                                                                             // Bin ich in der station? 
                     {                                                                                                                // Wenn ja
                         Frame.Log("In Station angekommen");                                                                          // Log
@@ -403,13 +397,11 @@ namespace Controllers
 
                 case TravelStates.warptobelt:
 
-                    if (Frame.Client.IsUnifiedInventoryOpen == false)                                                          // checken ob das Inventory geöffnet ist
-                    {                                                                                                          // Wenn ja
-                        Frame.Log(Frame.Client.IsUnifiedInventoryOpen);                                                        // Logbuchausgabe ob das inv geöffnet ist False/true
-                        Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenInventory);                                          // Öffnet das Inventory
-                        Frame.Log("Open Cargo of Activ Ship / Mining");
-                        break;                              // Logbuchausgabe das das inventory geöffnet wurde
+                    if (Frame.Client.getoreopen() == false)
+                    {
 
+                        Frame.Client.Getandopenwindow("Orehold");
+                        break;
                     }
 
 
@@ -462,15 +454,11 @@ namespace Controllers
 
 
                 case TravelStates.unload:
-               
-                    Frame.Client.OreHoldOfActiveShip();
-                    if (Frame.Client.IsUnifiedInventoryOpen == false)                                                          // checken ob das Inventory geöffnet ist
+
+                    if (Frame.Client.getoreopen() == false)
                     {
-                        Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenInventory); // Wenn ja
-                        Frame.Log(Frame.Client.IsUnifiedInventoryOpen);                                                        // Logbuchausgabe ob das inv geöffnet ist False/true
-                        //     Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenInventory);                                          // Öffnet das Inventory
-                        Frame.Log("Open Cargo of Activ Ship / Mining");                                                                 // Logbuchausgabe das das inventory geöffnet wurde
-                        Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenOreHoldOfActiveShip);
+
+                        Frame.Client.Getandopenwindow("Orehold");
                         break;
                     }
 
