@@ -943,7 +943,7 @@ namespace EveModel
 
         //  sm.StartService('station').TryActivateShip(invItem) (checked invItem = itemid of a ship) dunno if this works
 
-        public void InjectSkillIntoBrain(long itemid)
+        public void TryActivateShip(long itemid)
         {
             Frame.Client.GetService("station").CallMethod("TryActivateShip", new object[] { itemid });
             return;

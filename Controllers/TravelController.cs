@@ -58,7 +58,9 @@ namespace Controllers
                //     items = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;
                 //    Frame.Client.tryfit(items);
 
-                    Frame.Client.StripFitting(Frame.Client.GetActiveShip.ItemId);
+              //      Frame.Client.StripFitting(Frame.Client.GetActiveShip.ItemId);
+                    long itemid = Frame.Client.GetShipHangar().Items.LastOrDefault().ItemId;     
+              Frame.Client.TryActivateShip(itemid);
                 _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2500, 5000));
                    
             //    test3 =   Frame.Client.GetCharslots();
