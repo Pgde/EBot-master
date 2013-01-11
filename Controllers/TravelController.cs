@@ -59,7 +59,7 @@ namespace Controllers
                 //    Frame.Client.tryfit(items);
 
               //      Frame.Client.StripFitting(Frame.Client.GetActiveShip.ItemId);
-                    long itemid = Frame.Client.GetShipHangar().Items.LastOrDefault().ItemId;     
+                    EveObject itemid = Frame.Client.GetShipHangar().Items.LastOrDefault();    
               Frame.Client.TryActivateShip(itemid);
                 _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2500, 5000));
                    
