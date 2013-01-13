@@ -322,13 +322,13 @@ namespace Controllers
                             if (!targetast.IsBeingTargeted)
                             {
                                 targetast.LockTarget();
-                                _States.DroneState = states.DroneState.Startdrones;   // Target Locken
+                          //      _States.DroneState = states.DroneState.Startdrones;   // Target Locken
                                 Frame.Log("Locke Target");
                                 break;
                             }
                         }
                         ////// Miner
-                        
+                      
                         
                         List<EveModule> minerlist = Frame.Client.GetActiveShip.Miners;
                         int cnt = minerlist.Where(i => (i.IsActive == true)).Count();
@@ -341,6 +341,11 @@ namespace Controllers
                             minerlist.Where(i => (i.IsActive == false)).FirstOrDefault().Activate(targetast.Id);
                             Frame.Log("Miner Aktiviern");                                                               // Logausgabe Miner aktviviern
                             break;
+                        }
+                        double dist2 = Frame.Client.Entities.Where(i => i.Id == targetast.Id).FirstOrDefault().Distance;
+                        if (DroneController.dronen == false && dist2 < 2000)
+                        {
+                            _States.DroneState = states.DroneState.Startdrones;   // Target Locken
                         }
 
                     }
