@@ -15,13 +15,22 @@ namespace Controllers
         bool _waitforsessionChange;
 
         int dronesinbay = 0;
-        public static bool dronen { get; set; }
-       
+
+
+
+
+        EveEntity astrodronen;
+        public static EveEntity astro { get; set; }
+        public static bool dronenaktiviern { get; set; }
+        public static bool dronecontrolleraktiv { get; set; }
+
+  
         List<EveWindow> Windows = new List<EveWindow>();
 
         public DroneController()
         {
             Frame.Log("Starting a new Drone Controller");
+            DroneController.dronecontrolleraktiv = true;
         }
      
 
@@ -43,12 +52,12 @@ namespace Controllers
 
                     if (Frame.Client.Session.InStation == true)
                     {
-                         _localPulse = DateTime.Now.AddMilliseconds(GetRandom(3000, 3500));
+                         _localPulse = DateTime.Now.AddMilliseconds(GetRandom(8000, 9000));
                         break;
                     }
                     if (Frame.Client.GetActiveShip.DronesInBay > 0)
                     {
-                        DroneController.dronen = true;
+         //               DroneController.dronen = true;
                     }
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(3000, 3500));
 
@@ -57,21 +66,41 @@ namespace Controllers
 
 
                 case DroneState.Idle:
-                    dronen = false;
+                   
                 _localPulse = DateTime.Now.AddMilliseconds(GetRandom(3000, 3500));
                 Frame.Log("Drones ...Ídle");
+
+                if (astro != null)
+                {
+                    _States.DroneState = DroneState.Startdrones;
+                    astrodronen = DroneController.astro;
+                    break;
+                }
+
+                List<EveEntity> dronis = Frame.Client.GetActiveShip.ActiveDrones;
+                int droni = dronis.Count;
+                Frame.Log("Drones  count =   " + droni);
+
+                int dronesbay = Frame.Client.GetActiveShip.DronesInBay;
+                Frame.Log("Drones  count in bay =   " + dronesbay);
                  break;
 
 
 
                 case DroneState.Startdrones:
-                   
+
                  _localPulse = DateTime.Now.AddMilliseconds(GetRandom(3000, 3500));
                if (Frame.Client.getdronbay() == false)
                  {
                      Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenDroneBayOfActiveShip);
                      break;
                  }
+               double dista = astrodronen.Distance;
+               if (dista > 2000)
+               {
+                   Frame.Log("Debug distanz " + astrodronen.Distance);
+                   break;
+               }
                  dronesinbay = Frame.Client.GetActiveShip.DronesInBay;
                  if (dronesinbay > 0)
                  {
@@ -79,18 +108,34 @@ namespace Controllers
                      Frame.Client.GetActiveShip.ReleaseDrones();
                      break;
                  }
-                    if (dronen == false)
+                    if (dronenaktiviern == false)
                     {
                         Frame.Log("Drones start mining");
                  Frame.Client.DroneMineRepeatedly();
-                    dronen = true;                              // Dronen aktiv
+                    dronenaktiviern = true;                              // Dronen aktiv
+                    _States.DroneState = DroneState.dronesatwork;
                     break;
                   }
-
                     break;
 
+
+                case DroneState.dronesatwork:
+                      
+                    if (astrodronen.Id == DroneController.astro.Id)
+                    {
+                        _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2000));
+                        break;
+                    }
+ 
+                      dronenaktiviern = false;                              // Dronen aktiv
+                     _States.DroneState = DroneState.dronesback;
+                    break;
+
+
+
+
                 case DroneState.dronesback:
-                    if (Frame.Client.GetActiveShip.DronesInBay < 2)
+                    if (Frame.Client.GetActiveShip.ActiveDrones.Count > 0)
                     {
                         _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                         Frame.Log("Hole dronen zurück");
@@ -98,7 +143,7 @@ namespace Controllers
                         break;
                     }
                     Frame.Log("Setzte state auf Idle");
-                  _States.DroneState = states.DroneState.Idle;
+                    _States.DroneState = states.DroneState.Idle;
                      break;
                  }
              
@@ -106,3 +151,11 @@ namespace Controllers
         }
     }
 
+
+/*
+     double dist2 = Frame.Client.Entities.Where(i => i.Id == targetast.Id).FirstOrDefault().Distance;
+                        if (DroneController.dronenaktiviern == false && dist2 < 2000)
+                        {
+                            _States.DroneState = states.DroneState.Startdrones;   // Target Locken
+                        }
+*/

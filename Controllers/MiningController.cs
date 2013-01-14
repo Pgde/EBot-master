@@ -102,18 +102,21 @@ namespace Controllers
                 case TravelStates.Initialise:
     
            //         Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenDroneBayOfActiveShip);
-       /*
+      
                      List<EveWindow> mywindow;
                   mywindow = Frame.Client.GetWindows;
                   foreach (EveWindow tmp in mywindow)
                   {
                       Frame.Log("window name =  " + tmp.Name);
                   }
-                    */
-          
-        
+                   
 
 
+
+                    if (Frame.Client.getinvopen() == false)
+                    {
+                        Frame.Client.Getandopenwindow("leer");
+                    }
 
                     if (Frame.Client.getoreopen() == false)
                     {
@@ -121,7 +124,7 @@ namespace Controllers
                         Frame.Client.Getandopenwindow("Orehold");
                         break;
                     }
-                   EveInventoryContainer cargoho = Frame.Client.GetPrimaryInventoryWindow.OreHoldOfActiveShip;           //  Container wird erstellt "cargoho" und wird mit aktivem Cargohold verknüpft
+                    EveInventoryContainer cargoho = Frame.Client.GetPrimaryInventoryWindow.OreHoldOfActiveShip;           //  Container wird erstellt "cargoho" und wird mit aktivem Cargohold verknüpft
                     usdcapcargo = cargoho.UsedCapacity;                                                                     // Variablen werden gesetzt Verbrauchtes Cargo <--
                     fullcapcargo = cargoho.Capacity;                                                                        // Variablen werden gesetzen Cargo insgesammt <---
                     Frame.Log(usdcapcargo);
@@ -169,12 +172,18 @@ namespace Controllers
                     Frame.Log("Miningcount " + miningcount.ToString());
 
 
-                        if (Frame.Client.getoreopen() == false)
-                              {
+                    if (Frame.Client.getinvopen() == false)
+                    {
+                        Frame.Client.Getandopenwindow("leer");
+                        break;
+                    }
 
+                        if (Frame.Client.getoreopen() == false)
+                        {
                         Frame.Client.Getandopenwindow("Orehold");
                         break;
-                          }                                                       
+                          } 
+                                                          
                         EveInventoryContainer cargoho2 = Frame.Client.GetPrimaryInventoryWindow.OreHoldOfActiveShip;           //  Container wird erstellt "cargoho" und wird mit aktivem Cargohold verknüpft
                         usdcapcargo = cargoho2.UsedCapacity;                                                                     // Variablen werden gesetzt Verbrauchtes Cargo <--
                         fullcapcargo = cargoho2.Capacity;                                                                        // Variablen werden gesetzen Cargo insgesammt <---
@@ -184,12 +193,6 @@ namespace Controllers
                         Frame.Log("Maximal ladung(95% vom cargo" + carggoo);
                         if (usdcapcargo > carggoo)                                                                          // Wenn das cargo voll gehe heim
                         {
-
-                            if (Frame.Client.GetActiveShip.DronesInBay < 2 && DroneController.dronen == true)
-                            {
-                                _States.DroneState = states.DroneState.dronesback;
-                                break;
-                            }
                             Frame.Log("TravelState.Warphome");
                             _state = TravelStates.warphome;                                                                     // State um zurück zur Stations Bookmark zu warpen
                              break;
@@ -201,20 +204,16 @@ namespace Controllers
 
                     if (targetast != null)
                     {
+                        DroneController.astro = targetast;   // Target übergeben an dronen
                         targetda = test3.Where(i => (i.Id == targetast.Id)).Any();
                     }
                     if (targetda == false)
                     {
-                 //       _States.DroneState = states.DroneState.dronesback;
-                        targetast = null;
+                      targetast = null;
                     }
                     if (targetast == null)
                     {
-                        if (Frame.Client.GetActiveShip.DronesInBay < 2 && DroneController.dronen == true)
-                        {
-                            _States.DroneState = states.DroneState.dronesback;
-                            break;
-                        }
+
                         Frame.Log("suche asteroiden");
                         targetast = test3.Where(i =>
                         i.Distance < 65000
@@ -261,7 +260,11 @@ namespace Controllers
                     {
                         EmptyBelts.Add(currentbelt);
 
-
+                        if (Frame.Client.getinvopen() == false)
+                        {
+                            Frame.Client.Getandopenwindow("leer");
+                            break;
+                        }
 
                                 if (Frame.Client.getoreopen() == false)
                                {
@@ -279,11 +282,7 @@ namespace Controllers
                             Frame.Log(" 95% Cargo entspricht " + restofcargo);                                                       // Logausgabe Cargo insgesammt
                             if (usdcapcargo > restofcargo)                                                                          // Wenn das benutze cargo 80% übersteigt
                             {
-                                if (Frame.Client.GetActiveShip.DronesInBay < 2 && DroneController.dronen == true)
-                                {
-                                    _States.DroneState = states.DroneState.dronesback;
-                                    break;
-                                }
+
                                 Frame.Log("");
                                 minersactiv = "Aus";
                                 EmptyBelts.Add(currentbelt);
@@ -292,11 +291,7 @@ namespace Controllers
                             }
                             else
                             {
-                                if (Frame.Client.GetActiveShip.DronesInBay < 2 && DroneController.dronen == true)
-                                {
-                                    _States.DroneState = states.DroneState.dronesback;
-                                    break;
-                                }
+
                                 minersactiv = "Aus";
                                 _state = TravelStates.warptobelt;                                                                 // Warpe zum nächsten Mining Belt Bookmark
                                 break;
@@ -322,7 +317,7 @@ namespace Controllers
                             if (!targetast.IsBeingTargeted)
                             {
                                 targetast.LockTarget();
-                          //      _States.DroneState = states.DroneState.Startdrones;   // Target Locken
+                     //           DroneController.astro = targetast;   // Target übergeben an dronen
                                 Frame.Log("Locke Target");
                                 break;
                             }
@@ -342,11 +337,7 @@ namespace Controllers
                             Frame.Log("Miner Aktiviern");                                                               // Logausgabe Miner aktviviern
                             break;
                         }
-                        double dist2 = Frame.Client.Entities.Where(i => i.Id == targetast.Id).FirstOrDefault().Distance;
-                        if (DroneController.dronen == false && dist2 < 2000)
-                        {
-                            _States.DroneState = states.DroneState.Startdrones;   // Target Locken
-                        }
+             
 
                     }
                     _state = TravelStates.Mining;                                                                                    // Wieder zu Mining gehen
@@ -358,7 +349,11 @@ namespace Controllers
 
                 case TravelStates.warphome:                                                                                         // Heimwarpen
                     minersactiv = "Aus";
-
+                    if (Frame.Client.getinvopen() == false)
+                    {
+                        Frame.Client.Getandopenwindow("leer");
+                        break;
+                    }
                     if (Frame.Client.getoreopen() == false)
                     {
 
@@ -439,7 +434,11 @@ namespace Controllers
 
 
                 case TravelStates.warptobelt:
-
+                    if (Frame.Client.getinvopen() == false)
+                    {
+                        Frame.Client.Getandopenwindow("leer");
+                        break;
+                    }
                     if (Frame.Client.getoreopen() == false)
                     {
 
@@ -497,7 +496,11 @@ namespace Controllers
 
 
                 case TravelStates.unload:
-
+                    if (Frame.Client.getinvopen() == false)
+                    {
+                        Frame.Client.Getandopenwindow("leer");
+                        break;
+                    }
                     if (Frame.Client.getoreopen() == false)
                     {
 

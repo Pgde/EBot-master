@@ -1041,6 +1041,14 @@ namespace EveModel
              }
             mywindow = Frame.Client.GetWindows;
             winni = mywindow.Where(x => x.Name.Contains(name)).FirstOrDefault();
+            if (name == "leer" && winni == null)
+            {
+                Frame.Log("leer");
+               
+                return;
+            }
+            mywindow = Frame.Client.GetWindows;
+            winni = mywindow.Where(x => x.Name.Contains(name)).FirstOrDefault();
             if (name == "Orehold" && winni == null)
             {
                 Frame.Log("Öffne Orehold");
@@ -1074,6 +1082,7 @@ namespace EveModel
                     return false;
                 }
             }
+         
             if (Frame.Client.Session.InStation == true)
             {
                 mywindow = Frame.Client.GetWindows;
