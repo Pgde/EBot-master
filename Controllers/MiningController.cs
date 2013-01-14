@@ -193,6 +193,13 @@ namespace Controllers
                         Frame.Log("Maximal ladung(95% vom cargo" + carggoo);
                         if (usdcapcargo > carggoo)                                                                          // Wenn das cargo voll gehe heim
                         {
+                            if (Frame.Client.GetActiveShip.ActiveDrones.Count > 0)
+                            {
+                                _States.DroneState = states.DroneState.dronesback;
+                                    break;
+                            }
+                            DroneController.astro = null;
+
                             Frame.Log("TravelState.Warphome");
                             _state = TravelStates.warphome;                                                                     // State um zurück zur Stations Bookmark zu warpen
                              break;
@@ -282,7 +289,12 @@ namespace Controllers
                             Frame.Log(" 95% Cargo entspricht " + restofcargo);                                                       // Logausgabe Cargo insgesammt
                             if (usdcapcargo > restofcargo)                                                                          // Wenn das benutze cargo 80% übersteigt
                             {
-
+                                if (Frame.Client.GetActiveShip.ActiveDrones.Count > 0)
+                                {
+                                    _States.DroneState = states.DroneState.dronesback;
+                                    break;
+                                }
+                                DroneController.astro = null;
                                 Frame.Log("");
                                 minersactiv = "Aus";
                                 EmptyBelts.Add(currentbelt);
@@ -291,7 +303,12 @@ namespace Controllers
                             }
                             else
                             {
-
+                                if (Frame.Client.GetActiveShip.ActiveDrones.Count > 0)
+                                {
+                                    _States.DroneState = states.DroneState.dronesback;
+                                    break;
+                                }
+                                DroneController.astro = null;
                                 minersactiv = "Aus";
                                 _state = TravelStates.warptobelt;                                                                 // Warpe zum nächsten Mining Belt Bookmark
                                 break;
@@ -323,8 +340,8 @@ namespace Controllers
                             }
                         }
                         ////// Miner
-                      
-                        
+
+                       
                         List<EveModule> minerlist = Frame.Client.GetActiveShip.Miners;
                         int cnt = minerlist.Where(i => (i.IsActive == true)).Count();
                         if (minerlist.Count > cnt)
@@ -337,7 +354,26 @@ namespace Controllers
                             Frame.Log("Miner Aktiviern");                                                               // Logausgabe Miner aktviviern
                             break;
                         }
-             
+                            double dist33 = Frame.Client.Entities.Where(i => i.Id == targetast.Id).FirstOrDefault().Distance;
+                            Frame.Log("test " + dist33);
+                            if (dist33 > 3000)
+                            {
+                                
+                                targetast.Approach();
+                                break;
+                            }
+                            if (dist33 < 3000)
+                            {
+                                if (Frame.Client.GetActiveShip.ToEntity.MovementMode != EveEntity.EntityMovementState.Stopped)
+                                    Frame.Log("Schiff gestoppt"); 
+                                Frame.Client.ExecuteCommand(EveModel.EveCommand.CmdStopShip);
+                                break;
+                            }
+
+                            
+
+
+
 
                     }
                     _state = TravelStates.Mining;                                                                                    // Wieder zu Mining gehen
@@ -623,6 +659,13 @@ namespace Controllers
                         
                         if (itemsZZ != null)
                         {
+
+                            if (Frame.Client.getmarketopen() == false)
+                            {
+                                Frame.Client.Getandopenwindow("market");
+                                return;
+
+                            }
                             
                             int verkaufsintemszahl = (itemsZZ.Quantity);
                             sellitemsZ(verkaufsintemszahl, itemsZZ);
@@ -751,7 +794,8 @@ namespace Controllers
 
         public void buyitems(int typid,int menge)
         {
-            Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenMarket);
+
+
 
             Frame.Client.refreshorders(typid);
             List<EveMarketOrder> markyord = Frame.Client.GetCachedOrders();

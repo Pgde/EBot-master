@@ -66,7 +66,11 @@ namespace Controllers
 
 
                 case DroneState.Idle:
-                   
+                    if (Frame.Client.Session.InStation == true)
+                    {
+                        _localPulse = DateTime.Now.AddMilliseconds(GetRandom(3000, 3500));
+                        break;
+                    }
                 _localPulse = DateTime.Now.AddMilliseconds(GetRandom(3000, 3500));
                 Frame.Log("Drones ...Ídle");
 
@@ -95,10 +99,13 @@ namespace Controllers
                      Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenDroneBayOfActiveShip);
                      break;
                  }
-               double dista = astrodronen.Distance;
+                         List<EveEntity> test3 = Frame.Client.Entities;                                                                   // Und sortier sie nach namen distanz etc
+                         EveEntity dista2 = test3.Where(i => (i.Id == astro.Id)).FirstOrDefault();
+                         double dista = dista2.Distance;
+
                if (dista > 2000)
                {
-                   Frame.Log("Debug distanz " + astrodronen.Distance);
+                   Frame.Log("Debug distanz " + dista);
                    break;
                }
                  dronesinbay = Frame.Client.GetActiveShip.DronesInBay;
@@ -108,15 +115,15 @@ namespace Controllers
                      Frame.Client.GetActiveShip.ReleaseDrones();
                      break;
                  }
-                    if (dronenaktiviern == false)
-                    {
+     //               if (dronenaktiviern == false)
+     //               {
                         Frame.Log("Drones start mining");
-                 Frame.Client.DroneMineRepeatedly();
+                     Frame.Client.DroneMineRepeatedly();
                     dronenaktiviern = true;                              // Dronen aktiv
                     _States.DroneState = DroneState.dronesatwork;
                     break;
-                  }
-                    break;
+     //             }
+     //               break;
 
 
                 case DroneState.dronesatwork:

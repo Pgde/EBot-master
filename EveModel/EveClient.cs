@@ -1049,6 +1049,15 @@ namespace EveModel
             }
             mywindow = Frame.Client.GetWindows;
             winni = mywindow.Where(x => x.Name.Contains(name)).FirstOrDefault();
+            if (name == "market" && winni == null)
+            {
+                Frame.Log("Öffne Market");
+                Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenMarket);
+
+                return;
+            }
+            mywindow = Frame.Client.GetWindows;
+            winni = mywindow.Where(x => x.Name.Contains(name)).FirstOrDefault();
             if (name == "Orehold" && winni == null)
             {
                 Frame.Log("Öffne Orehold");
@@ -1124,7 +1133,19 @@ namespace EveModel
             return true;
         }
 
+        public bool getmarketopen()
+        {
+            List<EveWindow> mywindow;
+            mywindow = Frame.Client.GetWindows;
+            EveWindow winni;
 
+            winni = mywindow.Where(x => x.Name.Contains("market")).FirstOrDefault();
+            if (winni == null)
+            {
+                return false;
+            }
+            return true;
+        }
 
         public bool getdronbay()
         {
