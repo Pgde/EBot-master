@@ -103,7 +103,7 @@ namespace Controllers
                          EveEntity dista2 = test3.Where(i => (i.Id == astro.Id)).FirstOrDefault();
                          double dista = dista2.Distance;
 
-               if (dista > 2000)
+               if (dista > 7000)
                {
                    Frame.Log("Debug distanz " + dista);
                    break;

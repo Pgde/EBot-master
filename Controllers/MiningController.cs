@@ -356,13 +356,13 @@ namespace Controllers
                         }
                             double dist33 = Frame.Client.Entities.Where(i => i.Id == targetast.Id).FirstOrDefault().Distance;
                             Frame.Log("test " + dist33);
-                            if (dist33 > 3000)
+                            if (dist33 > 7000)
                             {
                                 
                                 targetast.Approach();
                                 break;
                             }
-                            if (dist33 < 3000)
+                            if (dist33 < 7000)
                             {
                                 if (Frame.Client.GetActiveShip.ToEntity.MovementMode != EveEntity.EntityMovementState.Stopped)
                                     Frame.Log("Schiff gestoppt"); 
