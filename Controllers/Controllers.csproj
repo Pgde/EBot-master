@@ -60,7 +60,8 @@
     <Compile Include="EBotManager.cs" />
     <Compile Include="IController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="states\DroneController.cs" />
+    <Compile Include="DroneController.cs" />
+    <Compile Include="states\dronestates.cs" />
     <Compile Include="states\loginstates.cs" />
     <Compile Include="states\miningstate.cs" />
     <Compile Include="states\states.cs" />

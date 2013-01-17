@@ -11,11 +11,11 @@ namespace Controllers
 {
     public class MiningController : BaseController
     {
-        int stationbook, counti;
+     //   int stationbook, counti;
         double usdcapcargo, fullcapcargo, restofcargo;
-        long _destinationId, _currentLocation, _currentDestGateId, currentbelt, curritemid, leereid;
+        long _destinationId, _currentLocation, _currentDestGateId, currentbelt;//, curritemid, leereid;
         long? bookmaid;
-        bool _waitforsessionChange, targetda, minersac;
+        bool _waitforsessionChange, targetda;//, minersac;
         enum TravelStates
         {
             Initialise, Start, Travel, ArrivedAtDestination, Opencargall, carunload, letzgo,
@@ -27,7 +27,7 @@ namespace Controllers
         TravelStates _state;
         List<long> EmptyBelts = new List<long>();
         List<EveItem> items;         // <--- Cargohold
-        List<EveItem> items2;        // <--- OreHold
+       // List<EveItem> items2;        // <--- OreHold
         List<long?> Emptysys = new List<long?>();
         int miningcount = 0;
         long itemzahl = 0;
@@ -40,10 +40,10 @@ namespace Controllers
 
         /////////////////////////////////////////////                           Dronen
         float maxactivdronen = 0;
-        int dronenanzahl = 0;
-        int droneninbay = 0;
+      //  int dronenanzahl = 0;
+      //  int droneninbay = 0;
 
-        bool dronen = false;
+//        bool dronen = false;
 
         /////////////////////////////////////////////                           Verkaufspreise ca.
 
@@ -69,7 +69,7 @@ namespace Controllers
      //   int verkaufsintemszahl = 0;
 
 
-        int sinctest = 3402;   // Skill sience
+       // int sinctest = 3402;   // Skill sience
         int minertest = 483;
 
 

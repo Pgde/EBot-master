@@ -10,8 +10,7 @@ namespace Controllers
 
     public class SkillController : BaseController
     {
-        long _destinationId, _currentLocation, _currentDestGateId;
-        bool _waitforsessionChange;
+     
         enum TravelStates { Initialise, Start, Travel, ArrivedAtDestination, sqlsettime, sqlstarttime, sqlcheck, sqltimecheck, buyskill }
 
 

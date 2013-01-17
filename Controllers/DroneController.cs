@@ -11,8 +11,6 @@ namespace Controllers
     public class DroneController : BaseController
     {
 
-        long _destinationId, _currentLocation, _currentDestGateId;
-        bool _waitforsessionChange;
 
         int dronesinbay = 0;
 

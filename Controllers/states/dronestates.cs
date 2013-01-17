@@ -5,16 +5,17 @@ using System.Text;
 
 namespace Controllers.states
 {
- 
-    public enum TravelerState
+
+    public enum DroneState
     {
         Initialise,
-        Start,
+        Idle,
+        Startdrones,
+        dronesback,
         Travel,
+        dronesatwork,
         ArrivedAtDestination
-    
-    }
-
 
     }
 
+}

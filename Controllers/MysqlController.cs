@@ -10,8 +10,7 @@ namespace Controllers
 
     public class MysqlController : BaseController
     {
-        long _destinationId, _currentLocation, _currentDestGateId;
-        bool _waitforsessionChange;
+
         enum TravelStates { Initialise, Start, Travel, ArrivedAtDestination, sqlsettime, sqlstarttime, sqlcheck, sqltimecheck }
 
 
@@ -25,8 +24,8 @@ namespace Controllers
         int stationtrip = 0;
         int charid;
         bool charon = false;
-        bool needupdate = false;
-        string row = "";
+ //       bool needupdate = false;
+  //      string row = "";
         string rowid = "";
 
         string minersactiv = "Aus";
@@ -35,7 +34,7 @@ namespace Controllers
         string aktime = "";
         string starttime = "";
 
-        int miningcount = 0;
+      //  int miningcount = 0;
       //   itemzahl = 0;
       //   itemwert = 0;
 
