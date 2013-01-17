@@ -14,9 +14,11 @@ namespace Controllers
     
         
         //
-        //  Braucht noch Eula Handeling und Login
+        //  Braucht noch Eula Handeling
         //  Restarten des Clients läuft über Injector
-
+        // Client wird bereits automatisch bei disconnect geschlossen
+        // beim quitten müssema schaue
+        // 
        
       
 
@@ -26,6 +28,8 @@ namespace Controllers
         int failcount = 0;
         int maxfails = 3;
         string charname = "Neo Worm";
+        string accname = "gwarfa";
+            string psswd = "UDh35dsF";
         DateTime errorwait = DateTime.Now;
 
 
@@ -76,8 +80,8 @@ namespace Controllers
                         _States.LoginState = loginstate.Error;
                         break;
                     }
-                    
-                    Frame.Client.logintest("gwarfa", "UDh35dsF");
+
+                    Frame.Client.logintest(accname, psswd);
                     Frame.Log("Logging In ");
                     _States.LoginState = loginstate.waitforcharsel;
                     break;
@@ -128,8 +132,22 @@ namespace Controllers
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 3500));
 
                     Frame.Log("Waiting for Ingame");
-                    _States.LoginState = loginstate.waitforig;
-                    break;
+
+                    if (Frame.Client.Session.InStation)                 //dreckig da muss es nen besseren weg geben aber fürs erste sollts reichen
+                    {
+                        _States.LoginState = loginstate.Idle;
+                        break;
+                    }
+
+                    if (Frame.Client.Session.InSpace)
+                    {
+                        _States.LoginState = loginstate.Idle;
+                        break;
+                    }
+
+                     
+                        break;
+
 
                 case loginstate.Error:
 
