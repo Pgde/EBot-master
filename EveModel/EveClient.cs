@@ -992,6 +992,17 @@ namespace EveModel
         }
 
 
+          public bool ischarsel()
+        {
+            return Frame.Client.GetService("viewState").CallMethod("IsViewActive", new object[] { "charsel" }).GetValueAs<bool>();           
+        }
+
+
+          public bool isloginscreen()
+          {
+              return Frame.Client.GetService("viewState").CallMethod("IsViewActive", new object[] { "login" }).GetValueAs<bool>();
+          }
+        
         public List<Charslot> GetCharslots()
         {
             List<EveObject> mychars;

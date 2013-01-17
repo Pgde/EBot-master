@@ -13,18 +13,20 @@ namespace Controllers
     {
     
         
-
+        //
+        //  Braucht noch Eula Handeling und Login
+        //  Restarten des Clients läuft über Injector
 
        
-        List<string> skilltotrainid = new List<string>();
+      
 
         ////////////////////////////////////////////////////////
         ///////////           VARIABLEN        ////////
 
-
-
-
-
+        int failcount = 0;
+        int maxfails = 3;
+        string charname = "Neo Worm";
+        DateTime errorwait = DateTime.Now;
 
 
 
@@ -37,7 +39,7 @@ namespace Controllers
 
         public logincontroller()
         {
-            Frame.Log("Starting a new SkillController");
+            Frame.Log("Starting a new LoginController");
         }
 
 
@@ -52,18 +54,30 @@ namespace Controllers
             switch (_States.LoginState)
             {
                 case loginstate.Idle:
+                    failcount = 0;
+                    if (Frame.Client.isloginscreen())
+                    {
+                        _States.LoginState = loginstate.login;
+                        _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 3500));
+                        break;
+                    }
 
-                    //check for loginscreen
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(20000, 35000));
-                    _States.LoginState = loginstate.login;
                     break;
 
 
 
                 case loginstate.login:
-
+                    errorwait = DateTime.Now.AddMilliseconds(GetRandom(20000, 35000));
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 3500));
-
+                    failcount++;
+                    if (failcount > maxfails)
+                    {
+                        _States.LoginState = loginstate.Error;
+                        break;
+                    }
+                    
+                    Frame.Client.logintest("gwarfa", "UDh35dsF");
                     Frame.Log("Logging In ");
                     _States.LoginState = loginstate.waitforcharsel;
                     break;
@@ -72,33 +86,54 @@ namespace Controllers
 
                 case loginstate.waitforcharsel:
 
+                    if (DateTime.Now > errorwait)
+                    {
+                        _States.LoginState = loginstate.Error;
+                        break;
+                    }
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 3500));
 
                     Frame.Log("Wait for Char selection");
-                    _States.LoginState = loginstate.selectchar;
-                    break;
+                    if (!Frame.Client.isconnecting() && (!Frame.Client.ischarsel()))
+                    {
+                        _States.LoginState = loginstate.login;
+                        break;
+                    }
 
+                    if (Frame.Client.ischarsel())
+                    {
+                        _States.LoginState = loginstate.selectchar;
+                        errorwait = DateTime.Now.AddMilliseconds(GetRandom(20000, 35000));
+                        break;
+                    }
+                    break;
 
                 case loginstate.selectchar:
 
-                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 3500));
 
-                    Frame.Log("Selecting Char");
+                    errorwait = DateTime.Now.AddMilliseconds(GetRandom(20000, 35000));
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 3500));
+                    Frame.Client.selectchar(charname);
+                    Frame.Log("Selecting Char: "+ charname);
                     _States.LoginState = loginstate.waitforig;
                     break;
 
 
                 case loginstate.waitforig:
-
+                    if (DateTime.Now > errorwait)
+                    {
+                        _States.LoginState = loginstate.Error;
+                        break;
+                    }
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 3500));
 
                     Frame.Log("Waiting for Ingame");
-                    _States.LoginState = loginstate.Idle;
+                    _States.LoginState = loginstate.waitforig;
                     break;
 
                 case loginstate.Error:
 
-                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 3500));
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(20000000, 35000000));      //dirty 
 
                     Frame.Log("Error");
                     _States.LoginState = loginstate.Error;

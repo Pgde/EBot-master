@@ -56,7 +56,7 @@ namespace EBotPilot
 
         private void button3_Click(object sender, EventArgs e)
         {
-           
+            _manager.AddController(new logincontroller());
         }
 
         #region Old Code
