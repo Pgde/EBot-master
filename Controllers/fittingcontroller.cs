@@ -29,7 +29,7 @@ namespace Controllers
 
 
 
-
+     
 
 
 
@@ -39,6 +39,7 @@ namespace Controllers
         public fittingcontroller()
         {
             Frame.Log("Starting a new FittingController");
+          
         }
 
 
@@ -57,13 +58,23 @@ namespace Controllers
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(20000, 35000));
                     break;
 
+                case fittingstate.FitVult:
 
+                      _localPulse = DateTime.Now.AddMilliseconds(GetRandom(20000, 35000));
+                      _States.fittingstate = fittingstate.Idle;
+                    break;
+
+                case fittingstate.FitCovetor:
+
+                      _localPulse = DateTime.Now.AddMilliseconds(GetRandom(20000, 35000));
+                      _States.fittingstate = fittingstate.Idle;
+                    break;
 
 
                 case fittingstate.Error:
 
-                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(20000000, 35000000));      //dirty 
-                    Frame.Log("Error");
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(200000000, 350000000));      //dirty 
+                    Frame.Log("Error fittingstate");
                     _States.fittingstate = fittingstate.Error;
                     break;
 

@@ -9,6 +9,9 @@ namespace Controllers.states
     public enum fittingstate
     {
         Idle,
+        Start,
+        FitVult,
+        FitCovetor,
         Error
     }
 
