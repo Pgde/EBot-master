@@ -27,9 +27,9 @@ namespace Controllers
 
         int failcount = 0;
         int maxfails = 3;
-        string charname = "Neo Worm";
-        string accname = "gwarfa";
-        string psswd = "UDh35dsF";
+        string charname = "Heinooo";
+        string accname = "teetee2000";
+            string psswd = "OQttV9Jp";
         DateTime errorwait = DateTime.Now;
 
 

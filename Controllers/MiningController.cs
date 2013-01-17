@@ -366,6 +366,7 @@ namespace Controllers
                                 {
                                     Frame.Log("Schiff gestoppt");
                                     Frame.Client.ExecuteCommand(EveModel.EveCommand.CmdStopShip);
+                                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 2500));     
                                 }
                                 break;
                             }
