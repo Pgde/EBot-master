@@ -19,20 +19,14 @@ namespace Controllers.states
         Start,
         Travel,
         ArrivedAtDestination,
-        Opencargall,
-        carunload,
         letzgo,
-        Opencargstation,
         Mining,
         warping,
         warphome,
-        warpnextbelt,
         unload,
         warptobelt,
         travStart,
-        changebook,
-        sqlchecktime,
-        sqlchecken,
+        changebook
 
     }
 

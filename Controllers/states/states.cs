@@ -12,5 +12,6 @@ namespace Controllers.states
         public static DroneState DroneState { get; set; }
         public static loginstate LoginState { get; set; }
         public static SkillState SkillState { get; set; }
+        public static MysqlState MysqlState { get; set; }
     }
 }

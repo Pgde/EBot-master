@@ -6,14 +6,11 @@ using System.Text;
 namespace Controllers.states
 {
 
-    public enum DroneState
+    public enum MysqlState
     {
         Initialise,
-        Idle,
-        Startdrones,
-        dronesback,
-        dronesatwork
-
+        Start
     }
 
 }
+

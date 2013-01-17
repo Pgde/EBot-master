@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using EveModel;
 using MySql.Data.MySqlClient;
-
+using Controllers.states;
 namespace Controllers
 {
 
     public class MysqlController : BaseController
     {
 
-        enum TravelStates { Initialise, Start, Travel, ArrivedAtDestination, sqlsettime, sqlstarttime, sqlcheck, sqltimecheck }
+     //   enum TravelStates { Initialise, Start, Travel, ArrivedAtDestination, sqlsettime, sqlstarttime, sqlcheck, sqltimecheck }
 
 
 
@@ -60,7 +60,6 @@ namespace Controllers
 
 
 
-        TravelStates _state;
 
         public MysqlController()
         {
@@ -74,15 +73,15 @@ namespace Controllers
             {
                 return;
             }
-            switch (_state)
+            switch (_States.MysqlState)
             {
-                case TravelStates.Initialise:
+                case MysqlState.Initialise:
 
 
 
                     ///   MySql INIZALISIERN ///
-                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(20000, 35000));  
-                    stringstate = _state.ToString();
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(20000, 35000));
+                    stringstate = _States.MysqlState.ToString();
                     shipname = Frame.Client.GetActiveShip.GivenName;
                     charid = Frame.Client.Session.CharId;
 
@@ -97,11 +96,11 @@ namespace Controllers
 
 
 
-                    _state = TravelStates.Start;
+                    _States.MysqlState = MysqlState.Start;
                     break;
 
 
-                case TravelStates.Start:
+                case MysqlState.Start:
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(20000, 35000));  
                     sqlsettime();
                     sqlcheck();
