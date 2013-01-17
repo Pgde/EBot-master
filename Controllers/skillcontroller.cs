@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using EveModel;
 using MySql.Data.MySqlClient;
+using Controllers.states;
 
 namespace Controllers
 {
@@ -11,7 +12,7 @@ namespace Controllers
     public class SkillController : BaseController
     {
      
-        enum TravelStates { Initialise, Start, Travel, ArrivedAtDestination, sqlsettime, sqlstarttime, sqlcheck, sqltimecheck, buyskill }
+     //   enum TravelStates { Initialise, Start, Travel, ArrivedAtDestination, sqlsettime, sqlstarttime, sqlcheck, sqltimecheck, buyskill }
 
 
         //   List<string> skilltotrainid = new List<string>();        
@@ -38,7 +39,7 @@ namespace Controllers
 
 
 
-        TravelStates _state;
+     
 
         public SkillController()
         {
@@ -52,9 +53,9 @@ namespace Controllers
             {
                 return;
             }
-            switch (_state)
+            switch (_States.SkillState)
             {
-                case TravelStates.Initialise:
+                case SkillState.Initialise:
 
 
                     List<EveSkill> neueskill = Frame.Client.GetMySkills();
@@ -105,12 +106,12 @@ namespace Controllers
                     {
                         Frame.Log("Skill = " + tmp);
                     }
-                    _state = TravelStates.Start;
+                     _States.SkillState = SkillState.Start; 
                     break;
 
 
 
-                case TravelStates.Start:
+                case SkillState.Start:
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 3500));  
 
                     double debugg = Frame.Client.qlengdouble;
@@ -137,7 +138,7 @@ namespace Controllers
                     {
                         Frame.Log("Skill nicht vorhanden muss einkaufen");
                         // Funktion zum einkaufen schreiben
-                        _state = TravelStates.buyskill;
+                        _States.SkillState = SkillState.buyskill;
                         break;
 
                     }
