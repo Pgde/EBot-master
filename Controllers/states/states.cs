@@ -10,5 +10,6 @@ namespace Controllers.states
         public static  TravelerState TravelerState { get; set; }
         public static MiningState MiningState { get; set; }
         public static DroneState DroneState { get; set; }
+        public static loginstate LoginState { get; set; }
     }
 }
