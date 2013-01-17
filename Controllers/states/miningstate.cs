@@ -6,12 +6,33 @@ using System.Text;
 namespace Controllers.states
 {
 
+
+  //  enum TravelStates
+  //  {
+  //      Initialise, Start, Travel, ArrivedAtDestination, Opencargall, carunload, letzgo,
+  //      Opencargstation, Mining, warping, warphome, warpnextbelt, unload, warptobelt, travStart, changebook,
+  //      sqlchecktime, sqlchecken
+  //  }
     public enum MiningState
     {
-        Idle,
-        Traveling,
-        AtDestination,
-        Error
+        Initialise,
+        Start,
+        Travel,
+        ArrivedAtDestination,
+        Opencargall,
+        carunload,
+        letzgo,
+        Opencargstation,
+        Mining,
+        warping,
+        warphome,
+        warpnextbelt,
+        unload,
+        warptobelt,
+        travStart,
+        changebook,
+        sqlchecktime,
+        sqlchecken,
 
     }
 

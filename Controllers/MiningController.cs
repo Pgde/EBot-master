@@ -24,7 +24,7 @@ namespace Controllers
         }
         EveEntity targetast;
         EveBookmark statbm;
-        TravelStates _state;
+    //    TravelStates _state;
         List<long> EmptyBelts = new List<long>();
         List<EveItem> items;         // <--- Cargohold
        // List<EveItem> items2;        // <--- OreHold
@@ -96,10 +96,10 @@ namespace Controllers
             {
                 return;
             }
-            switch (_state)
+            switch (_States.MiningState)
             {
                 /////////////////////////////////////////////////////////////////////////////////////////
-                case TravelStates.Initialise:
+                case MiningState.Initialise:
     
            //         Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenDroneBayOfActiveShip);
       
@@ -134,7 +134,7 @@ namespace Controllers
 
                     if (Frame.Client.Session.InSpace)                                                                           // Wenn wir im WEltraum sind gehe zur mining State
                     {
-                        _state = TravelStates.letzgo;
+                        _States.MiningState = MiningState.letzgo;
                         Frame.Log("State zu letzgo");
                          break;
                     }
@@ -144,11 +144,12 @@ namespace Controllers
                     {
                         if (usdcapcargo != 0)                                                                          // Wenn das cargo voll gehe heim
                         {
-                            _state = TravelStates.unload;                                                                               // Abladen
+                            _States.MiningState = MiningState.unload;                                                                                                        // Abladen
                             Frame.Log("State zu unload");
                             break;
                         }
-                        _state = TravelStates.letzgo;                                                                            //  Losfliegen minen gehen :D
+                        _States.MiningState = MiningState.letzgo;
+                        //  Losfliegen minen gehen :D
                         Frame.Log("State zu letzgo");
                         break;
                     }
@@ -158,7 +159,7 @@ namespace Controllers
                 /////////////////////////////////////////////////////////////////////////////////////////
 
 
-                case TravelStates.Mining:
+                case MiningState.Mining:
                     if (miningcount == 10)
                     {
                         Frame.Log("Starte SQLtimecheck");
@@ -200,8 +201,9 @@ namespace Controllers
                             }
                             DroneController.astro = null;
 
-                            Frame.Log("TravelState.Warphome");
-                            _state = TravelStates.warphome;                                                                     // State um zurück zur Stations Bookmark zu warpen
+                            Frame.Log("TravelState.Warphome");                           
+                            _States.MiningState = MiningState.warphome;
+                            // State um zurück zur Stations Bookmark zu warpen
                              break;
                         }
                     
@@ -297,8 +299,8 @@ namespace Controllers
                                 DroneController.astro = null;
                                 Frame.Log("");
                                 minersactiv = "Aus";
-                                EmptyBelts.Add(currentbelt);
-                                _state = TravelStates.warphome;                                                                     // State um zurück zur Stations Bookmark zu warpen
+                                EmptyBelts.Add(currentbelt);   // State um zurück zur Stations Bookmark zu warpen
+                                _States.MiningState = MiningState.warphome;
                                 break;
                             }
                             else
@@ -310,7 +312,7 @@ namespace Controllers
                                 }
                                 DroneController.astro = null;
                                 minersactiv = "Aus";
-                                _state = TravelStates.warptobelt;                                                                 // Warpe zum nächsten Mining Belt Bookmark
+                                _States.MiningState = MiningState.warptobelt;  // Warpe zum nächsten Mining Belt Bookmark
                                 break;
                             }
                     }
@@ -373,15 +375,15 @@ namespace Controllers
 
 
 
-                    }
-                    _state = TravelStates.Mining;                                                                                    // Wieder zu Mining gehen
+                    }   
+                 _States.MiningState = MiningState.Mining;    // Wieder zu Mining gehen
                     break;
                 /////////////////////////////////////////////////////////////////////////////////////////
 
 
 
 
-                case TravelStates.warphome:                                                                                         // Heimwarpen
+                case MiningState.warphome:                                                                                         // Heimwarpen
                     minersactiv = "Aus";
                     if (Frame.Client.getinvopen() == false)
                     {
@@ -398,7 +400,7 @@ namespace Controllers
                     if (Frame.Client.Session.InStation)                                                                             // Bin ich in der station? 
                     {                                                                                                                // Wenn ja
                         Frame.Log("In Station angekommen");                                                                          // Log
-                        _state = TravelStates.unload;                                                                                // setze state zu unload
+                        _States.MiningState = MiningState.unload;                                                                 // setze state zu unload
                        _localPulse = DateTime.Now.AddMilliseconds(GetRandom(4500, 6500));                                           // Warte zwischen 4,5 und 6,5 secunden
                         break;                                                                                                      // Breake
                     }                                                                                                               // Wenn nicht in Station
@@ -410,7 +412,7 @@ namespace Controllers
                             Frame.Log("Docking");                                                                                   // Logbuch
                             station.Dock();                                                                                         // Docke an dieser station/Warp dahin
                             _localPulse = DateTime.Now.AddMilliseconds(GetRandom(3000, 5000));                                      // Warte zwischen 3 und 5 Sekunden
-                            _state = TravelStates.warphome;                                                                         // Setze state auf warphome
+                            _States.MiningState = MiningState.warphome;                                                           // Setze state auf warphome
                             break;                                                                                                  // break
                         }
                         else
@@ -420,24 +422,24 @@ namespace Controllers
                             Frame.Log("Warp to Station");
                             statbm.WarpTo();
                             _localPulse = DateTime.Now.AddMilliseconds(GetRandom(4500, 6500));                                     // Warte zwischen 4.5 und 6.5 Secunden
-                            _state = TravelStates.warphome;
+                            _States.MiningState = MiningState.warphome;   
                           break;
                         }
                     }
-                    _state = TravelStates.warphome;
+                    _States.MiningState = MiningState.warphome;  
                     break;
                 /////////////////////////////////////////////////////////////////////////////////////////
 
 
 
-                case TravelStates.warping:
+                case MiningState.warping:
 
                     if (Frame.Client.GetActiveShip.ToEntity.MovementMode == EveEntity.EntityMovementState.InWarp)
                     {
                         break;
                     }
                     Frame.Log("wechsel state zu mining state");
-                    _state = TravelStates.Mining;
+                    _States.MiningState = MiningState.Mining;      
                    Frame.Log("Starte SQLtimecheck");
                     //          sqltimecheck();
                     break;
@@ -445,7 +447,7 @@ namespace Controllers
 
 
 
-                case TravelStates.letzgo:
+                case MiningState.letzgo:
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(18000, 50000));
                     targetast = null;                                                                                       // Setze Astroiden Target == Null
                    if (Frame.Client.Session.InStation)
@@ -457,7 +459,7 @@ namespace Controllers
                     }
                     {
                         if (Frame.Client.Session.InSpace)
-                            _state = TravelStates.warptobelt;
+                        _States.MiningState = MiningState.warptobelt;
                       }
 
                     Frame.Log("Starte SQLtimecheck");
@@ -467,7 +469,7 @@ namespace Controllers
 
 
 
-                case TravelStates.warptobelt:
+                case MiningState.warptobelt:
                     if (Frame.Client.getinvopen() == false)
                     {
                         Frame.Client.Getandopenwindow("leer");
@@ -486,7 +488,7 @@ namespace Controllers
                     if (belt == null)
                     {
                         Frame.Log("Alle belts auf Blacklist oder Keine Belts im System");
-                        _state = TravelStates.changebook;
+                        _States.MiningState = MiningState.changebook;
                         break;
                     }
                     currentbelt = belt.Id;
@@ -502,7 +504,7 @@ namespace Controllers
                     if (Frame.Client.GetActiveShip.ToEntity.MovementMode == EveEntity.EntityMovementState.InWarp)
                     {
                         Frame.Log("Fertig gewarpt weiter zur Warping State");
-                        _state = TravelStates.warping;
+                        _States.MiningState = MiningState.warping;
                         break;
                     }
 
@@ -517,19 +519,19 @@ namespace Controllers
                         {
                             belt.WarpTo();
                             _localPulse = DateTime.Now.AddMilliseconds(GetRandom(10000, 15000));
-                            _state = TravelStates.warptobelt;
+                            _States.MiningState = MiningState.warptobelt;
                            break;
                         }
                         else
                         {
-                            _state = TravelStates.Mining;
+                            _States.MiningState = MiningState.Mining;
                          }
                     }
 
                     break;
 
 
-                case TravelStates.unload:
+                case MiningState.unload:
                     if (Frame.Client.getinvopen() == false)
                     {
                         Frame.Client.Getandopenwindow("leer");
@@ -643,7 +645,7 @@ namespace Controllers
                         Frame.Log("Stackall");
               
 
-                        _state = TravelStates.unload;                                                                                              // wiederhole unload
+                        _States.MiningState = MiningState.unload;                                                                                   // wiederhole unload
                        break;
                     }                                                                                                                               // Wenn kein items mehr da ist / oder da war 
 
@@ -676,13 +678,13 @@ namespace Controllers
 
                     stationtrip = (stationtrip + 1);
                     Frame.Log("keine items mehr wieder losfliegen");                                                                                // Log buchausgabe
-                    _state = TravelStates.letzgo;                                                                                                   // Abdocken und losfliegen
-                  
+                                                                        // Abdocken und losfliegen
+                    _States.MiningState = MiningState.letzgo; 
                     break;
 
 
 
-                case TravelStates.changebook:
+                case MiningState.changebook:
                     EmptyBelts.Clear();
 
 
@@ -697,13 +699,13 @@ namespace Controllers
                     {
                         Frame.Log("booky == momentane Loc");
                         Emptysys.Add(bookmaid);
-                        _state = TravelStates.changebook;                                                                                                   // Abdocken und losfliegen
+                        _States.MiningState = MiningState.changebook;               // Abdocken und losfliegen
                         break;
                     }
 
                     booky1.SetDestination();
 
-                    _state = TravelStates.travStart;
+                    _States.MiningState = MiningState.travStart;
                     break;
 
 
@@ -715,13 +717,13 @@ namespace Controllers
                 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-                case TravelStates.travStart:
+                case MiningState.travStart:
 
                     _destinationId = _destinationId > 0 ? _destinationId : Frame.Client.GetLastWaypointLocationId();
                     if (_destinationId == -1 || Frame.Client.Session.LocationId == _destinationId)
                     {
                         Frame.Log("No destination found, shutting down");
-                        _state = TravelStates.ArrivedAtDestination;
+                        _States.MiningState = MiningState.ArrivedAtDestination; 
                         return;
                     }
                     if (Frame.Client.GetLastWaypointLocationId() == -1)
@@ -729,13 +731,13 @@ namespace Controllers
                         Frame.Log("Setting destination");
                         Frame.Client.SetDestination(_destinationId);
                     }
-
-                    _state = TravelStates.Start;
+                    _States.MiningState = MiningState.Start; 
                     break;
 
 
-                case TravelStates.Start:
-                    _state = TravelStates.Travel;
+                case MiningState.Start:
+
+                    _States.MiningState = MiningState.Travel; 
                     if (Frame.Client.Session.InStation)
                     {
                         Frame.Client.ExecuteCommand(EveModel.EveCommand.CmdExitStation);
@@ -743,11 +745,10 @@ namespace Controllers
                         _localPulse = DateTime.Now.AddMilliseconds(GetRandom(18000, 25000));
                     }
                     break;
-                case TravelStates.Travel:
+                case MiningState.Travel:
                     if (_destinationId == -1 || Frame.Client.Session.LocationId == _destinationId)
                     {
-                        _state = TravelStates.ArrivedAtDestination;
-
+                        _States.MiningState = MiningState.ArrivedAtDestination; 
                         EveEntity destEntity = Frame.Client.Entities.Where(ent => ent.Id == _currentDestGateId).FirstOrDefault();
 
                         if (Frame.Client.Session.LocationId != _currentLocation && Frame.Client.Session.IsItSafe)
@@ -778,9 +779,9 @@ namespace Controllers
 
                     break;
 
-                case TravelStates.ArrivedAtDestination:
+                case MiningState.ArrivedAtDestination:
                     Frame.Log("Destination reached");
-                    _state = TravelStates.letzgo;
+                    _States.MiningState = MiningState.letzgo; 
                     break;
 
 
