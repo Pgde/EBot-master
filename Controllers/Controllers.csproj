@@ -55,6 +55,7 @@
     <Compile Include="BaseController.cs" />
     <Compile Include="fittingcontroller.cs" />
     <Compile Include="loginController.cs" />
+    <Compile Include="settings.cs" />
     <Compile Include="skillcontroller.cs" />
     <Compile Include="MysqlController.cs" />
     <Compile Include="MiningController.cs" />

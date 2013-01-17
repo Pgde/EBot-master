@@ -5,6 +5,7 @@ using System.Text;
 using EveModel;
 using MySql.Data.MySqlClient;
 using global::Controllers.states;
+using Controllers.Settings;
 
 namespace Controllers
 {
@@ -27,9 +28,9 @@ namespace Controllers
 
         int failcount = 0;
         int maxfails = 3;
-        string charname = "Heinooo";
-        string accname = "teetee2000";
-            string psswd = "OQttV9Jp";
+        string charname = Settings.Settings.Instance.Charname;
+        string accname = Settings.Settings.Instance.Accname;
+        string psswd = Settings.Settings.Instance.Pw;
         DateTime errorwait = DateTime.Now;
 
 

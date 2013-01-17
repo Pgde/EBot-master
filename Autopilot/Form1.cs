@@ -29,7 +29,7 @@ namespace EBotPilot
         private void Form1_Load(object sender, EventArgs e)
         {
             _manager = new EBotManager();
-
+            Controllers.Settings.Settings.Instance.LoadSettings();
             #region Old Code
             //// Intialize
             //pulse = DateTime.MinValue;
