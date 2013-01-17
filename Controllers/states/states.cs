@@ -14,5 +14,6 @@ namespace Controllers.states
         public static SkillState SkillState { get; set; }
         public static MysqlState MysqlState { get; set; }
         public static fittingstate fittingstate { get; set; }
+        public static tutstates tutstates { get; set; }
     }
 }

@@ -70,7 +70,9 @@
     <Compile Include="states\skillstates.cs" />
     <Compile Include="states\states.cs" />
     <Compile Include="states\travelerstates.cs" />
+    <Compile Include="states\tutstates.cs" />
     <Compile Include="TravelController.cs" />
+    <Compile Include="tutcontroller.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EveModel\EveModel.csproj">
