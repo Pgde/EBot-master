@@ -9,7 +9,8 @@ namespace Controllers.states
     public enum MysqlState
     {
         Initialise,
-        Start
+        Start,
+        wait
     }
 
 }

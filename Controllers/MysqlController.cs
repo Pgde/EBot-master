@@ -106,6 +106,10 @@ namespace Controllers
                     sqlcheck();
                     break;
 
+                case MysqlState.wait:
+
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
+                    break;
 
 
             }

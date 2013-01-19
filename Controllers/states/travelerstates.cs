@@ -11,7 +11,8 @@ namespace Controllers.states
         Initialise,
         Start,
         Travel,
-        ArrivedAtDestination
+        ArrivedAtDestination,
+        wait
     
     }
 

@@ -145,6 +145,12 @@ namespace Controllers
                     Frame.Log("Destination reached");
                     IsWorkDone = true;
                     break;
+
+                case TravelerState.wait:
+
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
+                    break;
+
             }
         }
     }

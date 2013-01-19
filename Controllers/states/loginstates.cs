@@ -13,7 +13,8 @@ namespace Controllers.states
         waitforcharsel,
         selectchar,
         waitforig,
-        Error
+        Error,
+        wait
     }
 
 }

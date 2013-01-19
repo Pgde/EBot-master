@@ -88,6 +88,12 @@ namespace Controllers
                     _States.tutstates = tutstates.Error;
                     break;
 
+                case tutstates.wait:
+
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
+                    break;
+
+
             }
         }
     }

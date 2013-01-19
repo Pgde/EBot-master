@@ -181,6 +181,12 @@ namespace Controllers
 
                     break;
 
+
+                case SkillState.wait:
+
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
+                    break;
+
             }
         }
     }

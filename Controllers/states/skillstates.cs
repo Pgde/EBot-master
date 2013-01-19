@@ -10,7 +10,8 @@ namespace Controllers.states
     {
         Initialise,
         Start,
-        buyskill
+        buyskill,
+        wait
     
     }
 

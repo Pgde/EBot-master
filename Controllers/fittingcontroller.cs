@@ -78,6 +78,11 @@ namespace Controllers
                     _States.fittingstate = fittingstate.Error;
                     break;
 
+                case fittingstate.wait:
+
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
+                    break;
+
             }
         }
     }

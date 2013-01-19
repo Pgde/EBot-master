@@ -158,6 +158,11 @@ namespace Controllers
                     _States.LoginState = loginstate.Error;
                     break;
 
+                case loginstate.wait:
+
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
+                    break;
+
             }   
         }
     }

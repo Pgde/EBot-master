@@ -16,6 +16,7 @@ namespace Controllers.states
         compmission,
         checksecond,
         Error,
+        wait
     }
 
 }

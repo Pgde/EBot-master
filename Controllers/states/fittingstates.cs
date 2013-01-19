@@ -12,7 +12,8 @@ namespace Controllers.states
         Start,
         FitVult,
         FitCovetor,
-        Error
+        Error,
+        wait
     }
 
 }

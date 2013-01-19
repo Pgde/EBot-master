@@ -50,12 +50,12 @@ namespace Controllers
 
                     if (Frame.Client.Session.InStation == true)
                     {
-                         _localPulse = DateTime.Now.AddMilliseconds(GetRandom(8000, 9000));
+                        _localPulse = DateTime.Now.AddMilliseconds(GetRandom(8000, 9000));
                         break;
                     }
                     if (Frame.Client.GetActiveShip.DronesInBay > 0)
                     {
-         //               DroneController.dronen = true;
+                        //               DroneController.dronen = true;
                     }
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(3000, 3500));
 
@@ -69,71 +69,71 @@ namespace Controllers
                         _localPulse = DateTime.Now.AddMilliseconds(GetRandom(3000, 3500));
                         break;
                     }
-                _localPulse = DateTime.Now.AddMilliseconds(GetRandom(3000, 3500));
-                Frame.Log("Drones ...Ídle");
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(3000, 3500));
+                    Frame.Log("Drones ...Ídle");
 
-                if (astro != null)
-                {
-                    _States.DroneState = DroneState.Startdrones;
-                    astrodronen = DroneController.astro;
+                    if (astro != null)
+                    {
+                        _States.DroneState = DroneState.Startdrones;
+                        astrodronen = DroneController.astro;
+                        break;
+                    }
+
+                    List<EveEntity> dronis = Frame.Client.GetActiveShip.ActiveDrones;
+                    int droni = dronis.Count;
+                    Frame.Log("Drones  count =   " + droni);
+
+                    int dronesbay = Frame.Client.GetActiveShip.DronesInBay;
+                    Frame.Log("Drones  count in bay =   " + dronesbay);
                     break;
-                }
-
-                List<EveEntity> dronis = Frame.Client.GetActiveShip.ActiveDrones;
-                int droni = dronis.Count;
-                Frame.Log("Drones  count =   " + droni);
-
-                int dronesbay = Frame.Client.GetActiveShip.DronesInBay;
-                Frame.Log("Drones  count in bay =   " + dronesbay);
-                 break;
 
 
 
                 case DroneState.Startdrones:
 
-                 _localPulse = DateTime.Now.AddMilliseconds(GetRandom(3000, 3500));
-               if (Frame.Client.getdronbay() == false)
-                 {
-                     Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenDroneBayOfActiveShip);
-                     break;
-                 }
-                         List<EveEntity> test3 = Frame.Client.Entities;                                                                   // Und sortier sie nach namen distanz etc
-                         EveEntity dista2 = test3.Where(i => (i.Id == astro.Id)).FirstOrDefault();
-                         double dista = dista2.Distance;
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(3000, 3500));
+                    if (Frame.Client.getdronbay() == false)
+                    {
+                        Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenDroneBayOfActiveShip);
+                        break;
+                    }
+                    List<EveEntity> test3 = Frame.Client.Entities;                                                                   // Und sortier sie nach namen distanz etc
+                    EveEntity dista2 = test3.Where(i => (i.Id == astro.Id)).FirstOrDefault();
+                    double dista = dista2.Distance;
 
-               if (dista > 7000)
-               {
-                   Frame.Log("Debug distanz " + dista);
-                   break;
-               }
-                 dronesinbay = Frame.Client.GetActiveShip.DronesInBay;
-                 if (dronesinbay > 0)
-                 {
-                     Frame.Log("Drones Startet");
-                     Frame.Client.GetActiveShip.ReleaseDrones();
-                     break;
-                 }
-     //               if (dronenaktiviern == false)
-     //               {
-                        Frame.Log("Drones start mining");
-                     Frame.Client.DroneMineRepeatedly();
+                    if (dista > 7000)
+                    {
+                        Frame.Log("Debug distanz " + dista);
+                        break;
+                    }
+                    dronesinbay = Frame.Client.GetActiveShip.DronesInBay;
+                    if (dronesinbay > 0)
+                    {
+                        Frame.Log("Drones Startet");
+                        Frame.Client.GetActiveShip.ReleaseDrones();
+                        break;
+                    }
+                    //               if (dronenaktiviern == false)
+                    //               {
+                    Frame.Log("Drones start mining");
+                    Frame.Client.DroneMineRepeatedly();
                     dronenaktiviern = true;                              // Dronen aktiv
                     _States.DroneState = DroneState.dronesatwork;
                     break;
-     //             }
-     //               break;
+                //             }
+                //               break;
 
 
                 case DroneState.dronesatwork:
-                      
+
                     if (astrodronen.Id == DroneController.astro.Id)
                     {
                         _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2000));
                         break;
                     }
- 
-                      dronenaktiviern = false;                              // Dronen aktiv
-                     _States.DroneState = DroneState.dronesback;
+
+                    dronenaktiviern = false;                              // Dronen aktiv
+                    _States.DroneState = DroneState.dronesback;
                     break;
 
 
@@ -149,9 +149,16 @@ namespace Controllers
                     }
                     Frame.Log("Setzte state auf Idle");
                     _States.DroneState = states.DroneState.Idle;
-                     break;
-                 }
-             
+                    break;
+
+
+                case DroneState.wait:
+
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
+                    break;
+
+
+            }
             }
         }
     }

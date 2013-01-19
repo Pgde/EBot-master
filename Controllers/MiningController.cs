@@ -785,6 +785,10 @@ namespace Controllers
                     _States.MiningState = MiningState.letzgo; 
                     break;
 
+                case MiningState.wait:
+
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
+                    break;
 
 
             }

@@ -12,7 +12,8 @@ namespace Controllers.states
         Idle,
         Startdrones,
         dronesback,
-        dronesatwork
+        dronesatwork,
+        wait
 
     }
 
