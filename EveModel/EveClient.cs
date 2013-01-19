@@ -1262,8 +1262,12 @@ namespace EveModel
 
                 public bool AddSkillToEnd(EveSkill skill, int crlvl)
         {
-            Frame.Client.GetService("skillqueue").CallMethod("AddSkillToEnd", new object [] {skill.typeID, crlvl},true);
-            return true;
+            if (Frame.Client.GetService("skillqueue").IsValid)
+            {
+                Frame.Client.GetService("skillqueue").CallMethod("AddSkillToEnd", new object[] { skill.typeID, crlvl }, true);
+                return true;
+            }
+            return false;
         }
 
         public bool recallalldrones()
