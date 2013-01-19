@@ -23,7 +23,7 @@ namespace Controllers.Settings
         {
 
 
-                
+            Skilllist = new List<string>();
                 XElement xml = XDocument.Load(path).Root;
                 if (xml == null)
                 {

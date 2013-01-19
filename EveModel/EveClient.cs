@@ -44,6 +44,19 @@ namespace EveModel
                 return obj;
             }
         }
+
+        internal EveObject Form
+        {
+            get
+            {
+                EveObject obj;
+                if (!Objects.TryGetValue("form", out obj))
+                {
+                    obj = new EveObject(PyCall.PyImport_ImportModule("form"), "form");
+                }
+                return obj;
+            }
+        }
         /// <summary>
         /// Gets the utthread object reference used in creating asynchronous method calls in the EVE Client process
         /// </summary>
@@ -204,10 +217,14 @@ namespace EveModel
         /// <returns></returns>
         public EveObject GetService(string serviceName)
         {
-            EveObject serviceObject;
+       /*     EveObject serviceObject;
             if (!Services.GetDictionary<string>().TryGetValue(serviceName, out serviceObject))
                 serviceObject = LocalSvc[serviceName];
-            return serviceObject;
+            return serviceObject;*/
+             
+        
+            return Builtin["sm"].CallMethod("GetService", new object[] { serviceName }).GetValueAs<EveObject>();
+        
         }
         EveSession _eveSession;
         /// <summary>
@@ -768,6 +785,10 @@ namespace EveModel
             }
         }
 
+        public EveObject GetServiceEve(string svc)
+        {
+            return Builtin["sm"].CallMethod("GetService", new object[] { svc }).GetValueAs<EveObject>();
+        }
         
         EveAgentDialogWindow _agentDialogWindow;
         /// <summary>
@@ -841,9 +862,11 @@ namespace EveModel
         {
             get
             {
-                double tmp = Frame.Client.GetService("skillqueue").CallMethod("GetTrainingLengthOfQueue", new object[] { }).GetValueAs<double>();
+
+                double tmp = Frame.Client.GetService("skillqueue").CallMethod("GetTrainingLengthOfQueue", new object[] { }, true).GetValueAs<double>();
                 TimeSpan tmp2 = TimeSpan.FromTicks((long)tmp);
                 return tmp2.TotalDays;//Frame.Client.GetService("skillqueue").CallMethod("GetTrainingLengthOfQueue", new object[] { }).GetValueAs<double>();
+
             }
         }
 
@@ -895,305 +918,351 @@ namespace EveModel
             return tmp3.ConvertAll<EveMarketOrder>(EveObject2EveMarketOrder);
         }
 
-        public List<EveSkill> GetMySkills()
+     /*   public List<EveSkill> GetMySkills()
         {
             List<EveObject> mys;
            mys = Frame.Client.SkillService["myskills"].GetList<EveObject>();
            return mys.ConvertAll<EveSkill>(EveObject2EveSkill);
         }
-
-        //  def TryFit(self, invItems, shipID = None):  tested/working
-        public bool tryfit(List<EveItem> invitems)
+*/
+        public List<EveSkill> GetMySkills()
         {
-            if (Frame.Client.Session.InStation)
-            {
-                Frame.Client.GetService("menu").CallMethod("TryFit", new object[] { invitems, GetActiveShip.ItemId },true);
-                return true;
-            }
-            return false;
-            }
-
-        //  def TryFit(self, invItems, shipID = None):  tested/working
-        public bool tryfit(List<EveItem> invitems, long shipid)
-        {
-            if (Frame.Client.Session.InStation)
-            {
-                Frame.Client.GetService("menu").CallMethod("TryFit", new object[] { invitems, shipid });
-                return true;
-            }
-            return false;
+            List<EveObject> mys;
+            mys = Frame.Client.SkillService.CallMethod("MySkills", new object[] { } ).GetList<EveObject>();
+            return mys.ConvertAll<EveSkill>(EveObject2EveSkill);
         }
 
-        //def AssembleShip(self, invItems):     untested, should work
-        public bool AssembleShip(List<EveItem> invitems)
-        {
-            if (Frame.Client.Session.InStation)
-            {
-                Frame.Client.GetService("menu").CallMethod("AssembleShip", new object[] { invitems });
-                return true;
-            }
-            return false;
-        }
-
-        // self.invCache.GetInventoryFromId(shipID).StripFitting()   tested/working
-
-        public bool StripFitting(long shipid)
-        {
-
-            if (Frame.Client.Session.InStation)
-            {
-                EveObject tmp = new EveObject();
-
-                tmp = Frame.Client.GetService("invCache").CallMethod("GetInventoryFromId", new object[] { shipid }).GetValueAs<EveObject>();
-                tmp.CallMethod("StripFitting", new object[] { });
-                return true;
-            }
-            return false;
-        }
-
-        //def InjectSkillIntoBrain(self, invItems):     untested
-
-        public void InjectSkillIntoBrain(List<EveItem> invitems)
-        {
-            Frame.Client.GetService("menu").CallMethod("InjectSkillIntoBrain", new object[] { invitems });
-            return;
-        }
-
-        //  sm.StartService('station').TryActivateShip(invItem) (checked invItem = itemid of a ship) dunno if this works
-
-        public void TryActivateShip(EveObject ship)
-        {
-            Frame.Client.GetService("station").CallMethod("TryActivateShip", new object[] { ship } ,true);
-            return;
-        }
+        /*
+         * def MySkills(self, renew = 0, byTypeID = False):
+                if self.myskills is None or renew:
+                    self.LogInfo('MySkills::Renewing skill info')
+                    self.myskills = self.GetMyGodmaItem().skills.values()
+                    self.mySkillsByTypeID = self.myskills.Index('typeID')
+                if byTypeID:
+                    return self.mySkillsByTypeID
+                return self.myskills
+         */
 
 
-        public List<EveQskill> GetMyQueue()
-        {
-            List<EveObject> myqs;
-            myqs = Frame.Client.skillq["skillQueue"].GetList<EveObject>();
-            return myqs.ConvertAll<EveQskill>(tuple2QEveSkill);
-        }
-
-        public bool logintest(string usr, string psw)
-        {
-            if (Frame.Client.GetService("viewState").CallMethod("IsViewActive", new object[] { "login" }).GetValueAs<bool>())
-            {
-                Frame.Client.loginfrm["usernameEditCtrl"].CallMethod("SetValue", new object[] { usr });
-                Frame.Client.loginfrm["passwordEditCtrl"].CallMethod("SetValue", new object[] { psw });
-                Frame.Client.loginfrm.CallMethod("_Connect", new object[] { },true);
-            }
-                return false;
-        }
-
-        public bool isconnecting()
-        {             
-          return  Frame.Client.loginfrm["connecting"].GetValueAs<bool>();                   
-        }
-
-
-          public bool ischarsel()
-        {
-            return Frame.Client.GetService("viewState").CallMethod("IsViewActive", new object[] { "charsel" }).GetValueAs<bool>();           
-        }
-
-
-          public bool isloginscreen()
-          {
-              return Frame.Client.GetService("viewState").CallMethod("IsViewActive", new object[] { "login" }).GetValueAs<bool>();
-          }
-        
-        public List<Charslot> GetCharslots()
-        {
-            List<EveObject> mychars;
-            mychars = Builtin["uicore"]["layer"]["charsel"]["sr"]["slots"].GetList<EveObject>();
-
-            return mychars.ConvertAll<Charslot>(EveObject2Charslot);
-        }
-
-        public bool selectchar(string charname)
-        {
-            Charslot tmp = GetCharslots().Where(i => i.Name == charname).FirstOrDefault();
-
-            if (tmp.idx != 0)
-            {
-                Builtin["uicore"]["layer"]["charsel"].CallMethod("SelectSlot", new object[] { tmp.PointerToObject }, true);
-                return false;
-            }
-            Builtin["uicore"]["layer"]["charsel"].CallMethod("Confirm", new object[] { }, true);
-            return true;
-        }
-
-        
-        public void Getandopenwindow(string name)
-        {
-            List<EveWindow> mywindow;
-            mywindow = Frame.Client.GetWindows;
-            EveWindow winni;
-            if (Frame.Client.Session.InSpace == true)
-            {
-                mywindow = Frame.Client.GetWindows;
-                winni = mywindow.Where(x => x.Name.Contains("InventorySpace")).FirstOrDefault();
-                if (winni == null)
+                //  def TryFit(self, invItems, shipID = None):  tested/working
+                public bool tryfit(List<EveItem> invitems)
                 {
-                    Frame.Log("Kein inv gefunden öffne");
-                    Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenInventory);
-                }
-            }
-            if (Frame.Client.Session.InStation == true)
-            {
-                mywindow = Frame.Client.GetWindows;
-                winni = mywindow.Where(x => x.Name.Contains("InventoryStation")).FirstOrDefault();
-                if (winni == null)
+                    if (Frame.Client.Session.InStation)
+                    {
+                        Frame.Client.GetService("menu").CallMethod("TryFit", new object[] { invitems, GetActiveShip.ItemId },true);
+                        return true;
+                    }
+                    return false;
+                    }
+
+                //  def TryFit(self, invItems, shipID = None):  tested/working
+                public bool tryfit(List<EveItem> invitems, long shipid)
                 {
-                    Frame.Log("Kein inv gefunden öffne");
-                    Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenInventory);
+                    if (Frame.Client.Session.InStation)
+                    {
+                        Frame.Client.GetService("menu").CallMethod("TryFit", new object[] { invitems, shipid },true);
+                        return true;
+                    }
+                    return false;
                 }
-             }
-            mywindow = Frame.Client.GetWindows;
-            winni = mywindow.Where(x => x.Name.Contains(name)).FirstOrDefault();
-            if (name == "leer" && winni == null)
-            {
-                Frame.Log("leer");
+
+                //def AssembleShip(self, invItems):     untested, should work
+                public bool AssembleShip(List<EveItem> invitems)
+                {
+                    if (Frame.Client.Session.InStation)
+                    {
+                        Frame.Client.GetService("menu").CallMethod("AssembleShip", new object[] { invitems });
+                        return true;
+                    }
+                    return false;
+                }
+
+                // self.invCache.GetInventoryFromId(shipID).StripFitting()   tested/working
+
+                public bool StripFitting(long shipid)
+                {
+
+                    if (Frame.Client.Session.InStation)
+                    {
+                        EveObject tmp = new EveObject();
+
+                        tmp = Frame.Client.GetService("invCache").CallMethod("GetInventoryFromId", new object[] { shipid }).GetValueAs<EveObject>();
+                        tmp.CallMethod("StripFitting", new object[] { });
+                        return true;
+                    }
+                    return false;
+                }
+
+                //def InjectSkillIntoBrain(self, invItems):     untested
+
+                public void InjectSkillIntoBrain(List<EveItem> invitems)
+                {
+                    Frame.Client.GetService("menu").CallMethod("InjectSkillIntoBrain", new object[] { invitems });
+                    return;
+                }
+
+                //  sm.StartService('station').TryActivateShip(invItem) (checked invItem = itemid of a ship) dunno if this works
+
+                public void TryActivateShip(EveObject ship)
+                {
+                    Frame.Client.GetService("station").CallMethod("TryActivateShip", new object[] { ship } ,true);
+                    return;
+                }
+
+
+                /*
+                 * 
+                 *  def GetServerQueue(self):
+                if self.cachedSkillQueue is not None:
+                    return self.cachedSkillQueue[:]
+                else:
+                    return self.GetQueue()
+                 /*/ 
+
+                /*        public List<EveQskill> GetMyQueue()
+                        {
+                            List<EveObject> myqs;
+                            myqs = Frame.Client.skillq["skillQueue"].GetList<EveObject>();
+                            return myqs.ConvertAll<EveQskill>(tuple2QEveSkill);
+                        }
+        */
+                //BeginTransaction
+                public void refreshskillq()
+                {
+                    Frame.Client.GetService("skillqueue").CallMethod("BeginTransaction", new object[] { },true);
+                    Frame.Client.GetService("skillqueue").CallMethod("PrimeCache", new object[] { },true);
+                }
+                      public List<EveQskill> GetMyQueue()
+                       {
+                           List<EveObject> myqs = new List<EveObject>();
+                           if (Frame.Client.skillq.IsValid)
+                           {
+                               Frame.Log("Ist Valid");
+                               myqs = Frame.Client.skillq["skillQueue"].GetList<EveObject>();
+                           }
+                           return myqs.ConvertAll<EveQskill>(tuple2QEveSkill);
+                       }
+
+
+                        public bool logintest(string usr, string psw)
+                        {
+                            if (Frame.Client.GetService("viewState").CallMethod("IsViewActive", new object[] { "login" }).GetValueAs<bool>())
+                            {
+                                Frame.Client.loginfrm["usernameEditCtrl"].CallMethod("SetValue", new object[] { usr });
+                                Frame.Client.loginfrm["passwordEditCtrl"].CallMethod("SetValue", new object[] { psw });
+                                Frame.Client.loginfrm.CallMethod("_Connect", new object[] { },true);
+                            }
+                                return false;
+                        }
+
+                        public bool isconnecting()
+                        {             
+                          return  Frame.Client.loginfrm["connecting"].GetValueAs<bool>();                   
+                        }
+
+
+                          public bool ischarsel()
+                        {
+                            return Frame.Client.GetService("viewState").CallMethod("IsViewActive", new object[] { "charsel" }).GetValueAs<bool>();           
+                        }
+
+
+                          public bool isloginscreen()
+                          {
+                              return Frame.Client.GetService("viewState").CallMethod("IsViewActive", new object[] { "login" }).GetValueAs<bool>();
+                          }
+        
+                        public List<Charslot> GetCharslots()
+                        {
+                            List<EveObject> mychars;
+                            mychars = Builtin["uicore"]["layer"]["charsel"]["sr"]["slots"].GetList<EveObject>();
+
+                            return mychars.ConvertAll<Charslot>(EveObject2Charslot);
+                        }
+
+                        public bool selectchar(string charname)
+                        {
+                            Charslot tmp = GetCharslots().Where(i => i.Name == charname).FirstOrDefault();
+
+                            if (tmp.idx != 0)
+                            {
+                                Builtin["uicore"]["layer"]["charsel"].CallMethod("SelectSlot", new object[] { tmp.PointerToObject }, true);
+                                return false;
+                            }
+                            Builtin["uicore"]["layer"]["charsel"].CallMethod("Confirm", new object[] { }, true);
+                            return true;
+                        }
+
+        
+                        public void Getandopenwindow(string name)
+                        {
+                            List<EveWindow> mywindow;
+                            mywindow = Frame.Client.GetWindows;
+                            EveWindow winni;
+                            if (Frame.Client.Session.InSpace == true)
+                            {
+                                mywindow = Frame.Client.GetWindows;
+                                winni = mywindow.Where(x => x.Name.Contains("InventorySpace")).FirstOrDefault();
+                                if (winni == null)
+                                {
+                                    Frame.Log("Kein inv gefunden öffne");
+                                    Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenInventory);
+                                }
+                            }
+                            if (Frame.Client.Session.InStation == true)
+                            {
+                                mywindow = Frame.Client.GetWindows;
+                                winni = mywindow.Where(x => x.Name.Contains("InventoryStation")).FirstOrDefault();
+                                if (winni == null)
+                                {
+                                    Frame.Log("Kein inv gefunden öffne");
+                                    Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenInventory);
+                                }
+                             }
+                            mywindow = Frame.Client.GetWindows;
+                            winni = mywindow.Where(x => x.Name.Contains(name)).FirstOrDefault();
+                            if (name == "leer" && winni == null)
+                            {
+                                Frame.Log("leer");
                
-                return;
-            }
-            mywindow = Frame.Client.GetWindows;
-            winni = mywindow.Where(x => x.Name.Contains(name)).FirstOrDefault();
-            if (name == "market" && winni == null)
-            {
-                Frame.Log("Öffne Market");
-                Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenMarket);
+                                return;
+                            }
+                            mywindow = Frame.Client.GetWindows;
+                            winni = mywindow.Where(x => x.Name.Contains(name)).FirstOrDefault();
+                            if (name == "market" && winni == null)
+                            {
+                                Frame.Log("Öffne Market");
+                                Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenMarket);
 
-                return;
-            }
-            mywindow = Frame.Client.GetWindows;
-            winni = mywindow.Where(x => x.Name.Contains(name)).FirstOrDefault();
-            if (name == "Orehold" && winni == null)
-            {
-                Frame.Log("Öffne Orehold");
-                Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenOreHoldOfActiveShip);
+                                return;
+                            }
+                            mywindow = Frame.Client.GetWindows;
+                            winni = mywindow.Where(x => x.Name.Contains(name)).FirstOrDefault();
+                            if (name == "Orehold" && winni == null)
+                            {
+                                Frame.Log("Öffne Orehold");
+                                Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenOreHoldOfActiveShip);
                 
-                return;
-            }
-            if (name == "StationItems" && winni == null)
-            {
-                Frame.Log("Öffne Itemhanger");
-                Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenHangarFloor);
-                return;
-            }
-            Frame.Log("Kein Befehl gefunden oder schon offen");
+                                return;
+                            }
+                            if (name == "StationItems" && winni == null)
+                            {
+                                Frame.Log("Öffne Itemhanger");
+                                Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenHangarFloor);
+                                return;
+                            }
+                            Frame.Log("Kein Befehl gefunden oder schon offen");
 
-            return;
-        }
+                            return;
+                        }
 
-        public bool getinvopen()
-        {
-            List<EveWindow> mywindow;
-            mywindow = Frame.Client.GetWindows;
-            EveWindow winni;
-            if (Frame.Client.Session.InSpace == true)
-            {
-                mywindow = Frame.Client.GetWindows;
-                winni = mywindow.Where(x => x.Name.Contains("InventorySpace")).FirstOrDefault();
-                if (winni == null)
-                {
-                    Frame.Log("Kein inv gefunden öffne");
-                    return false;
-                }
-            }
+                        public bool getinvopen()
+                        {
+                            List<EveWindow> mywindow;
+                            mywindow = Frame.Client.GetWindows;
+                            EveWindow winni;
+                            if (Frame.Client.Session.InSpace == true)
+                            {
+                                mywindow = Frame.Client.GetWindows;
+                                winni = mywindow.Where(x => x.Name.Contains("InventorySpace")).FirstOrDefault();
+                                if (winni == null)
+                                {
+                                    Frame.Log("Kein inv gefunden öffne");
+                                    return false;
+                                }
+                            }
          
-            if (Frame.Client.Session.InStation == true)
-            {
-                mywindow = Frame.Client.GetWindows;
-                winni = mywindow.Where(x => x.Name.Contains("InventoryStation")).FirstOrDefault();
-                if (winni == null)
-                {
-                    Frame.Log("Kein inv gefunden öffne");
-                    return false;
-                }
-            }
-            return true;
-        }
+                            if (Frame.Client.Session.InStation == true)
+                            {
+                                mywindow = Frame.Client.GetWindows;
+                                winni = mywindow.Where(x => x.Name.Contains("InventoryStation")).FirstOrDefault();
+                                if (winni == null)
+                                {
+                                    Frame.Log("Kein inv gefunden öffne");
+                                    return false;
+                                }
+                            }
+                            return true;
+                        }
 
-        public bool getoreopen()
-        {
-            List<EveWindow> mywindow;
-            mywindow = Frame.Client.GetWindows;
-            EveWindow winni;
+                        public bool getoreopen()
+                        {
+                            List<EveWindow> mywindow;
+                            mywindow = Frame.Client.GetWindows;
+                            EveWindow winni;
 
-            winni = mywindow.Where(x => x.Name.Contains("ShipOreHold")).FirstOrDefault();
-            if (winni == null)
-            {
-                return false;
-            }
-            return true;
-        }
+                            winni = mywindow.Where(x => x.Name.Contains("ShipOreHold")).FirstOrDefault();
+                            if (winni == null)
+                            {
+                                return false;
+                            }
+                            return true;
+                        }
 
-        public bool getitemopen()
-        {
-            List<EveWindow> mywindow;
-            mywindow = Frame.Client.GetWindows;
-            EveWindow winni;
+                        public bool getitemopen()
+                        {
+                            List<EveWindow> mywindow;
+                            mywindow = Frame.Client.GetWindows;
+                            EveWindow winni;
 
-            winni = mywindow.Where(x => x.Name.Contains("StationItems")).FirstOrDefault();
-            if (winni == null)
-            {
-                return false;
-            }
-            return true;
-        }
+                            winni = mywindow.Where(x => x.Name.Contains("StationItems")).FirstOrDefault();
+                            if (winni == null)
+                            {
+                                return false;
+                            }
+                            return true;
+                        }
 
-        public bool getmarketopen()
-        {
-            List<EveWindow> mywindow;
-            mywindow = Frame.Client.GetWindows;
-            EveWindow winni;
+                        public bool getmarketopen()
+                        {
+                            List<EveWindow> mywindow;
+                            mywindow = Frame.Client.GetWindows;
+                            EveWindow winni;
 
-            winni = mywindow.Where(x => x.Name.Contains("market")).FirstOrDefault();
-            if (winni == null)
-            {
-                return false;
-            }
-            return true;
-        }
+                            winni = mywindow.Where(x => x.Name.Contains("market")).FirstOrDefault();
+                            if (winni == null)
+                            {
+                                return false;
+                            }
+                            return true;
+                        }
 
-        public bool getdronbay()
-        {
-            List<EveWindow> mywindow;
-            mywindow = Frame.Client.GetWindows;
-            EveWindow winni;
+                        public bool getdronbay()
+                        {
+                            List<EveWindow> mywindow;
+                            mywindow = Frame.Client.GetWindows;
+                            EveWindow winni;
 
-            winni = mywindow.Where(x => x.Name.Contains("ShipDroneBay")).FirstOrDefault();
-            if (winni == null)
-            {
-                Frame.Log("dronebay name nicht gefunden");
-                return false;
-            }
-            return true;
-        }
+                            winni = mywindow.Where(x => x.Name.Contains("ShipDroneBay")).FirstOrDefault();
+                            if (winni == null)
+                            {
+                                Frame.Log("dronebay name nicht gefunden");
+                                return false;
+                            }
+                            return true;
+                        }
       
    
 
-        /*
-         *  def AddSkillToEnd(self, skillID, current, nextLevel = None):
-        queueLength = self.GetNumberOfSkillsInQueue()
-        if queueLength >= const.skillQueueMaxSkills:
-            eve.Message('CustomNotify', {'notify': localization.GetByLabel('UI/SkillQueue/QueueIsFull')})
-            return
-        totalTime = self.GetTrainingLengthOfQueue()
-        if totalTime > const.skillQueueTime:
-            eve.Message('CustomNotify', {'notify': localization.GetByLabel('UI/SkillQueue/QueueIsFull')})
-            return
-        if nextLevel is None:
-            queue = self.GetServerQueue()
-            nextLevel = self.FindNextLevel(skillID, current, queue)
-        self.AddSkillToQueue(skillID, nextLevel)
-*/
+                        /*
+                         *  def AddSkillToEnd(self, skillID, current, nextLevel = None):
+                        queueLength = self.GetNumberOfSkillsInQueue()
+                        if queueLength >= const.skillQueueMaxSkills:
+                            eve.Message('CustomNotify', {'notify': localization.GetByLabel('UI/SkillQueue/QueueIsFull')})
+                            return
+                        totalTime = self.GetTrainingLengthOfQueue()
+                        if totalTime > const.skillQueueTime:
+                            eve.Message('CustomNotify', {'notify': localization.GetByLabel('UI/SkillQueue/QueueIsFull')})
+                            return
+                        if nextLevel is None:
+                            queue = self.GetServerQueue()
+                            nextLevel = self.FindNextLevel(skillID, current, queue)
+                        self.AddSkillToQueue(skillID, nextLevel)
+                */
 
-        public bool AddSkillToEnd(EveSkill skill, int crlvl)
+                public bool AddSkillToEnd(EveSkill skill, int crlvl)
         {
-            Frame.Client.GetService("skillqueue").CallMethod("AddSkillToEnd", new object [] {skill.typeID, crlvl});
+            Frame.Client.GetService("skillqueue").CallMethod("AddSkillToEnd", new object [] {skill.typeID, crlvl},true);
             return true;
         }
 
@@ -1287,6 +1356,16 @@ namespace EveModel
           return fullcargo;
 
         }
+
+       //    skillPoints = int(sm.GetService('skills').GetSkillPoints())
+
+                public int skillpoints()
+        {
+
+            return Frame.Client.GetService("skills").CallMethod("GetSkillPoints", new object[] { }, true).GetValueAs<int>();
+
+        }
+        
 
         #region External Resources
         static string _innerspacePath = @"C:\Program Files (x86)\InnerSpace\.NET Programs";

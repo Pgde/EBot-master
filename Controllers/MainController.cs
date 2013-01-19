@@ -71,7 +71,7 @@ namespace Controllers
 
                     waitallstates();
                     _States.maincontrollerState = maincontrollerStates.skillcheck;
-                    _States.SkillState = SkillState.Start;
+                    _States.SkillState = SkillState.Initialise;
                     //checks for skilltraining etc
                    // _States.MiningState = MiningState.letzgo;
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));

@@ -136,6 +136,7 @@ namespace Controllers
 
                     if (Frame.Client.Session.InStation)                 //dreckig da muss es nen besseren weg geben aber fürs erste sollts reichen
                     {
+                        _localPulse = DateTime.Now.AddMilliseconds(GetRandom(4000, 5500));
                         _States.LoginState = loginstate.Idle;
                         _States.MiningState = MiningState.Initialise;
                         break;
@@ -143,6 +144,7 @@ namespace Controllers
 
                     if (Frame.Client.Session.InSpace)
                     {
+                        _localPulse = DateTime.Now.AddMilliseconds(GetRandom(4000, 5500));
                         _States.LoginState = loginstate.Idle;
                         _States.MiningState = MiningState.Initialise;
                         break;

@@ -77,6 +77,7 @@ namespace Controllers
         public MiningController()
         {
             Frame.Log("Starting a new travelcontroller");
+                _States.MiningState = MiningState.wait;
         }
         public MiningController(long destinationId)
             : this()
@@ -116,6 +117,7 @@ namespace Controllers
                     if (Frame.Client.getinvopen() == false)
                     {
                         Frame.Client.Getandopenwindow("leer");
+                        break;
                     }
 
                     if (Frame.Client.getoreopen() == false)

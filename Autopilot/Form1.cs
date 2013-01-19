@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using Controllers;
-
+using Controllers.states;
 namespace EBotPilot
 {
     public partial class Form1 : Form
@@ -49,14 +49,18 @@ namespace EBotPilot
         private void button2_Click(object sender, EventArgs e)
         {
       //      _manager.AddController(new MysqlController());
-            _manager.AddController(new MiningController());
+     //       _manager.AddController(new MiningController());
       //      _manager.AddController(new SkillController());
-          _manager.AddController(new DroneController());
+       //   _manager.AddController(new DroneController());
+            _States.SkillState = SkillState.Initialise;
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             _manager.AddController(new logincontroller());
+            _manager.AddController(new MiningController());
+            _manager.AddController(new DroneController());
+            _manager.AddController(new SkillController());
         }
 
         #region Old Code

@@ -44,6 +44,7 @@ namespace Controllers
         public SkillController()
         {
             Frame.Log("Starting a new SkillController");
+            _States.SkillState = SkillState.wait;
         }
 
 
@@ -57,6 +58,12 @@ namespace Controllers
             {
                 case SkillState.Initialise:
 
+                    if (!Frame.Client.GetService("skillqueue").IsValid)
+                    {
+                        _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 3500));
+                        break;
+                    }
+              //      Frame.Client.refreshskillq();
 
                     List<EveSkill> neueskill = Frame.Client.GetMySkills();
                     List<EveQskill> neueQskill = Frame.Client.GetMyQueue();
@@ -122,7 +129,7 @@ namespace Controllers
                 case SkillState.Start:
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 3500));
 
-
+                    Frame.Log(skilltotrainid.Count);
                     if (skilltotrainid.Count < 1)
                     {
                         Frame.Log("liste leer");
@@ -130,12 +137,19 @@ namespace Controllers
                         break;
                     }
 
-                    double debugg = Frame.Client.qlengdouble;
-                    Frame.Log("Debugg float lenge = " + debugg);
-                    if (!Frame.Client.placeinq())
+                    if (Frame.Client.GetService("skillqueue").IsValid)
                     {
-                        Frame.Log("kein platz in q");
-                        _States.SkillState = SkillState.done;
+                        double debugg = Frame.Client.qlengdouble;
+                        Frame.Log("Debugg float lenge = " + debugg);
+                        if (!Frame.Client.placeinq())
+                        {
+                            Frame.Log("kein platz in q");
+                            _States.SkillState = SkillState.done;
+                            break;
+                        }
+                    }
+                    else
+                    {
                         break;
                     }
                     List<EveSkill> neueskill2 = Frame.Client.GetMySkills();
@@ -159,7 +173,7 @@ namespace Controllers
                         int remove = Math.Min(skilltotrainid.Count, 1);
                         skilltotrainid.RemoveRange(0, remove);
                         Frame.Log("Remove First entry of list ");
-                        _States.SkillState = SkillState.wait;
+                       // _States.SkillState = SkillState.wait;
                         break;
 
                     }
@@ -209,7 +223,6 @@ namespace Controllers
                     break;
 
                 case SkillState.done:
-
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                     break;
             }
