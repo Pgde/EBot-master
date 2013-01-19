@@ -75,9 +75,14 @@ namespace Controllers
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                     break;
 
+
+
+
+
+
+
                 case maincontrollerStates.pause:
 
-                    _States.MiningState = MiningState.letzgo;
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                     waitallstates();
                     pausebot = true;

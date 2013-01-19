@@ -112,13 +112,22 @@ namespace Controllers
 
 
                 case SkillState.Start:
-                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 3500));  
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 3500));
+
+
+                    if (skilltotrainid.Count < 1)
+                    {
+                        Frame.Log("liste leer");
+                        _States.SkillState = SkillState.done;
+                        break;
+                    }
 
                     double debugg = Frame.Client.qlengdouble;
                     Frame.Log("Debugg float lenge = " + debugg);
                     if (!Frame.Client.placeinq())
                     {
-                        Frame.Log("platz in q");
+                        Frame.Log("kein platz in q");
+                        _States.SkillState = SkillState.done;
                         break;
                     }
                     List<EveSkill> neueskill2 = Frame.Client.GetMySkills();
@@ -138,7 +147,11 @@ namespace Controllers
                     {
                         Frame.Log("Skill nicht vorhanden muss einkaufen");
                         // Funktion zum einkaufen schreiben
-                        _States.SkillState = SkillState.buyskill;
+                       // _States.SkillState = SkillState.buyskill;
+                        int remove = Math.Min(skilltotrainid.Count, 1);
+                        skilltotrainid.RemoveRange(0, remove);
+                        Frame.Log("Remove First entry of list ");
+                        _States.SkillState = SkillState.wait;
                         break;
 
                     }
@@ -187,6 +200,10 @@ namespace Controllers
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                     break;
 
+                case SkillState.done:
+
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
+                    break;
             }
         }
     }
