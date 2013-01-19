@@ -18,6 +18,7 @@ namespace Controllers.Settings
         public string Charname { get; set; }
         public string Accname { get; set; }
         public string Pw { get; set; }
+        public List<String> Skilllist {get; set;}
         public void LoadSettings()
         {
 
@@ -41,6 +42,37 @@ namespace Controllers.Settings
                     {
                        Frame.Log("Error Loading Ship Name Settings [" + exception + "]");
                     }
+
+
+
+
+
+
+                    XElement xmlSkilllist = xml.Element("skilllist");
+                    if (xmlSkilllist != null)
+                    {
+                        Frame.Log("xmlSkilllist");
+                        int i = 1;
+                        foreach (XElement Skill in xmlSkilllist.Elements("skill"))
+                        {
+                            Skilllist.Add((string)Skill);
+                            i++;
+                        }
+                        Frame.Log("Skilllistcount: "+ Skilllist.Count );
+                    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                 /*
      
