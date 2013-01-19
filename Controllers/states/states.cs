@@ -15,6 +15,6 @@ namespace Controllers.states
         public static MysqlState MysqlState { get; set; }
         public static fittingstate fittingstate { get; set; }
         public static tutstates tutstates { get; set; }
-       public static maincontrollerStates maincontrollerStates { get; set; }
+       public static maincontrollerStates maincontrollerState { get; set; }
     }
 }

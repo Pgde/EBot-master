@@ -48,7 +48,7 @@ namespace Controllers
             }
 
 
-            switch (_States.maincontrollerStates)
+            switch (_States.maincontrollerState)
             {
                 case maincontrollerStates.Idle:
 
@@ -70,7 +70,8 @@ namespace Controllers
                 case maincontrollerStates.endminingcycle:
 
                     waitallstates();
-                    _States.maincontrollerStates = maincontrollerStates.skillcheck;
+                    _States.maincontrollerState = maincontrollerStates.skillcheck;
+                    _States.SkillState = SkillState.Start;
                     //checks for skilltraining etc
                    // _States.MiningState = MiningState.letzgo;
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
@@ -97,14 +98,14 @@ namespace Controllers
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                     waitallstates();
                     pausebot = true;
-                    _States.maincontrollerStates = maincontrollerStates.pauseloop;
+                    _States.maincontrollerState = maincontrollerStates.pauseloop;
                     break;
 
                 case maincontrollerStates.pauseloop:
                     if (!pausebot)
                     {
                         restorestates();
-                        _States.maincontrollerStates = maincontrollerStates.Idle;
+                        _States.maincontrollerState = maincontrollerStates.Idle;
                     }
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                     break;

@@ -680,7 +680,8 @@ namespace Controllers
                     stationtrip = (stationtrip + 1);
                     Frame.Log("keine items mehr wieder losfliegen");                                                                                // Log buchausgabe
                                                                         // Abdocken und losfliegen
-                    _States.MiningState = MiningState.letzgo; 
+                    _States.MiningState = MiningState.wait;
+                    _States.maincontrollerState = maincontrollerStates.endminingcycle;
                     break;
 
 
