@@ -137,12 +137,14 @@ namespace Controllers
                     if (Frame.Client.Session.InStation)                 //dreckig da muss es nen besseren weg geben aber fürs erste sollts reichen
                     {
                         _States.LoginState = loginstate.Idle;
+                        _States.MiningState = MiningState.Initialise;
                         break;
                     }
 
                     if (Frame.Client.Session.InSpace)
                     {
                         _States.LoginState = loginstate.Idle;
+                        _States.MiningState = MiningState.Initialise;
                         break;
                     }
 
