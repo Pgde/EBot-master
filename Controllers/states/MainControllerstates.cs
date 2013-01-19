@@ -9,6 +9,9 @@ namespace Controllers.states
     public enum maincontrollerStates
     {
         Idle,
+        endminingcycle,
+        pause,
+        pauseloop,
         Error,
         wait
     }
