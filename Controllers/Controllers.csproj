@@ -55,6 +55,7 @@
     <Compile Include="BaseController.cs" />
     <Compile Include="fittingcontroller.cs" />
     <Compile Include="loginController.cs" />
+    <Compile Include="MainController.cs" />
     <Compile Include="settings.cs" />
     <Compile Include="skillcontroller.cs" />
     <Compile Include="MysqlController.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="states\dronestates.cs" />
     <Compile Include="states\fittingstates.cs" />
     <Compile Include="states\loginstates.cs" />
+    <Compile Include="states\MainControllerstates.cs" />
     <Compile Include="states\miningstate.cs" />
     <Compile Include="states\mysqlstates.cs" />
     <Compile Include="states\skillstates.cs" />
