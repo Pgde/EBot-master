@@ -58,7 +58,7 @@ namespace Controllers
                 case maincontrollerStates.Error:
 
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(200000000, 350000000));      //dirty 
-                    Frame.Log("Error tutstates");
+                    Frame.Log("Error maincontroller");
                     _States.tutstates = tutstates.Error;
                     break;
 
