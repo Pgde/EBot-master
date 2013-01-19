@@ -13,7 +13,8 @@ namespace Controllers.states
         pause,
         pauseloop,
         Error,
-        wait
+        wait,
+        skillcheck,
     }
 
 }

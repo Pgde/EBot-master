@@ -69,13 +69,24 @@ namespace Controllers
 
                 case maincontrollerStates.endminingcycle:
 
-
+                    waitallstates();
+                    _States.maincontrollerStates = maincontrollerStates.skillcheck;
                     //checks for skilltraining etc
-                    _States.MiningState = MiningState.letzgo;
+                   // _States.MiningState = MiningState.letzgo;
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                     break;
 
 
+                case maincontrollerStates.skillcheck:
+
+            
+                    if (_States.SkillState == SkillState.done)
+                    {
+                        restorestates();
+                    _States.MiningState = MiningState.letzgo;
+                    }
+                        _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
+                    break;
 
 
 
