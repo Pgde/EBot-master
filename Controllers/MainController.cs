@@ -105,7 +105,7 @@ namespace Controllers
 
                 case maincontrollerStates.startbuy:
 
-                    Tuple<int,int> tmp = new Tuple<int,int> (483,1);
+                    Tuple<int,int> tmp = new Tuple<int,int> (483,1); // miner, 1 -> typeid, menge
                      BuyController.buylist.Add(tmp);
                     _States.BuyControllerState = BuyControllerStates.buy;
                     _States.maincontrollerState = maincontrollerStates.waitbuy;
