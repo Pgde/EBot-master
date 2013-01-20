@@ -85,14 +85,52 @@ namespace Controllers
             
                     if (_States.SkillState == SkillState.done)
                     {
-                        restorestates();
-                    _States.MiningState = MiningState.letzgo;
+                //        restorestates();
+                //    _States.MiningState = MiningState.letzgo;
+                        _States.maincontrollerState = maincontrollerStates.checkbuy;
                     }
                         _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                     break;
 
+                case maincontrollerStates.checkbuy:
 
 
+             // checks ob etwas gekauft werden muss
+            // wenn nein
+                    _States.maincontrollerState = maincontrollerStates.resumemining;
+            // wenn ja
+            //        _States.maincontrollerState = maincontrollerStates.startbuy;
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
+                    break;
+
+                case maincontrollerStates.startbuy:
+
+                    Tuple<int,int> tmp = new Tuple<int,int> (483,1);
+                     BuyController.buylist.Add(tmp);
+                    _States.BuyControllerState = BuyControllerStates.buy;
+                
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
+                    break;
+
+                case maincontrollerStates.waitbuy:
+
+
+                    if (_States.BuyControllerState == BuyControllerStates.done)
+                    {
+
+                        _States.maincontrollerState = maincontrollerStates.resumemining;
+                    }
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
+                    break;
+
+            case maincontrollerStates.resumemining:
+
+                
+                        restorestates();
+                        _States.MiningState = MiningState.letzgo;
+                        _States.maincontrollerState = maincontrollerStates.Idle;
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
+                    break;
 
 
                 case maincontrollerStates.pause:

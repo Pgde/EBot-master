@@ -16,7 +16,11 @@ namespace Controllers.states
         wait,
         skillcheck,
         Startup,
-        homesysarriv
+        homesysarriv,
+        checkbuy,
+        startbuy,
+        waitbuy,
+        resumemining
     }
 
 }
