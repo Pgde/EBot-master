@@ -1378,7 +1378,19 @@ namespace EveModel
                         return Frame.Client.GetService("wallet").CallMethod("GetWealth", new object[] { }).GetValueAs<double>();
                               
                 }
-        
+
+                public List<long> GetDestinationPath()
+                {
+                    return Frame.Client.GetService("starmap").CallMethod("GetDestinationPath", new object[] { }).GetList<long>();
+                 
+                 }
+
+
+        /*
+         * 
+         * def SetWaypoint(self, destinationID, clearOtherWaypoints = False, first = False):
+         * 
+         * */
 
         #region External Resources
         static string _innerspacePath = @"C:\Program Files (x86)\InnerSpace\.NET Programs";
