@@ -95,7 +95,7 @@ namespace Controllers
                 case maincontrollerStates.checkbuy:
 
 
-             // checks ob etwas gekauft werden muss
+             // checks ob etwas gekauft werden muss, evtl eigener controller ?
             // wenn nein
                     _States.maincontrollerState = maincontrollerStates.resumemining;
             // wenn ja
@@ -108,7 +108,7 @@ namespace Controllers
                     Tuple<int,int> tmp = new Tuple<int,int> (483,1);
                      BuyController.buylist.Add(tmp);
                     _States.BuyControllerState = BuyControllerStates.buy;
-                
+                    _States.maincontrollerState = maincontrollerStates.waitbuy;
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                     break;
 
