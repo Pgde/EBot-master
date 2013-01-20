@@ -44,6 +44,9 @@ namespace EBotPilot
         private void button1_Click(object sender, EventArgs e)
         {
             _manager.AddController(new TravelController());
+            TravelController.desti = 60003760;
+            _States.TravelerState = TravelerState.Initialise;
+
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -62,6 +65,8 @@ namespace EBotPilot
             _manager.AddController(new MiningController());
             _manager.AddController(new DroneController());
             _manager.AddController(new SkillController());
+            _manager.AddController(new TravelController());
+            _manager.AddController(new MainController());
         }
 
         #region Old Code

@@ -8,12 +8,12 @@ namespace Controllers.states
  
     public enum TravelerState
     {
+        idel,
         Initialise,
         Start,
         Travel,
         ArrivedAtDestination,
-        wait
-    
+        wait,
     }
 
 

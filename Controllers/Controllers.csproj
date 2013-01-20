@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseController.cs" />
+    <Compile Include="BuyController.cs" />
     <Compile Include="fittingcontroller.cs" />
     <Compile Include="loginController.cs" />
     <Compile Include="MainController.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="IController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DroneController.cs" />
+    <Compile Include="states\buycontrollerstates.cs" />
     <Compile Include="states\dronestates.cs" />
     <Compile Include="states\fittingstates.cs" />
     <Compile Include="states\loginstates.cs" />

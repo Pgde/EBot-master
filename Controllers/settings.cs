@@ -18,6 +18,7 @@ namespace Controllers.Settings
         public string Charname { get; set; }
         public string Accname { get; set; }
         public string Pw { get; set; }
+        public long homesys { get; set; }
         public List<String> Skilllist {get; set;}
         public void LoadSettings()
         {
@@ -37,6 +38,7 @@ namespace Controllers.Settings
                         Charname = (string)xml.Element("Charname") ?? "";
                         Accname = (string)xml.Element("Accname") ?? "";
                         Pw = (string)xml.Element("Pw") ?? "";
+                        homesys = (long)xml.Element("homesys");
                     }
                     catch (Exception exception)
                     {

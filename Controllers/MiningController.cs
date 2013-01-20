@@ -76,7 +76,7 @@ namespace Controllers
 
         public MiningController()
         {
-            Frame.Log("Starting a new travelcontroller");
+            Frame.Log("Starting a new MiningController");
                 _States.MiningState = MiningState.wait;
         }
         public MiningController(long destinationId)
@@ -693,8 +693,13 @@ namespace Controllers
 
 
                     Frame.Log("state changebook");
-
-                    List<EveBookmark> test2 = Frame.Client.GetMyBookmarks();
+                    List<EveBookmark> test2 = new List<EveBookmark>();
+                     test2 = Frame.Client.GetMyBookmarks();
+                     if (test2.Count <= 0)
+                     {
+                         _States.MiningState = MiningState.wait;
+                         //keine bookmarks mehr
+                     }
                     EveBookmark booky1 = test2.Where(x => !Emptysys.Contains(x.LocationId)).FirstOrDefault();
                     bookmaid = booky1.LocationId;
                     Frame.Log(bookmaid);

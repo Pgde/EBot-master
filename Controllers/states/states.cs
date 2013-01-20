@@ -16,5 +16,6 @@ namespace Controllers.states
         public static fittingstate fittingstate { get; set; }
         public static tutstates tutstates { get; set; }
        public static maincontrollerStates maincontrollerState { get; set; }
+       public static BuyControllerStates BuyControllerState { get; set; }
     }
 }

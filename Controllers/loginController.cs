@@ -130,23 +130,23 @@ namespace Controllers
                         _States.LoginState = loginstate.Error;
                         break;
                     }
-                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 3500));
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(40000, 40000));
 
                     Frame.Log("Waiting for Ingame");
 
                     if (Frame.Client.Session.InStation)                 //dreckig da muss es nen besseren weg geben aber fürs erste sollts reichen
                     {
-                        _localPulse = DateTime.Now.AddMilliseconds(GetRandom(4000, 5500));
+                        _localPulse = DateTime.Now.AddMilliseconds(GetRandom(40000, 40000));
                         _States.LoginState = loginstate.Idle;
-                        _States.MiningState = MiningState.Initialise;
+                        _States.maincontrollerState = maincontrollerStates.Startup;
                         break;
                     }
 
                     if (Frame.Client.Session.InSpace)
                     {
-                        _localPulse = DateTime.Now.AddMilliseconds(GetRandom(4000, 5500));
+                        _localPulse = DateTime.Now.AddMilliseconds(GetRandom(40000, 55000));
                         _States.LoginState = loginstate.Idle;
-                        _States.MiningState = MiningState.Initialise;
+                        _States.maincontrollerState = maincontrollerStates.Startup;
                         break;
                     }
 

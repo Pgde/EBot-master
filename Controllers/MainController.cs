@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using EveModel;
 using global::Controllers.states;
-
+using Controllers.Settings;
+using Controllers;
 namespace Controllers
 {
 
@@ -109,8 +110,41 @@ namespace Controllers
                     }
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                     break;
+            
+
+             case maincontrollerStates.Startup:
+                  
+
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
+                    if (Frame.Client.Session.LocationId != Settings.Settings.Instance.homesys)
+                    {
+                        TravelController.desti = Settings.Settings.Instance.homesys;
+                        _States.TravelerState = TravelerState.Initialise;
+                        _States.maincontrollerState = maincontrollerStates.homesysarriv;
+                    }
+                    else
+                    {
+                        _States.maincontrollerState = maincontrollerStates.Idle;
+                        _States.MiningState = MiningState.Initialise;
+                    }
+                    break;
+
+             case maincontrollerStates.homesysarriv:
+
+
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
+                    Frame.Log(Frame.Client.Session.LocationId.ToString());
+                    if (_States.TravelerState == TravelerState.ArrivedAtDestination)
+                    {
+                        _States.maincontrollerState = maincontrollerStates.Startup;
+                        break;
+                    }
+
+                    break;
             }
+       
         }
+        
 
 
         public void waitallstates()

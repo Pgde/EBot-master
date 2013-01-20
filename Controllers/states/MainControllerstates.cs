@@ -15,6 +15,8 @@ namespace Controllers.states
         Error,
         wait,
         skillcheck,
+        Startup,
+        homesysarriv
     }
 
 }

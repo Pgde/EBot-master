@@ -27,7 +27,7 @@ namespace Controllers.states
         warptobelt,
         travStart,
         changebook,
-        wait
+        wait       
 
     }
 

@@ -3,27 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using EveModel;
-
+using Controllers.states;
 namespace Controllers
 {
     public class TravelController : BaseController
     {
         long _destinationId, _currentLocation, _currentDestGateId;
         bool _waitforsessionChange;
-
-        enum TravelStates { Initialise, Start, Travel, ArrivedAtDestination }
-
-        TravelStates _state;
+        public static long desti { get; set; }
+ 
 
         public TravelController()
         {
             Frame.Log("Starting a new travelcontroller");
         }
-        public TravelController(long destinationId)
-            : this()
-        {
-            _destinationId = destinationId;
-        }
+
 
         public override void DoWork()
         {
@@ -31,27 +25,34 @@ namespace Controllers
             {
                 return;
             }
-            switch (_state)
+            switch (_States.TravelerState)
             {
-                case TravelStates.Initialise:
-                    _destinationId = _destinationId > 0 ? _destinationId : Frame.Client.GetLastWaypointLocationId();
-                    if (_destinationId == -1 || Frame.Client.Session.LocationId == _destinationId)
-                    {
-                        Frame.Log("No destination found, shutting down");
-                        _state = TravelStates.ArrivedAtDestination;
-                        return;
-                    }
-                    if (Frame.Client.GetLastWaypointLocationId() == -1)
-                    {
-                        Frame.Log("Setting destination");
-                        Frame.Client.SetDestination(_destinationId);
-                    }
-                    _state = TravelStates.Start;
+
+                case TravelerState.idel:
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(4000, 6000));
                     break;
 
 
-                case TravelStates.Start:
-                    _state = TravelStates.Travel;
+                case TravelerState.Initialise:
+                    _destinationId = desti;
+                    _destinationId = _destinationId > 0 ? _destinationId : Frame.Client.GetLastWaypointLocationId();
+                    if (_destinationId == -1 || Frame.Client.Session.LocationId == _destinationId)
+                    {
+                        Frame.Log("No destination found, ");
+                        _localPulse = DateTime.Now.AddMilliseconds(GetRandom(4000, 6000));
+                        _States.TravelerState = TravelerState.wait;
+                        break;
+                    }
+                  
+                        Frame.Log("Setting destination");
+                        Frame.Client.SetDestination(_destinationId);
+                    
+                    _States.TravelerState = TravelerState.Start;
+                    break;
+
+
+                case TravelerState.Start:
+                    _States.TravelerState = TravelerState.Travel;
                     if (Frame.Client.Session.InStation)
                     {
                         Frame.Client.ExecuteCommand(EveModel.EveCommand.CmdExitStation);
@@ -59,10 +60,10 @@ namespace Controllers
                         _localPulse = DateTime.Now.AddMilliseconds(GetRandom(18000, 25000));
                     }
                     break;
-                case TravelStates.Travel:
+                case TravelerState.Travel:
                     if (_destinationId == -1 || Frame.Client.Session.LocationId == _destinationId)
                     {
-                        _state = TravelStates.ArrivedAtDestination;
+                        _States.TravelerState = TravelerState.ArrivedAtDestination;
                         return;
                     }
                     EveEntity destEntity = Frame.Client.Entities.Where(ent => ent.Id == _currentDestGateId).FirstOrDefault();
@@ -103,8 +104,14 @@ namespace Controllers
                         _currentLocation = Frame.Client.Session.LocationId;
                     }
                     break;
-                case TravelStates.ArrivedAtDestination:
+                case TravelerState.ArrivedAtDestination:
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(4000, 6000));
                     Frame.Log("Destination reached");
+                    break;
+
+                case TravelerState.wait:
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(4000, 6000));
+                    Frame.Log("waiting");
                     break;
             }
         }
