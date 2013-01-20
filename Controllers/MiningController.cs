@@ -849,7 +849,7 @@ namespace Controllers
                  Frame.Client.refreshorders(typeid);
                  List<EveMarketOrder> markyord = Frame.Client.GetCachedOrders();
 
-                 List<EveMarketOrder> marketitemZ = markyord.Where(x => x.typeID == typeid.TypeId).Where(x => x.jumps < 5).Where(x => x.bid == true).Where(x => x.range == -1).ToList();
+                 List<EveMarketOrder> marketitemZ = markyord.Where(x => x.typeID == typeid.TypeId).Where(x => x.jumps < 5).Where(x => x.bid == true).Where(x => x.stationID == Frame.Client.Session.LocationId).ToList();
                  EveMarketOrder marketitem = marketitemZ.OrderByDescending(x => x.price).FirstOrDefault();
 
 
@@ -858,7 +858,7 @@ namespace Controllers
 
                  if (marketitem == null)
                  {
-                     marketitemZ = markyord.Where(x => x.typeID == typeid.TypeId).OrderByDescending(x => x.jumps).Where(x => x.bid == true).Where(x => x.range == -1).ToList();
+                     marketitemZ = markyord.Where(x => x.typeID == typeid.TypeId).OrderByDescending(x => x.jumps).Where(x => x.bid == true).Where(x => x.stationID == Frame.Client.Session.LocationId).ToList();
                      marketitem = marketitemZ.OrderByDescending(x => x.price).FirstOrDefault();
                  }
                  if (marketitem == null)
