@@ -46,7 +46,7 @@ namespace EBotPilot
         //    _manager.AddController(new TravelController());
         //    TravelController.desti = 60003760;
         //    _States.TravelerState = TravelerState.Initialise;
-            _States.SkillState = SkillState.Initialise;
+            _States.tutstates = tutstates.wait;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -57,7 +57,10 @@ namespace EBotPilot
        //   _manager.AddController(new DroneController());
           //  _States.SkillState = SkillState.Initialise;
          //   _States.MiningState = MiningState.Initialise;
-            _manager.AddController(new SkillController());
+            _manager.AddController(new tutcontroller());
+            _manager.AddController(new BuyController());
+            _manager.AddController(new TravelController());
+            
         }
 
         private void button3_Click(object sender, EventArgs e)

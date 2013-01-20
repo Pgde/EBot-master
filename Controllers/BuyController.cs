@@ -21,7 +21,7 @@ namespace Controllers
         public static List<Tuple<int, int>> buylist2 { get; set; }
         int i;
         long Jitastationid = 60003760;
-
+        
 
 
 
@@ -31,7 +31,8 @@ namespace Controllers
         public BuyController()
         {
             Frame.Log("Starting a new BuyController");
-
+            buylist = new List<Tuple<int, int>>();
+            buylist2 = new List<Tuple<int, int>>();
         }
 
 
@@ -69,9 +70,24 @@ namespace Controllers
                    int menge = buylist.First().Item2;
           
                     Frame.Client.refreshorders(typeid);
-                    List<EveMarketOrder> markyord = Frame.Client.GetCachedOrders();
+                    List<EveMarketOrder> markyord = new List<EveMarketOrder>();
+                    markyord = Frame.Client.GetCachedOrders();
 
-                    List<EveMarketOrder> marketitemZ = markyord.Where(x => x.typeID == typeid).Where(x => x.jumps < 1).Where(x => x.bid == false).Where(x => x.range == -1).ToList();
+                    foreach (EveMarketOrder tmp in markyord)
+                    {
+                        Frame.Log(tmp.jumps +"//" + tmp.price + tmp.range ); 
+                    }
+                    List<EveMarketOrder> marketitemZ = new List<EveMarketOrder>();
+                    marketitemZ = markyord.Where(x => x.typeID == typeid).Where(x => x.jumps < 1).Where(x => x.bid == false).Where(x => x.stationID == Frame.Client.Session.LocationId).ToList();
+               
+                    if (marketitemZ.Count < 1)
+                    {
+                        Frame.Log("Kein items in der Station und auchnicht in der nähe (nicht im Storecach)");
+                        buylist2.Add(buylist.First());
+                        buylist.RemoveAt(0);
+                        break;
+                    }
+                       
                     EveMarketOrder marketitem = marketitemZ.OrderByDescending(x => x.price).LastOrDefault();
 
                 /*     if (marketitemZ == null)
@@ -80,14 +96,7 @@ namespace Controllers
                         marketitem = marketitemZ.OrderByDescending(x => x.price).LastOrDefault();
                     }
                  */
-                    if (marketitemZ == null)
-                    {
-                    Frame.Log("Kein items in der Station und auchnicht in der nähe (nicht im Storecach)");
-                    buylist2.Add(buylist.First());
-                    buylist.RemoveAt(0);                   
-                    break;
-                    }
-                       
+         
             Frame.Log("Marketitem Name =  " + marketitem.Name);                                                                                                // Funktion für verkaufen infos
             Frame.Log("Marketitem Price =  " + marketitem.price);
             Frame.Log("Marketitem Volentered =  " + marketitem.volEntered);
@@ -201,17 +210,17 @@ namespace Controllers
                 case BuyControllerStates.Error:
 
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(200000000, 350000000));      //dirty 
-                    Frame.Log("Error tutstates");
+                    Frame.Log("Error Buystates");
                     _States.tutstates = tutstates.Error;
                     break;
 
                 case BuyControllerStates.wait:
-
+                    Frame.Log("wait");
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                     break;
 
                 case BuyControllerStates.done:
-
+                    Frame.Log("done");
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(10000, 25000));
                     break;
 

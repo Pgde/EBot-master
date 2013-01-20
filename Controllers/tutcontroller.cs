@@ -91,6 +91,10 @@ namespace Controllers
                 case tutstates.wait:
 
                     Frame.Log(Frame.Client.wealth());
+                     Tuple<int,int> tmp = new Tuple<int,int> (483,1);
+                    BuyController.buylist.Add(tmp);
+                    _States.BuyControllerState = BuyControllerStates.buy;
+                    _States.tutstates = tutstates.Idle;
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                     break;
 
