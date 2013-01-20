@@ -1369,6 +1369,15 @@ namespace EveModel
             return Frame.Client.GetService("skills").CallMethod("GetSkillPoints", new object[] { }, true).GetValueAs<int>();
 
         }
+
+
+                public double wealth()
+                {
+                  
+                    
+                        return Frame.Client.GetService("wallet").CallMethod("GetWealth", new object[] { }).GetValueAs<double>();
+                              
+                }
         
 
         #region External Resources

@@ -52,7 +52,8 @@ namespace EBotPilot
      //       _manager.AddController(new MiningController());
       //      _manager.AddController(new SkillController());
        //   _manager.AddController(new DroneController());
-            _States.SkillState = SkillState.Initialise;
+          //  _States.SkillState = SkillState.Initialise;
+            _States.MiningState = MiningState.Initialise;
         }
 
         private void button3_Click(object sender, EventArgs e)
