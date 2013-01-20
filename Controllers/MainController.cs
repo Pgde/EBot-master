@@ -142,6 +142,7 @@ namespace Controllers
                     Frame.Log(Frame.Client.Session.LocationId.ToString());
                     if (_States.TravelerState == TravelerState.ArrivedAtDestination)
                     {
+                        _States.TravelerState = TravelerState.wait;
                         _States.maincontrollerState = maincontrollerStates.Startup;
                         break;
                     }

@@ -863,7 +863,7 @@ namespace EveModel
             get
             {
 
-                double tmp = Frame.Client.GetService("skillqueue").CallMethod("GetTrainingLengthOfQueue", new object[] { }, true).GetValueAs<double>();
+                double tmp = Frame.Client.GetService("skillqueue").CallMethod("GetTrainingLengthOfQueue", new object[] { }).GetValueAs<double>();
                 TimeSpan tmp2 = TimeSpan.FromTicks((long)tmp);
                 return tmp2.TotalDays;//Frame.Client.GetService("skillqueue").CallMethod("GetTrainingLengthOfQueue", new object[] { }).GetValueAs<double>();
 

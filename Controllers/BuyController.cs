@@ -95,8 +95,20 @@ namespace Controllers
             Frame.Log("Marketitem OrderId =  " + marketitem.orderID);
             Frame.Log("Marketitem Jumpes =  " + marketitem.jumps);
             Frame.Log("Marketitem Range =  " + marketitem.range);
-            marketitem.buy(menge);
+            double kosten = (marketitem.price * menge);
 
+            if (marketitem.volRemaining < menge)
+            {
+                marketitem.buy(menge);
+                buylist.RemoveAt(0);   
+            }
+            else
+            {
+                marketitem.buy(marketitem.volRemaining);
+                buylist.RemoveAt(0);  
+                Tuple<int,int> tmp = new Tuple<int,int>  (marketitem.typeID,(menge - marketitem.volRemaining));
+                buylist.Add(tmp);
+            }
 
             break;
 

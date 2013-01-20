@@ -90,6 +90,7 @@ namespace Controllers
 
                 case tutstates.wait:
 
+                    Frame.Log(Frame.Client.wealth());
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                     break;
 
