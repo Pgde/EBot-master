@@ -18,7 +18,7 @@ namespace Controllers
         ///////////           VARIABLEN        ////////
 
         DateTime errorwait = DateTime.Now;
-
+        public static DateTime logintimer { get; set; }
         public MiningState backupmining;
         public TravelerState backuptravel;
         public DroneState backupdrone;
@@ -116,6 +116,12 @@ namespace Controllers
                   
 
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
+                   
+                   if (DateTime.Now < logintimer)
+                   {
+                        Frame.Log("warte noch");
+                       break;
+                    }
                     if (Frame.Client.Session.LocationId != Settings.Settings.Instance.homesys)
                     {
                         TravelController.desti = Settings.Settings.Instance.homesys;

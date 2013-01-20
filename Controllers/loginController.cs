@@ -136,6 +136,7 @@ namespace Controllers
 
                     if (Frame.Client.Session.InStation)                 //dreckig da muss es nen besseren weg geben aber fürs erste sollts reichen
                     {
+                        MainController.logintimer = DateTime.Now.AddMinutes(1);
                         _localPulse = DateTime.Now.AddMilliseconds(GetRandom(40000, 40000));
                         _States.LoginState = loginstate.Idle;
                         _States.maincontrollerState = maincontrollerStates.Startup;
@@ -144,6 +145,7 @@ namespace Controllers
 
                     if (Frame.Client.Session.InSpace)
                     {
+                        MainController.logintimer = DateTime.Now.AddMinutes(1);
                         _localPulse = DateTime.Now.AddMilliseconds(GetRandom(40000, 55000));
                         _States.LoginState = loginstate.Idle;
                         _States.maincontrollerState = maincontrollerStates.Startup;
