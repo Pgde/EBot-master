@@ -38,12 +38,7 @@ namespace Controllers
 
         public override void DoWork()
         {
-            if (IsWorkDone || _localPulse > DateTime.Now || Frame.Client.Session.NextSessionChange > DateTime.Now)
-            {
-                return;
-            }
-
-
+          
             switch (_States.BuyControllerState)
             {
                 case BuyControllerStates.Idle:
@@ -53,6 +48,7 @@ namespace Controllers
 
                      case BuyControllerStates.setup:
                     i = 0;
+                   
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(20000, 35000));
                     break;
 
@@ -63,7 +59,7 @@ namespace Controllers
                     if (buylist.Count <= 0 && buylist2.Count > 0)
                     {
                         _States.BuyControllerState = BuyControllerStates.gojita;
-                        
+                        break;
                     }
                   
                    int typeid = buylist.First().Item1;
@@ -87,42 +83,55 @@ namespace Controllers
                         buylist.RemoveAt(0);
                         break;
                     }
-                       
-                    EveMarketOrder marketitem = marketitemZ.OrderByDescending(x => x.price).LastOrDefault();
 
-                /*     if (marketitemZ == null)
+                    if (marketitemZ != null)
                     {
-                       marketitemZ = markyord.Where(x => x.typeID == minertest).OrderByDescending(x => x.jumps).Where(x => x.bid == false).Where(x => x.range == -1).ToList();
-                        marketitem = marketitemZ.OrderByDescending(x => x.price).LastOrDefault();
+                        EveMarketOrder marketitem = marketitemZ.OrderByDescending(x => x.price).LastOrDefault();
+
+                        /*     if (marketitemZ == null)
+                            {
+                               marketitemZ = markyord.Where(x => x.typeID == minertest).OrderByDescending(x => x.jumps).Where(x => x.bid == false).Where(x => x.range == -1).ToList();
+                                marketitem = marketitemZ.OrderByDescending(x => x.price).LastOrDefault();
+                            }
+                         */
+
+                        Frame.Log("Marketitem Name =  " + marketitem.Name);                                                                                                // Funktion für verkaufen infos
+                        Frame.Log("Marketitem Price =  " + marketitem.price);
+                        Frame.Log("Marketitem Volentered =  " + marketitem.volEntered);
+                        Frame.Log("Marketitem Remain =  " + marketitem.volRemaining);
+                        Frame.Log("Marketitem OrderId =  " + marketitem.orderID);
+                        Frame.Log("Marketitem Jumpes =  " + marketitem.jumps);
+                        Frame.Log("Marketitem Range =  " + marketitem.range);
+                        double kosten = (marketitem.price * menge);
+
+                        if (marketitem.volRemaining < menge)
+                        {
+                            if (kosten < Frame.Client.wealth())
+                            {
+                                marketitem.buy(menge);
+                               
+                            }
+                            buylist.RemoveAt(0);
+                            }
+                        else
+                        {
+                            if (kosten < Frame.Client.wealth())
+                            {
+                                marketitem.buy(marketitem.volRemaining);
+                                buylist.RemoveAt(0);
+                                Tuple<int, int> tmp = new Tuple<int, int>(marketitem.typeID, (menge - marketitem.volRemaining));
+                                buylist.Add(tmp);
+                            }
+                            else
+                            {
+                                buylist.RemoveAt(0);
+                            }
+                        }
                     }
-                 */
-         
-            Frame.Log("Marketitem Name =  " + marketitem.Name);                                                                                                // Funktion für verkaufen infos
-            Frame.Log("Marketitem Price =  " + marketitem.price);
-            Frame.Log("Marketitem Volentered =  " + marketitem.volEntered);
-            Frame.Log("Marketitem Remain =  " + marketitem.volRemaining);
-            Frame.Log("Marketitem OrderId =  " + marketitem.orderID);
-            Frame.Log("Marketitem Jumpes =  " + marketitem.jumps);
-            Frame.Log("Marketitem Range =  " + marketitem.range);
-            double kosten = (marketitem.price * menge);
-
-            if (marketitem.volRemaining < menge)
-            {
-                marketitem.buy(menge);
-                buylist.RemoveAt(0);   
-            }
-            else
-            {
-                marketitem.buy(marketitem.volRemaining);
-                buylist.RemoveAt(0);  
-                Tuple<int,int> tmp = new Tuple<int,int>  (marketitem.typeID,(menge - marketitem.volRemaining));
-                buylist.Add(tmp);
-            }
-
             break;
 
                 case BuyControllerStates.gojita:
-
+            Frame.Log("gojita");
             _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 5000));
                     TravelController.desti = Jitastationid;
                     _States.TravelerState = TravelerState.Initialise;
@@ -150,7 +159,7 @@ namespace Controllers
                     if (buylist2.Count <= 0)
                     {
                         _States.BuyControllerState = BuyControllerStates.gohome;
-                        
+                        break;
                     }
                   
                    int typeid2 = buylist2.First().Item1;
@@ -159,31 +168,55 @@ namespace Controllers
                     Frame.Client.refreshorders(typeid2);
                     markyord = Frame.Client.GetCachedOrders();
 
-                    marketitemZ = markyord.Where(x => x.typeID == typeid2).Where(x => x.jumps < 1).Where(x => x.bid == false).Where(x => x.range == -1).ToList();
-                    marketitem = marketitemZ.OrderByDescending(x => x.price).LastOrDefault();
+                    marketitemZ = markyord.Where(x => x.typeID == typeid2).Where(x => x.jumps < 1).Where(x => x.bid == false).Where(x => x.stationID == Frame.Client.Session.LocationId).ToList();
 
-                /*     if (marketitemZ == null)
+                    if (marketitemZ != null)
                     {
-                       marketitemZ = markyord.Where(x => x.typeID == minertest).OrderByDescending(x => x.jumps).Where(x => x.bid == false).Where(x => x.range == -1).ToList();
-                        marketitem = marketitemZ.OrderByDescending(x => x.price).LastOrDefault();
-                    }
-                 */
-                    if (marketitemZ == null)
-                    {
-                    Frame.Log("Kein items in der Station und auchnicht in der nähe (nicht im Storecach)");
-                    buylist2.RemoveAt(0);                   
-                    break;
-                    }
-                       
-            Frame.Log("Marketitem Name =  " + marketitem.Name);                                                                                                // Funktion für verkaufen infos
-            Frame.Log("Marketitem Price =  " + marketitem.price);
-            Frame.Log("Marketitem Volentered =  " + marketitem.volEntered);
-            Frame.Log("Marketitem Remain =  " + marketitem.volRemaining);
-            Frame.Log("Marketitem OrderId =  " + marketitem.orderID);
-            Frame.Log("Marketitem Jumpes =  " + marketitem.jumps);
-            Frame.Log("Marketitem Range =  " + marketitem.range);
-            marketitem.buy(menge2);
+                        EveMarketOrder marketitem = marketitemZ.OrderByDescending(x => x.price).LastOrDefault();
 
+
+                        if (marketitemZ.Count < 1)
+                        {
+                            Frame.Log("Kein items in der Station und auchnicht in der nähe (nicht im Storecach)");
+                            buylist2.RemoveAt(0);
+                            break;
+                        }
+
+                        Frame.Log("Marketitem Name =  " + marketitem.Name);                                                                                                // Funktion für verkaufen infos
+                        Frame.Log("Marketitem Price =  " + marketitem.price);
+                        Frame.Log("Marketitem Volentered =  " + marketitem.volEntered);
+                        Frame.Log("Marketitem Remain =  " + marketitem.volRemaining);
+                        Frame.Log("Marketitem OrderId =  " + marketitem.orderID);
+                        Frame.Log("Marketitem Jumpes =  " + marketitem.jumps);
+                        Frame.Log("Marketitem Range =  " + marketitem.range);
+                        double kosten = (marketitem.price * menge2);
+
+                        if (marketitem.volRemaining < menge2)
+                        {
+                            if (kosten < Frame.Client.wealth())
+                            {
+                                marketitem.buy(menge2);
+
+                            }
+                            buylist.RemoveAt(0);
+                        }
+                        else
+                        {
+                            if (kosten < Frame.Client.wealth())
+                            {
+                                marketitem.buy(marketitem.volRemaining);
+                                buylist.RemoveAt(0);
+                                Tuple<int, int> tmp = new Tuple<int, int>(marketitem.typeID, (menge2 - marketitem.volRemaining));
+                                buylist2.Add(tmp);
+                            }
+                            else
+                            {
+                                buylist2.RemoveAt(0);
+                            }
+
+                        }
+                        
+                    }
 
             break;
 

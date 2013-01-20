@@ -36,10 +36,7 @@ namespace Controllers
 
         public override void DoWork()
         {
-            if (IsWorkDone || _localPulse > DateTime.Now || Frame.Client.Session.NextSessionChange > DateTime.Now)
-            {
-                return;
-            }
+
 
 
             switch (_States.tutstates)
@@ -92,8 +89,8 @@ namespace Controllers
 
                     Frame.Log(Frame.Client.wealth());
                      Tuple<int,int> tmp = new Tuple<int,int> (483,1);
-                    BuyController.buylist.Add(tmp);
-                    _States.BuyControllerState = BuyControllerStates.buy;
+                    BuyController.buylist2.Add(tmp);
+                    _States.BuyControllerState = BuyControllerStates.buyjita;
                     _States.tutstates = tutstates.Idle;
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                     break;

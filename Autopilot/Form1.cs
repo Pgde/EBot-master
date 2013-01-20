@@ -71,6 +71,7 @@ namespace EBotPilot
             _manager.AddController(new SkillController());
             _manager.AddController(new TravelController());
             _manager.AddController(new MainController());
+            _manager.AddController(new BuyController());
         }
 
         #region Old Code
