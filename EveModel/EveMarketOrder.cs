@@ -71,6 +71,8 @@ namespace EveModel
  //def SellStuff(self, stationID, typeID, itemID, price, quantity, duration = 0, useCorp = False, located = None):
         public void sell(int quant, EveItem itemsell)
         {
+            if (Frame.Client.Session.InStation)
+            {
             if (quant > volRemaining)
             {
                 quant = volRemaining;
@@ -80,7 +82,8 @@ namespace EveModel
                 quant = itemsell.Quantity;
             }
             Frame.Client.GetService("marketQuote").CallMethod("SellStuff", new object[] {Frame.Client.Session.stationId, itemsell.TypeId, itemsell.ItemId, price, quant },true);
-        }
+            }
+            }
 
         // return what == 'sell' and (order.jumps <= order.range or eve.session.stationid and order.range == -1 and order.stationID == eve.session.stationid or eve.session.solarsystemid and order.jumps == 0)
 
