@@ -157,6 +157,32 @@ namespace EveModel
             }
         }
 
+        int? _RegionId;
+        public int RegionId
+        {
+            get
+            {
+                if (!_RegionId.HasValue)
+                {
+                    _RegionId = this["regionid"].GetValueAs<int>();
+                }
+                return _RegionId.Value;
+            }
+        }
+
+        int? _ConstellationId;
+        public int ConstellationId
+        {
+            get
+            {
+                if (!_ConstellationId.HasValue)
+                {
+                    _ConstellationId = this["constellationid"].GetValueAs<int>();
+                }
+                return _ConstellationId.Value;
+            }
+        }
+
         double? _systemSecurity;
         public double SystemSecurity
         {

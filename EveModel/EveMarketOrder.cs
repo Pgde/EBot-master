@@ -82,6 +82,45 @@ namespace EveModel
             Frame.Client.GetService("marketQuote").CallMethod("SellStuff", new object[] { stationID, typeID, itemsell.ItemId, price, quant });
         }
 
+        // return what == 'sell' and (order.jumps <= order.range or eve.session.stationid and order.range == -1 and order.stationID == eve.session.stationid or eve.session.solarsystemid and order.jumps == 0)
+
+
+        //rangeConstellation = 4
+//rangeRegion = 32767
+//rangeSolarSystem = 0
+//rangeStation = -1
+        public bool inrange
+        {
+            get
+            {
+            long   mystationid = Frame.Client.Session.LocationId;
+            long    mysolarid = Frame.Client.Session.SolarSystemId;
+            long    myregionid = Frame.Client.Session.RegionId;
+            long    myconstid = Frame.Client.Session.ConstellationId;
+
+            if (range < jumps)
+            {
+                return true;
+            }
+               if  (range == -1 && mystationid == stationID) 
+                {
+                return true ;
+                }
+               if (range == 0 && mysolarid == solarSystemID)
+                {
+                    return true;
+                }
+
+               if (range == 32767 && myregionid == regionID)
+               {
+                   return true;
+               }
+                
+
+               return false;
+
+            }
+        }
 
 
         /*
