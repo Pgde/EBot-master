@@ -59,13 +59,13 @@ namespace EveModel
             {
                 quant = volRemaining;
             }
-            Frame.Client.GetService("marketQuote").CallMethod("BuyStuff", new object[] { stationID, typeID, price, quant });
+            Frame.Client.GetService("marketQuote").CallMethod("BuyStuff", new object[] { stationID, typeID, price, quant },true);
         }
 
         public void buy()
         {
 
-            Frame.Client.GetService("marketQuote").CallMethod("BuyStuff", new object[] { stationID, typeID, price, volRemaining });
+            Frame.Client.GetService("marketQuote").CallMethod("BuyStuff", new object[] { stationID, typeID, price, volRemaining },true);
         }
 
  //def SellStuff(self, stationID, typeID, itemID, price, quantity, duration = 0, useCorp = False, located = None):
@@ -79,7 +79,7 @@ namespace EveModel
             {
                 quant = itemsell.Quantity;
             }
-            Frame.Client.GetService("marketQuote").CallMethod("SellStuff", new object[] { stationID, typeID, itemsell.ItemId, price, quant });
+            Frame.Client.GetService("marketQuote").CallMethod("SellStuff", new object[] {Frame.Client.Session.stationId, itemsell.TypeId, itemsell.ItemId, price, quant },true);
         }
 
         // return what == 'sell' and (order.jumps <= order.range or eve.session.stationid and order.range == -1 and order.stationID == eve.session.stationid or eve.session.solarsystemid and order.jumps == 0)
@@ -98,7 +98,7 @@ namespace EveModel
             long    myregionid = Frame.Client.Session.RegionId;
             long    myconstid = Frame.Client.Session.ConstellationId;
 
-            if (range < jumps)
+            if (range >= jumps && range != 0 && range != -1)
             {
                 return true;
             }

@@ -157,6 +157,20 @@ namespace EveModel
             }
         }
 
+        int? _stationId;
+        public int stationId
+        {
+            get
+            {
+                if (!_stationId.HasValue)
+                {
+                    _stationId = this["stationid"].GetValueAs<int>();
+                    if (_stationId == -1)
+                        _stationId = this["stationid2"].GetValueAs<int>();
+                }
+                return _stationId.Value;
+            }
+        }
         int? _RegionId;
         public int RegionId
         {

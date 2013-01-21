@@ -656,7 +656,7 @@ namespace Controllers
 
                         Frame.Client.GetItemHangar();
                         List<EveItem> itemlischt = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;
-                        EveItem itemsZZ = itemlischt.Where(x => x.Stacksize > 20000).FirstOrDefault();
+                        EveItem itemsZZ = itemlischt.Where(x => x.Stacksize > 1000).FirstOrDefault();
                         if (itemsZZ == null)
                         {
                             Frame.Log("Keine items in der menge vorrätig");
@@ -673,6 +673,10 @@ namespace Controllers
                             }
                             
                             verkaufsintemszahl = (itemsZZ.Quantity);
+                            if (!Frame.Client.GetService("marketQuote").IsValid)
+                            {
+                                break;
+                            }
                             sellitemsZ(verkaufsintemszahl, itemsZZ);
                             Frame.Log("Verkaufe itemZZ typ id =  " + itemsZZ.TypeId);
                             Frame.Log("Verkaufe items" + verkaufsintemszahl + "  " + itemsZZ.Quantity);
@@ -852,14 +856,14 @@ namespace Controllers
 
                  List<EveMarketOrder> markyord = Frame.Client.GetCachedOrders();
 
-                 List<EveMarketOrder> marketitemZ = markyord.Where(x => x.typeID == typeid.TypeId).Where(x => x.jumps < 5).Where(x => x.bid == true).Where(x => x.stationID == Frame.Client.Session.LocationId).ToList();
+                 List<EveMarketOrder> marketitemZ = markyord.Where(x => x.typeID == typeid.TypeId).Where(x => x.inrange == true).Where(x => x.bid == true).ToList();
                  if (marketitemZ != null)
                  {
                       marketitem = marketitemZ.OrderByDescending(x => x.price).FirstOrDefault();
                  }
 
     
-                 if (marketitem == null)
+           /*      if (marketitem == null)
                  {
                      marketitemZ = markyord.Where(x => x.typeID == typeid.TypeId).OrderByDescending(x => x.jumps).Where(x => x.bid == true).Where(x => x.jumps <= x.range).ToList();
                      if (marketitemZ != null)
@@ -885,7 +889,7 @@ namespace Controllers
                          marketitem = marketitemZ.OrderByDescending(x => x.price).FirstOrDefault();
                      }
                  }
-
+                 */
                  
                  if (marketitem == null)
                  {
@@ -900,6 +904,7 @@ namespace Controllers
                  Frame.Log("Marketitem OrderId =  " + marketitem.orderID);
                  Frame.Log("Marketitem Jumpes =  " + marketitem.jumps);
                  Frame.Log("Marketitem Range =  " + marketitem.range);
+                 Frame.Log("Marketitem inrange =  " + marketitem.inrange);
                  marketitem.sell(menge, typeid);
                  verkaufswertinsg = (marketitem.price * verkaufsintemszahl);
                  Frame.Log("Verkaufswert =   " +  verkaufswertinsg );

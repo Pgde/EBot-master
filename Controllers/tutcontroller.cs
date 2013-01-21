@@ -87,12 +87,18 @@ namespace Controllers
 
                 case tutstates.wait:
 
-                    Frame.Log(Frame.Client.wealth());
-                    Frame.Log(Frame.Client.Session.LocationId);
-                                Tuple<int,int> tmp = new Tuple<int,int> (483,1);
-                    BuyController.buylist.Add(tmp);
-                    _States.BuyControllerState = BuyControllerStates.buy;
+               //     Frame.Log(Frame.Client.wealth());
+               //     Frame.Log(Frame.Client.Session.LocationId);
+               //                 Tuple<int,int> tmp = new Tuple<int,int> (483,1);
+               //     BuyController.buylist.Add(tmp);
+               //     _States.BuyControllerState = BuyControllerStates.buy;
                     _States.tutstates = tutstates.Idle;
+                    List<EveMarketOrder> tmp = Frame.Client.GetCachedOrders();
+                    foreach
+                        (EveMarketOrder tmp2 in tmp)
+                    {
+                        Frame.Log(tmp2.Name + "inrange " + tmp2.inrange);
+                    }
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                     break;
 
