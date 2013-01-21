@@ -272,6 +272,12 @@ namespace Controllers
                     break;
                     }
 
+                    if (Frame.Client.getinvopen() == false)
+                    {
+                        Frame.Client.Getandopenwindow("leer");
+                        break;
+                    }
+
                     // buggy wie bekomm ich das invetory vom schiff ?
                     Frame.Log("bin bei einladen");
                     items =Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;                                                     // Get itemslist check fehlt
