@@ -21,7 +21,7 @@ namespace Controllers
 
         public override void DoWork()
         {
-            if (IsWorkDone || _localPulse > DateTime.Now || Frame.Client.Session.NextSessionChange > DateTime.Now)
+            if ( _localPulse > DateTime.Now || Frame.Client.Session.NextSessionChange > DateTime.Now)
             {
                 return;
             }
@@ -34,6 +34,7 @@ namespace Controllers
 
 
                 case TravelerState.Initialise:
+                    _currentLocation = 0;
                     _destinationId = desti;
                     _destinationId = _destinationId > 0 ? _destinationId : Frame.Client.GetLastWaypointLocationId();
                     if (_destinationId == -1 || Frame.Client.Session.LocationId == _destinationId)
@@ -53,6 +54,7 @@ namespace Controllers
 
                 case TravelerState.Start:
                     _States.TravelerState = TravelerState.Travel;
+                    Frame.Log("travel");
                     if (Frame.Client.Session.InStation)
                     {
                         Frame.Client.ExecuteCommand(EveModel.EveCommand.CmdExitStation);
@@ -63,9 +65,11 @@ namespace Controllers
                 case TravelerState.Travel:
                     if (_destinationId == -1 || Frame.Client.Session.LocationId == _destinationId)
                     {
+                        Frame.Log("bug");
                         _States.TravelerState = TravelerState.ArrivedAtDestination;
-                        return;
+                        break;
                     }
+                    Frame.Log("test");
                     EveEntity destEntity = Frame.Client.Entities.Where(ent => ent.Id == _currentDestGateId).FirstOrDefault();
                     // Should I cloak
                     if (Frame.Client.GetActiveShip.ToEntity != null && Frame.Client.GetActiveShip.ToEntity.MovementMode == EveEntity.EntityMovementState.InWarp &&
@@ -86,9 +90,10 @@ namespace Controllers
                             Frame.Log("Session changed");
                             _localPulse = DateTime.Now.AddMilliseconds(GetRandom(4000, 6000));
                             _waitforsessionChange = false;
-                            return;
+                            break;
                         }
                         _waitforsessionChange = true;
+                        Frame.Log(Frame.Client.GetNextWaypointStargate());
                         destEntity = Frame.Client.GetNextWaypointStargate();
                         _currentDestGateId = destEntity.Id;
                         if (destEntity.Group == Group.Stargate)
@@ -104,6 +109,8 @@ namespace Controllers
                         _currentLocation = Frame.Client.Session.LocationId;
                     }
                     break;
+
+
                 case TravelerState.ArrivedAtDestination:
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(4000, 6000));
                     Frame.Log("Destination reached");
