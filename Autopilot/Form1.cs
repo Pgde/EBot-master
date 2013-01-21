@@ -47,7 +47,7 @@ namespace EBotPilot
         //    TravelController.desti = 60003760;
         //    _States.TravelerState = TravelerState.Initialise;
         //    _States.tutstates = tutstates.wait;
-            _States.MiningState = MiningState.unload;  
+            _States.tutstates = tutstates.start; 
         }
 
         private void button2_Click(object sender, EventArgs e)

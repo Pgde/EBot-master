@@ -88,8 +88,27 @@ namespace Controllers
                      _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 3500));
                     Frame.Client.GetAgentByName(TutAgent).StartConversation();
                     EveAgentDialogWindow agentwnd = Frame.Client.GetAgentDialogWindow(Frame.Client.GetAgentByName(TutAgent).AgentId);
-                    agentwnd.ClickButton(EveWindow.Button.RequestMission);
-                    _States.tutstates = tutstates.acceptmission;
+                  //  agentwnd.ClickButton(EveWindow.Button.RequestMission);
+
+                    foreach (EveAgentMission tmp in Frame.Client.AgentMissions)
+                    {
+                        if (tmp.State == EveAgentMission.MissionState.Offered && tmp.Name == "Making Mountains of Molehills (1 of 10)" || tmp.State == EveAgentMission.MissionState.Offered && tmp.Name == "Making Mountains of Molehills (2 of 10)")
+                        {
+                            _States.tutstates = tutstates.acceptmission;
+                            break;
+                        }
+                        if (tmp.State == EveAgentMission.MissionState.Accepted && tmp.Name == "Making Mountains of Molehills (1 of 10)" || tmp.State == EveAgentMission.MissionState.Accepted && tmp.Name == "Making Mountains of Molehills (2 of 10)")
+                        {
+                            _States.tutstates = tutstates.domission;
+                            break;
+                        }
+                    }
+                   if (agentwnd.HasButton(EveWindow.Button.RequestMission))
+                   {
+                       agentwnd.ClickButton(EveWindow.Button.RequestMission);
+                       _States.tutstates = tutstates.acceptmission;
+                   }
+                           
                     break;
 
                 case tutstates.acceptmission:
