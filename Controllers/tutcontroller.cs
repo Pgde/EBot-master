@@ -116,17 +116,41 @@ namespace Controllers
                     foreach (EveAgentMission tmp in Frame.Client.AgentMissions)
                     {
                    Frame.Log( tmp.Name);
+                   if (tmp.State == EveAgentMission.MissionState.Offered && tmp.Name == "Making Mountains of Molehills (1 of 10)" || tmp.State == EveAgentMission.MissionState.Offered && tmp.Name == "Making Mountains of Molehills (2 of 10)")
+                   {
+                       EveAgentDialogWindow agentwnd2 = Frame.Client.GetAgentDialogWindow(Frame.Client.GetAgentByName(TutAgent).AgentId);
+                       if (agentwnd2.HasButton(EveWindow.Button.Accept))
+                       {
+                           agentwnd2.ClickButton(EveWindow.Button.Accept);
+                           _States.tutstates = tutstates.getmission;
+                       }
+                   }
                     }
-                    EveAgentDialogWindow agentwnd2 = Frame.Client.GetAgentDialogWindow(Frame.Client.GetAgentByName(TutAgent).AgentId);
-                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(20000, 35000));
+                  
+                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(20000, 35000));
                     // agentwnd2.ClickButton(EveWindow.Button.Accept);
                     
                     break;
 
                 case tutstates.domission:
 
+
+                    foreach (EveAgentMission tmp in Frame.Client.AgentMissions)
+                    {
+                        Frame.Log(tmp.Name);
+                        if (tmp.State == EveAgentMission.MissionState.Offered && tmp.Name == "Making Mountains of Molehills (1 of 10)")
+                        {
+                            _States.tutstates = tutstates.dominingmissi;
+                            break;
+                        }
+
+                        if (tmp.State == EveAgentMission.MissionState.Offered && tmp.Name == "Making Mountains of Molehills (2 of 10)")
+                        {
+                            _States.tutstates = tutstates.dosecmissi;
+                            break;
+                        }
+                    }
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(20000, 35000));
-                    _States.tutstates = tutstates.compmission;
                     break;
 
                 case tutstates.compmission:

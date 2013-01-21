@@ -18,6 +18,8 @@ namespace Controllers.states
         compmission,
         checksecond,
         Error,
+        dominingmissi,
+        dosecmissi,
         wait
     }
 
