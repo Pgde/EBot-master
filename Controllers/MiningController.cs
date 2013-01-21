@@ -36,7 +36,9 @@ namespace Controllers
         int stationtrip = 0;
         List<string> skilltotrainid = new List<string>();
         List<string> skillZ = new List<string>();
-
+        double verkaufswertinsg;
+        int verkaufsintemszahl;
+        EveMarketOrder marketitem = null;
 
         /////////////////////////////////////////////                           Dronen
         float maxactivdronen = 0;
@@ -670,7 +672,7 @@ namespace Controllers
 
                             }
                             
-                            int verkaufsintemszahl = (itemsZZ.Quantity);
+                            verkaufsintemszahl = (itemsZZ.Quantity);
                             sellitemsZ(verkaufsintemszahl, itemsZZ);
                             Frame.Log("Verkaufe itemZZ typ id =  " + itemsZZ.TypeId);
                             Frame.Log("Verkaufe items" + verkaufsintemszahl + "  " + itemsZZ.Quantity);
@@ -847,20 +849,44 @@ namespace Controllers
             //     return what == 'sell' and (order.jumps <= order.range or eve.session.stationid and order.range == -1 and order.stationID == eve.session.stationid or eve.session.solarsystemid and order.jumps == 0)
 
                  Frame.Client.refreshorders(typeid);
+
                  List<EveMarketOrder> markyord = Frame.Client.GetCachedOrders();
 
                  List<EveMarketOrder> marketitemZ = markyord.Where(x => x.typeID == typeid.TypeId).Where(x => x.jumps < 5).Where(x => x.bid == true).Where(x => x.stationID == Frame.Client.Session.LocationId).ToList();
-                 EveMarketOrder marketitem = marketitemZ.OrderByDescending(x => x.price).FirstOrDefault();
+                 if (marketitemZ != null)
+                 {
+                      marketitem = marketitemZ.OrderByDescending(x => x.price).FirstOrDefault();
+                 }
 
-
-           //      List<EveMarketOrder> marketitemZ = markyord.Where(x => x.typeID == typeid.TypeId).Where(x => x.jumps < 5).Where(x => x.bid == true).Where(x => x.range == -1).ToList();
-           //      EveMarketOrder marketitem = marketitemZ.OrderByDescending(x => x.price).FirstOrDefault();
+    
+                 if (marketitem == null)
+                 {
+                     marketitemZ = markyord.Where(x => x.typeID == typeid.TypeId).OrderByDescending(x => x.jumps).Where(x => x.bid == true).Where(x => x.jumps <= x.range).ToList();
+                     if (marketitemZ != null)
+                     {
+                                              marketitem = marketitemZ.OrderByDescending(x => x.price).FirstOrDefault();
+                     }
+                 }
 
                  if (marketitem == null)
                  {
-                     marketitemZ = markyord.Where(x => x.typeID == typeid.TypeId).OrderByDescending(x => x.jumps).Where(x => x.bid == true).Where(x => x.stationID == Frame.Client.Session.LocationId).ToList();
-                     marketitem = marketitemZ.OrderByDescending(x => x.price).FirstOrDefault();
+                     marketitemZ = markyord.Where(x => x.typeID == typeid.TypeId).OrderByDescending(x => x.jumps).Where(x => x.bid == true).Where(x => x.stationID == -1).Where(x => x.range == -1).ToList();
+                     if (marketitemZ != null)
+                  {
+                                              marketitem = marketitemZ.OrderByDescending(x => x.price).FirstOrDefault();
+                  }
                  }
+
+                 if (marketitem == null)
+                 {
+                     marketitemZ = markyord.Where(x => x.typeID == typeid.TypeId).OrderByDescending(x => x.jumps).Where(x => x.bid == true).Where(x => x.solarSystemID == 0).Where(x => x.jumps == 0).ToList();
+                     if (marketitemZ != null)
+                     {
+                         marketitem = marketitemZ.OrderByDescending(x => x.price).FirstOrDefault();
+                     }
+                 }
+
+                 
                  if (marketitem == null)
                  {
                      Frame.Log("kein eintrag mit -1");
@@ -875,6 +901,8 @@ namespace Controllers
                  Frame.Log("Marketitem Jumpes =  " + marketitem.jumps);
                  Frame.Log("Marketitem Range =  " + marketitem.range);
                  marketitem.sell(menge, typeid);
+                 verkaufswertinsg = (marketitem.price * verkaufsintemszahl);
+                 Frame.Log("Verkaufswert =   " +  verkaufswertinsg );
 
              }
         
