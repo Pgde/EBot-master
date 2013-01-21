@@ -537,6 +537,17 @@ namespace Controllers
 
 
                 case MiningState.unload:
+
+                    if (Frame.Client.GetService("marketQuote").IsValid != true)
+                    {
+                        break;
+                    }
+
+                    if (Frame.Client.GetService("wallet").IsValid != true)
+                    {
+                        break;
+                    }
+
                     if (Frame.Client.getinvopen() == false)
                     {
                         Frame.Client.Getandopenwindow("leer");
