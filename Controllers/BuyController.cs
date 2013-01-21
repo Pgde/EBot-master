@@ -39,6 +39,10 @@ namespace Controllers
 
         public override void DoWork()
         {
+            if (IsWorkDone || _localPulse > DateTime.Now || Frame.Client.Session.NextSessionChange > DateTime.Now)
+            {
+                return ;
+            }
           
             switch (_States.BuyControllerState)
             {
