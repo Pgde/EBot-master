@@ -17,7 +17,7 @@ namespace Controllers
         ///////////           VARIABLEN        ////////
 
         DateTime errorwait = DateTime.Now;
-
+        string TutAgent = "Abishi Tian";
 
 
 
@@ -47,15 +47,61 @@ namespace Controllers
                     break;
 
                 case tutstates.start:
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 5000));
+                    if (!Frame.Client.GetService("agents").IsValid)
+                    {
+                        break;
+                    }
 
-                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(20000, 35000));
+                    if (!Frame.Client.GetAgentByName(TutAgent).IsValid)
+                    {
+                        _States.tutstates = tutstates.Error;
+                        break;
+                    }
+                    if (Frame.Client.Session.LocationId == Frame.Client.GetAgentByName(TutAgent).StationId)
+                    {
+                        _States.tutstates = tutstates.getmission;
+                        break;
+                    }
+                    else
+                    {
+                        TravelController.desti = Frame.Client.GetAgentByName(TutAgent).StationId;
+                        _States.TravelerState = TravelerState.Initialise;
+                        _States.tutstates = tutstates.travel;
+                    }
+
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 5000));
+                    break;
+
+                case tutstates.travel:
+
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 3500));
+                    if (_States.TravelerState == TravelerState.ArrivedAtDestination)
+                    {
+                        _States.TravelerState = TravelerState.wait;
+                        _States.tutstates = tutstates.start;
+                    }
+                   break;
+                    break;
+
+                case tutstates.getmission:
+                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 3500));
+                    Frame.Client.GetAgentByName(TutAgent).StartConversation();
+                    EveAgentDialogWindow agentwnd = Frame.Client.GetAgentDialogWindow(Frame.Client.GetAgentByName(TutAgent).AgentId);
+                    agentwnd.ClickButton(EveWindow.Button.RequestMission);
                     _States.tutstates = tutstates.acceptmission;
                     break;
 
                 case tutstates.acceptmission:
 
+                    foreach (EveAgentMission tmp in Frame.Client.AgentMissions)
+                    {
+                   Frame.Log( tmp.Name);
+                    }
+                    EveAgentDialogWindow agentwnd2 = Frame.Client.GetAgentDialogWindow(Frame.Client.GetAgentByName(TutAgent).AgentId);
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(20000, 35000));
-                    _States.tutstates = tutstates.domission;
+                    // agentwnd2.ClickButton(EveWindow.Button.Accept);
+                    
                     break;
 
                 case tutstates.domission:
@@ -93,9 +139,9 @@ namespace Controllers
                //     BuyController.buylist.Add(tmp);
                //     _States.BuyControllerState = BuyControllerStates.buy;
                     _States.tutstates = tutstates.Idle;
-                    List<EveMarketOrder> tmp = Frame.Client.GetCachedOrders();
+                    List<EveMarketOrder> tmporder = Frame.Client.GetCachedOrders();
                     foreach
-                        (EveMarketOrder tmp2 in tmp)
+                        (EveMarketOrder tmp2 in tmporder)
                     {
                         Frame.Log(tmp2.Name + "inrange " + tmp2.inrange);
                     }

@@ -10,6 +10,8 @@ namespace Controllers.states
     {
         Idle,
         start,
+        starttravel,
+        travel,
         getmission,
         acceptmission,
         domission,
