@@ -47,6 +47,7 @@ namespace EBotPilot
         //    TravelController.desti = 60003760;
         //    _States.TravelerState = TravelerState.Initialise;
             _States.tutstates = tutstates.wait;
+            
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -72,6 +73,11 @@ namespace EBotPilot
             _manager.AddController(new TravelController());
             _manager.AddController(new MainController());
             _manager.AddController(new BuyController());
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            _States.maincontrollerState = maincontrollerStates.Startup;
         }
 
         #region Old Code

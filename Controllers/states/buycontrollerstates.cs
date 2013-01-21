@@ -19,7 +19,9 @@ namespace Controllers.states
         traveljita,
         gojita,
         travelhome,
-        gohome
+        gohome,
+        shiphome,
+        unload
     }
 
 }

@@ -21,12 +21,13 @@ namespace Controllers
         public static List<Tuple<int, int>> buylist2 { get; set; }
         int i;
         long Jitastationid = 60003760;
-        
-
-
-
-
-
+        List<EveItem> items = new List<EveItem>();
+        List<EveItem> mitnehmen = new List<EveItem>();
+        double used = new double();
+        double cargomax = new double();
+        double cargofree = new double();
+        bool shiphome = false;
+        int itemzahl = new int();
 
         public BuyController()
         {
@@ -47,8 +48,9 @@ namespace Controllers
                     break;
 
                      case BuyControllerStates.setup:
-                    i = 0;
-                   
+
+                    Frame.Client.GetService("marketQuote");
+                    _States.BuyControllerState = BuyControllerStates.buy;
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(20000, 35000));
                     break;
 
@@ -56,9 +58,26 @@ namespace Controllers
 
                     
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 5000));
+
+                    if (Frame.Client.GetService("marketQuote").IsValid != true)
+                    {
+                        break;
+                    }
+
+                    if (Frame.Client.GetService("wallet").IsValid != true)
+                    {
+                        break;
+                    }
+
+                    Frame.Log(buylist.Count + "//" + buylist2.Count);
                     if (buylist.Count <= 0 && buylist2.Count > 0)
                     {
                         _States.BuyControllerState = BuyControllerStates.gojita;
+                        break;
+                    }
+                    if (buylist.Count <= 0 && buylist2.Count <= 0)
+                    {
+                        _States.BuyControllerState = BuyControllerStates.done;
                         break;
                     }
                   
@@ -104,7 +123,7 @@ namespace Controllers
                         Frame.Log("Marketitem Range =  " + marketitem.range);
                         double kosten = (marketitem.price * menge);
 
-                        if (marketitem.volRemaining < menge)
+                        if (marketitem.volRemaining > menge)
                         {
                             if (kosten < Frame.Client.wealth())
                             {
@@ -145,8 +164,16 @@ namespace Controllers
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 5000));
                     if (_States.TravelerState == TravelerState.ArrivedAtDestination && Frame.Client.Session.LocationId == Jitastationid)
                     {
-                        _States.BuyControllerState = BuyControllerStates.buyjita;
-                        _States.TravelerState = TravelerState.wait;
+                        if (shiphome == true)
+                        {
+                            _States.BuyControllerState = BuyControllerStates.shiphome;
+                            _States.TravelerState = TravelerState.wait;
+                        }
+                        else
+                        {
+                            _States.BuyControllerState = BuyControllerStates.buyjita;
+                            _States.TravelerState = TravelerState.wait;
+                        }
                     }
                     break;
 
@@ -155,10 +182,20 @@ namespace Controllers
 
                     case BuyControllerStates.buyjita:
 
+                    if (Frame.Client.GetService("marketQuote").IsValid != true)
+                    {
+                        break;
+                    }
+
+                    if (Frame.Client.GetService("wallet").IsValid != true)
+                    {
+                        break;
+                    }
+
                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 5000));
                     if (buylist2.Count <= 0)
                     {
-                        _States.BuyControllerState = BuyControllerStates.gohome;
+                        _States.BuyControllerState = BuyControllerStates.shiphome;
                         break;
                     }
                   
@@ -191,21 +228,23 @@ namespace Controllers
                         Frame.Log("Marketitem Range =  " + marketitem.range);
                         double kosten = (marketitem.price * menge2);
 
-                        if (marketitem.volRemaining < menge2)
+                        if (marketitem.volRemaining > menge2)
                         {
+                            Frame.Log(kosten + "//" + Frame.Client.wealth());
                             if (kosten < Frame.Client.wealth())
                             {
+                                Frame.Log("kaufe");
                                 marketitem.buy(menge2);
 
                             }
-                            buylist.RemoveAt(0);
+                            buylist2.RemoveAt(0);
                         }
                         else
                         {
                             if (kosten < Frame.Client.wealth())
                             {
                                 marketitem.buy(marketitem.volRemaining);
-                                buylist.RemoveAt(0);
+                                buylist2.RemoveAt(0);
                                 Tuple<int, int> tmp = new Tuple<int, int>(marketitem.typeID, (menge2 - marketitem.volRemaining));
                                 buylist2.Add(tmp);
                             }
@@ -220,6 +259,67 @@ namespace Controllers
 
             break;
 
+                    // _name = Frame.Client.GetInvType(new object[] { typeID })["typeName"].GetValueAs<string>();
+
+                    case BuyControllerStates.shiphome:
+
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 5000));
+                   
+                    
+                    if (Frame.Client.getinvopen() == false)
+                    {
+                    Frame.Client.Getandopenwindow("leer");
+                    break;
+                    }
+
+                    // buggy wie bekomm ich das invetory vom schiff ?
+                    Frame.Log("bin bei einladen");
+                    items =Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;                                                     // Get itemslist check fehlt
+                    Frame.Log(items.Count);
+                    used = Frame.Client.GetPrimaryInventoryWindow.CargoHoldOfActiveShip.UsedCapacity;  
+                    cargomax = Frame.Client.GetPrimaryInventoryWindow.CargoHoldOfActiveShip.Capacity;
+                    cargofree = cargomax - used;
+
+                    items = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;
+                        if (items.Count != 0)                                                                                                          // Wenn items zahl ungleich 0 ist dann
+                        {
+                            EveItem itemZ = items.OrderBy(x => x.ItemId).FirstOrDefault();
+                            double itemvolume = itemZ.Volume;
+
+                            double stackvolume = (itemvolume * itemZ.Stacksize);
+                            Frame.Log(itemvolume + "//" + stackvolume);
+                            if (stackvolume < cargofree)
+                            {
+                                Frame.Client.GetItemHangar();
+                                Frame.Client.GetPrimaryInventoryWindow.CargoHoldOfActiveShip.Add(itemZ);                                                               // und füge es dem itemshangar hinzu
+                                //        items.Remove(itemZ); unsinning da das item aus dem hangar verschwindet
+                                Frame.Client.GetPrimaryInventoryWindow.CargoHoldOfActiveShip.StackAll();
+                                Frame.Log("Stackall");
+                                break;
+                            }
+                            else
+                            {
+                                double tmp = (cargofree / itemvolume);
+                                int amounttomove = (int)tmp;
+
+                                if (amounttomove > 0)
+                                {
+                                    Frame.Client.GetItemHangar();
+                                    Frame.Client.GetPrimaryInventoryWindow.CargoHoldOfActiveShip.Add(itemZ,amounttomove);                                                               // und füge es dem itemshangar hinzu
+                                    //        items.Remove(itemZ); unsinning da das item aus dem hangar verschwindet
+                                    Frame.Client.GetPrimaryInventoryWindow.CargoHoldOfActiveShip.StackAll();
+                                    Frame.Log("Stackall");
+                                    break;
+                                }
+                                shiphome = true;
+                                _States.BuyControllerState = BuyControllerStates.gohome;
+                            }
+                           
+                        }
+                        shiphome = false;
+                        _States.BuyControllerState = BuyControllerStates.gohome;
+                    break;
+
 
                     case BuyControllerStates.gohome:
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 5000));
@@ -233,12 +333,66 @@ namespace Controllers
 
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 5000));
                     if (_States.TravelerState == TravelerState.ArrivedAtDestination && Frame.Client.Session.LocationId == Settings.Settings.Instance.homesys)
-                    {
-                        _States.BuyControllerState = BuyControllerStates.done;
+                    {                        
+                        _States.BuyControllerState = BuyControllerStates.unload;
                         _States.TravelerState = TravelerState.wait;
                     }
                     break;
 
+
+                    case BuyControllerStates.unload:
+
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 5000));
+
+                      if (Frame.Client.getinvopen() == false)
+                    {
+                        Frame.Client.Getandopenwindow("leer");
+                        break;
+                    }
+
+
+                    Frame.Log("bin bei Unload");
+                    items = Frame.Client.GetPrimaryInventoryWindow.OreHoldOfActiveShip.Items;                                                     // Get itemslist check fehlt
+                    Frame.Log(items.Count);                                                                                                         // Logbuch Items zahl
+                    if (items.Count == 0)
+                    {
+                        items = Frame.Client.GetPrimaryInventoryWindow.CargoHoldOfActiveShip.Items;
+                    }
+
+
+                    if (items.Count != 0)                                                                                                          // Wenn items zahl ungleich 0 ist dann
+                    {
+                        Frame.Log("item gefunden");                                                                                                 // Logbuch items gefunden
+                        EveItem itemZ = items.OrderBy(x => x.ItemId).FirstOrDefault();                                                              // Nimm das erste items in der liste
+                        itemzahl = (itemZ.Quantity);
+                        Frame.Log("itemzahl = " + itemzahl);
+                        string namee = itemZ.TypeName;
+                        Frame.Log("givenname = " + namee);
+
+
+                        Frame.Client.GetItemHangar();
+                        Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Add(itemZ);                                                               // und füge es dem itemshangar hinzu
+                        items.Remove(itemZ);
+                        Frame.Client.GetPrimaryInventoryWindow.ItemHangar.StackAll();
+                        Frame.Log("Stackall");
+
+
+                        _States.BuyControllerState = BuyControllerStates.unload;                                                                          // wiederhole unload
+                        break;
+                    }
+                    else
+                    {
+                        if (shiphome == true)
+                        {
+                            _States.BuyControllerState = BuyControllerStates.gojita;
+                        }
+                        else
+                        {
+                            _States.BuyControllerState = BuyControllerStates.done;
+                        }
+                        break;
+                    }
+                    break;
 
                 case BuyControllerStates.Error:
 
