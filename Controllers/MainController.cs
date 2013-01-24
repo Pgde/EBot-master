@@ -129,6 +129,7 @@ namespace Controllers
                         restorestates();
                         _States.MiningState = MiningState.letzgo;
                         _States.maincontrollerState = maincontrollerStates.Idle;
+                        _States.DroneState = DroneState.Idle;
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                     break;
 

@@ -101,7 +101,11 @@ namespace EveModel
             long    myregionid = Frame.Client.Session.RegionId;
             long    myconstid = Frame.Client.Session.ConstellationId;
 
-            if (range >= jumps && range != 0 && range != -1)
+            if (range == 32767 && myregionid == regionID)
+            {
+                return true;
+            }
+            if (range >= jumps && range != 0 && range != -1 && jumps != 0)
             {
                 return true;
             }
@@ -114,10 +118,6 @@ namespace EveModel
                     return true;
                 }
 
-               if (range == 32767 && myregionid == regionID)
-               {
-                   return true;
-               }
                 
 
                return false;

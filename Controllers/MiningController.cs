@@ -18,7 +18,7 @@ namespace Controllers
         bool _waitforsessionChange, targetda;//, minersac;
         enum TravelStates
         {
-            Initialise, Start, Travel, ArrivedAtDestination, Opencargall, carunload, letzgo,
+            Initialise, Start, Travel, ArrivedAtDestination, Opencargall, carunload, letzgo, schelling,
             Opencargstation, Mining, warping, warphome, warpnextbelt, unload, warptobelt, travStart, changebook,
             sqlchecktime, sqlchecken
         }
@@ -538,12 +538,12 @@ namespace Controllers
 
                 case MiningState.unload:
 
-                    if (Frame.Client.GetService("marketQuote").IsValid != true)
+                    if (Frame.Client.GetService("marketQuote") == null)
                     {
                         break;
                     }
 
-                    if (Frame.Client.GetService("wallet").IsValid != true)
+                    if (Frame.Client.GetService("wallet") == null)
                     {
                         break;
                     }
@@ -688,9 +688,49 @@ namespace Controllers
                             {
                                 break;
                             }
-                            sellitemsZ(verkaufsintemszahl, itemsZZ);
+                        //    sellitemsZ(verkaufsintemszahl, itemsZZ);
                             Frame.Log("Verkaufe itemZZ typ id =  " + itemsZZ.TypeId);
                             Frame.Log("Verkaufe items" + verkaufsintemszahl + "  " + itemsZZ.Quantity);
+
+
+                            Frame.Client.refreshorders(itemsZZ);
+                            List<EveMarketOrder> markyord = Frame.Client.GetCachedOrders();
+                            if (markyord.Count == 0)
+                            {
+                                break;
+                            }
+                           
+
+                            List<EveMarketOrder> marketitemZ = markyord.Where(x => x.typeID == itemsZZ.TypeId).Where(x => x.inrange == true).Where(x => x.bid == true).ToList();
+                            if (marketitemZ != null)
+                            {
+                              marketitem = marketitemZ.OrderByDescending(x => x.price).Where(x => x.price > 15).FirstOrDefault();
+                            }
+
+
+                            if (marketitem == null)
+                            {
+                                Frame.Log("kein eintrag mit -1");
+                                return;
+                            }
+
+                            Frame.Log("Marketitem Name =  " + marketitem.Name);                                                                                                // Funktion für verkaufen infos
+                            Frame.Log("Marketitem Price =  " + marketitem.price);
+                            Frame.Log("Marketitem Volentered =  " + marketitem.volEntered);
+                            Frame.Log("Marketitem Remain =  " + marketitem.volRemaining);
+                            Frame.Log("Marketitem OrderId =  " + marketitem.orderID);
+                            Frame.Log("Marketitem Jumpes =  " + marketitem.jumps);
+                            Frame.Log("Marketitem Range =  " + marketitem.range);
+                            Frame.Log("Marketitem inrange =  " + marketitem.inrange);
+                            marketitem.sell(verkaufsintemszahl, itemsZZ);
+                            verkaufswertinsg = (marketitem.price * verkaufsintemszahl);
+                            Frame.Log("Verkaufswert =   " + verkaufswertinsg);
+                            Frame.Log("setze marketitem wieder auf null");
+                            marketitem = null;
+                            itemlischt.Remove(itemsZZ);
+                            Frame.Log("Loesche Item aus Liste");
+                            break;
+
                         }
                      
                         
@@ -742,6 +782,46 @@ namespace Controllers
                 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*
+                case MiningState.schelling:
+
+
+                    Frame.Client.refreshorders(itemsZZ);
+
+                 if (Frame.Client.GetCachedOrders() == null)
+                 {
+                     break;
+                 }
+                 List<EveMarketOrder> markyord = Frame.Client.GetCachedOrders();
+
+                 List<EveMarketOrder> marketitemZ = markyord.Where(x => x.typeID == itemsZZ.TypeId).Where(x => x.inrange == true).Where(x => x.bid == true).ToList();
+                 if (marketitemZ != null)
+                 {
+                      marketitem = marketitemZ.OrderByDescending(x => x.price).FirstOrDefault();
+                 }
+
+                        
+                 if (marketitem == null)
+                 {
+                     Frame.Log("kein eintrag mit -1");
+                     return;
+                 }
+
+                 Frame.Log("Marketitem Name =  " + marketitem.Name);                                                                                                // Funktion für verkaufen infos
+                 Frame.Log("Marketitem Price =  " + marketitem.price);
+                 Frame.Log("Marketitem Volentered =  " + marketitem.volEntered);
+                 Frame.Log("Marketitem Remain =  " + marketitem.volRemaining);
+                 Frame.Log("Marketitem OrderId =  " + marketitem.orderID);
+                 Frame.Log("Marketitem Jumpes =  " + marketitem.jumps);
+                 Frame.Log("Marketitem Range =  " + marketitem.range);
+                 Frame.Log("Marketitem inrange =  " + marketitem.inrange);
+                 marketitem.sell(verkaufsintemszahl, itemsZZ);
+                 verkaufswertinsg = (marketitem.price * verkaufsintemszahl);
+                 Frame.Log("Verkaufswert =   " +  verkaufswertinsg );
+
+                    break;
+                    */
 
                 case MiningState.travStart:
 
@@ -857,6 +937,7 @@ namespace Controllers
 
         }
 
+        /*
              public void sellitemsZ(int menge, EveItem typeid)
              {
 
@@ -865,6 +946,10 @@ namespace Controllers
 
                  Frame.Client.refreshorders(typeid);
 
+                 if (Frame.Client.GetCachedOrders() == null)
+                 {
+                     break;
+                 }
                  List<EveMarketOrder> markyord = Frame.Client.GetCachedOrders();
 
                  List<EveMarketOrder> marketitemZ = markyord.Where(x => x.typeID == typeid.TypeId).Where(x => x.inrange == true).Where(x => x.bid == true).ToList();
@@ -873,34 +958,7 @@ namespace Controllers
                       marketitem = marketitemZ.OrderByDescending(x => x.price).FirstOrDefault();
                  }
 
-    
-           /*      if (marketitem == null)
-                 {
-                     marketitemZ = markyord.Where(x => x.typeID == typeid.TypeId).OrderByDescending(x => x.jumps).Where(x => x.bid == true).Where(x => x.jumps <= x.range).ToList();
-                     if (marketitemZ != null)
-                     {
-                                              marketitem = marketitemZ.OrderByDescending(x => x.price).FirstOrDefault();
-                     }
-                 }
 
-                 if (marketitem == null)
-                 {
-                     marketitemZ = markyord.Where(x => x.typeID == typeid.TypeId).OrderByDescending(x => x.jumps).Where(x => x.bid == true).Where(x => x.stationID == -1).Where(x => x.range == -1).ToList();
-                     if (marketitemZ != null)
-                  {
-                                              marketitem = marketitemZ.OrderByDescending(x => x.price).FirstOrDefault();
-                  }
-                 }
-
-                 if (marketitem == null)
-                 {
-                     marketitemZ = markyord.Where(x => x.typeID == typeid.TypeId).OrderByDescending(x => x.jumps).Where(x => x.bid == true).Where(x => x.solarSystemID == 0).Where(x => x.jumps == 0).ToList();
-                     if (marketitemZ != null)
-                     {
-                         marketitem = marketitemZ.OrderByDescending(x => x.price).FirstOrDefault();
-                     }
-                 }
-                 */
                  
                  if (marketitem == null)
                  {
@@ -921,7 +979,7 @@ namespace Controllers
                  Frame.Log("Verkaufswert =   " +  verkaufswertinsg );
 
              }
-        
+        */
 
            public void dronencheck()
         {
