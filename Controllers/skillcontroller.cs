@@ -175,6 +175,7 @@ namespace Controllers
                        Tuple<int,int> tmp = new Tuple<int,int> (483,1);
                         BuyController.buylist.Add(tmp);
                         _States.BuyControllerState = BuyControllerStates.buy;
+                        _States.SkillState = SkillState.buyskill;
 
                         int remove = Math.Min(skilltotrainid.Count, 1);
                         skilltotrainid.RemoveRange(0, remove);

@@ -76,11 +76,13 @@ namespace Controllers
                     Frame.Log(buylist.Count + "//" + buylist2.Count);
                     if (buylist.Count <= 0 && buylist2.Count > 0)
                     {
+                        Frame.Log("setzte buycontroller = gojita");
                         _States.BuyControllerState = BuyControllerStates.gojita;
                         break;
                     }
                     if (buylist.Count <= 0 && buylist2.Count <= 0)
                     {
+                        Frame.Log("setzte buycontroller = done");
                         _States.BuyControllerState = BuyControllerStates.done;
                         break;
                     }
@@ -208,8 +210,13 @@ namespace Controllers
           
                     Frame.Client.refreshorders(typeid2);
                     markyord = Frame.Client.GetCachedOrders();
+                    if (markyord.Count == 0)
+                    {
+                        _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 1500));
+                        break;
+                    }
 
-                    marketitemZ = markyord.Where(x => x.typeID == typeid2).Where(x => x.jumps < 1).Where(x => x.bid == false).Where(x => x.stationID == Frame.Client.Session.LocationId).ToList();
+                    marketitemZ = markyord.Where(x => x.typeID == typeid2).Where(x => x.bid == false).Where(x => x.stationID == Frame.Client.Session.LocationId).ToList();
 
                     if (marketitemZ != null)
                     {

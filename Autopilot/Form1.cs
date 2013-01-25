@@ -77,7 +77,11 @@ namespace EBotPilot
 
         private void button4_Click(object sender, EventArgs e)
         {
-            _States.maincontrollerState = maincontrollerStates.Startup;
+      //      _States.maincontrollerState = maincontrollerStates.Startup;
+            _manager.AddController(new TravelController());
+            _manager.AddController(new BuyController());
+            _manager.AddController(new tutcontroller());
+            _States.tutstates = tutstates.wait;
         }
 
         #region Old Code
