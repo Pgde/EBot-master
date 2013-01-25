@@ -170,6 +170,12 @@ namespace Controllers
                         Frame.Log("Skill nicht vorhanden muss einkaufen");
                         // Funktion zum einkaufen schreiben
                        // _States.SkillState = SkillState.buyskill;
+                     //   Frame.Log(Frame.Client.wealth());
+                     //       Frame.Log(Frame.Client.Session.LocationId);
+                       Tuple<int,int> tmp = new Tuple<int,int> (483,1);
+                        BuyController.buylist.Add(tmp);
+                        _States.BuyControllerState = BuyControllerStates.buy;
+
                         int remove = Math.Min(skilltotrainid.Count, 1);
                         skilltotrainid.RemoveRange(0, remove);
                         Frame.Log("Remove First entry of list ");
@@ -222,10 +228,23 @@ namespace Controllers
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                     break;
 
+
+                case SkillState.buyskill:
+
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
+                    if (_States.BuyControllerState == BuyControllerStates.done)
+                    {
+                        _States.BuyControllerState = BuyControllerStates.wait;
+                        _States.SkillState = SkillState.Initialise;
+                    }
+
+                    break;
+
                 case SkillState.done:
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                     break;
             }
+
         }
     }
 }
