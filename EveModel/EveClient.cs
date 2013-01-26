@@ -995,9 +995,11 @@ namespace EveModel
 
                 //def InjectSkillIntoBrain(self, invItems):     untested
 
-                public void InjectSkillIntoBrain(List<EveItem> invitems)
+                public void InjectSkillIntoBrain(EveItem skillbook)
                 {
-                    Frame.Client.GetService("menu").CallMethod("InjectSkillIntoBrain", new object[] { invitems });
+                    List<EveItem> tmp = new List<EveItem>();
+                    tmp.Add(skillbook);
+                    Frame.Client.GetService("menu").CallMethod("InjectSkillIntoBrain", new object[] { tmp });
                     return;
                 }
 
