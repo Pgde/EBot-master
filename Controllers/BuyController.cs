@@ -393,7 +393,6 @@ namespace Controllers
                         Frame.Client.GetPrimaryInventoryWindow.ItemHangar.StackAll();
                         Frame.Log("Stackall");
 
-
                         _States.BuyControllerState = BuyControllerStates.unload;                                                                          // wiederhole unload
                         break;
                     }

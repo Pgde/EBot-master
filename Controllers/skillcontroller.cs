@@ -23,7 +23,11 @@ namespace Controllers
         ///////////           VARIABLEN        ////////
 
         List<string> skilltotrainid = new List<string>();
+        List<string> vergleichlist = new List<string>();
+        List<EveItem> itemlistee = new List<EveItem>();
+        List<string> vergleichlist2 = new List<string>();
 
+        public static int itemid { get; set; }
         ////////////////////////////////////////////////////////
         ///////////           VARIABLEN        ////////
 
@@ -44,6 +48,8 @@ namespace Controllers
         public SkillController()
         {
             Frame.Log("Starting a new SkillController");
+
+            itemid = 0;
             _States.SkillState = SkillState.wait;
         }
 
@@ -106,6 +112,7 @@ namespace Controllers
                     }
                     int skillsinlist = Settings.Settings.Instance.Skilllist.Count;
                     skilltotrainid = Settings.Settings.Instance.Skilllist;
+                    vergleichlist = skilltotrainid;
          /*           skilltotrainid.Insert(skillsinlist, skillsminingfrigat + " " + "2");
                     skillsinlist = skilltotrainid.Count();  // Miningfrigate 2
                     skilltotrainid.Insert(skillsinlist, skillmining + " " + "3"); skillsinlist = skilltotrainid.Count(); // Mining 3
@@ -161,6 +168,7 @@ namespace Controllers
                     string[] a = buk.Split(new Char[] { });                                                                     // teile den string in typid und lvl
                     string a1 = a[0];                                                                                           // [0]
                     string a2 = a[1];                                                                                           // [1]
+                    int bunsch1 = Convert.ToInt32(a1);
                     Frame.Log("Skillz Typid = " + a1);                                                                              // log
                     Frame.Log("Skillz gewuenschter lvl = " + a2);                                                                              // log
                     long? blub = long.Parse(a1);
@@ -172,7 +180,7 @@ namespace Controllers
                        // _States.SkillState = SkillState.buyskill;
                      //   Frame.Log(Frame.Client.wealth());
                      //       Frame.Log(Frame.Client.Session.LocationId);
-                       Tuple<int,int> tmp = new Tuple<int,int> (483,1);
+                       Tuple<int,int> tmp = new Tuple<int,int> (bunsch1,1);
                         BuyController.buylist.Add(tmp);
                         _States.BuyControllerState = BuyControllerStates.buy;
                         _States.SkillState = SkillState.buyskill;
@@ -235,6 +243,30 @@ namespace Controllers
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                     if (_States.BuyControllerState == BuyControllerStates.done)
                     {
+                                           
+                                      if (Frame.Client.getinvopen() == false)
+                                            {
+                                           Frame.Client.Getandopenwindow("leer");
+                                            break;
+                                              }
+                                Frame.Client.GetItemHangar();               
+                               itemlistee = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;                            
+                                
+                               foreach (EveItem tmp in itemlistee)
+                               {
+                                   Frame.Log("Skill = " + tmp.TypeId);
+                                   int buggy = tmp.TypeId;
+                                   string buggy22 = buggy.ToString();
+                                   if (vergleichlist2.Contains(buggy22))
+                                   {
+                                       Frame.Log("Item gefunden");
+                                        EveItem skillbookitem = itemlistee.Where(i => i.TypeId == buggy).FirstOrDefault();
+                                        Frame.Client.InjectSkillIntoBrain(skillbookitem);
+                                           Frame.Log("Inject skill");
+                                   }
+                              
+                               }
+                                    
                         _States.BuyControllerState = BuyControllerStates.wait;
                         _States.SkillState = SkillState.Initialise;
                     }
