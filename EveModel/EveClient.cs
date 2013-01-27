@@ -999,7 +999,7 @@ namespace EveModel
                 {
                     List<EveItem> tmp = new List<EveItem>();
                     tmp.Add(skillbook);
-                    Frame.Client.GetService("menu").CallMethod("InjectSkillIntoBrain", new object[] { tmp });
+                    Frame.Client.GetService("menu").CallMethod("InjectSkillIntoBrain", new object[] { tmp }, true);
                     return;
                 }
 

@@ -81,6 +81,9 @@ namespace EBotPilot
             _manager.AddController(new TravelController());
             _manager.AddController(new BuyController());
             _manager.AddController(new tutcontroller());
+            _manager.AddController(new SkillController());
+            _States.BuyControllerState = BuyControllerStates.done;
+            _States.SkillState = SkillState.buyskill;
             _States.tutstates = tutstates.wait;
         }
 

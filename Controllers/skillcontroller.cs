@@ -26,7 +26,8 @@ namespace Controllers
         List<string> vergleichlist = new List<string>();
         List<EveItem> itemlistee = new List<EveItem>();
         List<string> vergleichlist2 = new List<string>();
-
+        List<EveItem> ersteitemlistee = new List<EveItem>();
+        
         public static int itemid { get; set; }
         ////////////////////////////////////////////////////////
         ///////////           VARIABLEN        ////////
@@ -110,9 +111,14 @@ namespace Controllers
                         _States.SkillState = SkillState.done;
                         break;
                     }
-                    int skillsinlist = Settings.Settings.Instance.Skilllist.Count;
-                    skilltotrainid = Settings.Settings.Instance.Skilllist;
-                    vergleichlist = skilltotrainid;
+        //            int skillsinlist = Settings.Settings.Instance.Skilllist.Count;
+        //            skilltotrainid = Settings.Settings.Instance.Skilllist;
+        //            vergleichlist = skilltotrainid;
+
+                      int skillsinlist = Settings.Settings.Instance.Skilllist.Count;
+                        skilltotrainid = Settings.Settings.Instance.Skilllist;
+                        vergleichlist = skilltotrainid;
+
          /*           skilltotrainid.Insert(skillsinlist, skillsminingfrigat + " " + "2");
                     skillsinlist = skilltotrainid.Count();  // Miningfrigate 2
                     skilltotrainid.Insert(skillsinlist, skillmining + " " + "3"); skillsinlist = skilltotrainid.Count(); // Mining 3
@@ -169,6 +175,7 @@ namespace Controllers
                     string a1 = a[0];                                                                                           // [0]
                     string a2 = a[1];                                                                                           // [1]
                     int bunsch1 = Convert.ToInt32(a1);
+                    itemid = bunsch1;
                     Frame.Log("Skillz Typid = " + a1);                                                                              // log
                     Frame.Log("Skillz gewuenschter lvl = " + a2);                                                                              // log
                     long? blub = long.Parse(a1);
@@ -176,10 +183,7 @@ namespace Controllers
                     if (bugg == null)
                     {
                         Frame.Log("Skill nicht vorhanden muss einkaufen");
-                        // Funktion zum einkaufen schreiben
-                       // _States.SkillState = SkillState.buyskill;
-                     //   Frame.Log(Frame.Client.wealth());
-                     //       Frame.Log(Frame.Client.Session.LocationId);
+                     
                        Tuple<int,int> tmp = new Tuple<int,int> (bunsch1,1);
                         BuyController.buylist.Add(tmp);
                         _States.BuyControllerState = BuyControllerStates.buy;
@@ -239,25 +243,54 @@ namespace Controllers
 
 
                 case SkillState.buyskill:
+                    if (Frame.Client.getinvopen() == false)
+                    {
+                        Frame.Client.Getandopenwindow("leer");
+                        break;
+                    }
+
+                      Frame.Client.GetItemHangar();               
+                      ersteitemlistee = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;
+                      EveItem skillbookitem2 = ersteitemlistee.Where(i => i.TypeId == itemid).FirstOrDefault();
+                      if (skillbookitem2 != null)
+                      {
+                          Frame.Log("Buch schon im Hanger");
+                          _States.BuyControllerState = BuyControllerStates.done;
+                      }
 
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                     if (_States.BuyControllerState == BuyControllerStates.done)
                     {
-                                           
+
+                      
+
+                        Frame.Log("Test22");   
                                       if (Frame.Client.getinvopen() == false)
                                             {
                                            Frame.Client.Getandopenwindow("leer");
                                             break;
                                               }
                                 Frame.Client.GetItemHangar();               
-                               itemlistee = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;                            
-                                
+                               itemlistee = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;
+
+                               foreach (string tmp in vergleichlist)
+                               {
+                                   Frame.Log("Skill vergleichsliste2 = " + tmp);
+                                   Frame.Log(".....");
+                                    string[] aa = tmp.Split(new Char[] { });                                                                     // teile den string in typid und lvl
+                                   string aa1 = aa[0];
+                                   vergleichlist2.Add(aa1);
+                               }
+
                                foreach (EveItem tmp in itemlistee)
                                {
                                    Frame.Log("Skill = " + tmp.TypeId);
                                    int buggy = tmp.TypeId;
                                    string buggy22 = buggy.ToString();
-                                   if (vergleichlist2.Contains(buggy22))
+                                   string[] aa = buggy22.Split(new Char[] { });                                                                     // teile den string in typid und lvl
+                                   string aa1 = aa[0];
+                                   Frame.Log("Sstring nach teilung  " + aa1);
+                                   if (vergleichlist2.Contains(aa1))
                                    {
                                        Frame.Log("Item gefunden");
                                         EveItem skillbookitem = itemlistee.Where(i => i.TypeId == buggy).FirstOrDefault();
