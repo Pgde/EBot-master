@@ -33,6 +33,7 @@ namespace Controllers
         long? skilldronen = 3436;
         long? skilldronenop = 3438;
         bool firstread = false;
+        string[] bung2;
         
 
         ////////////////////////////////////////////////////////
@@ -144,9 +145,13 @@ namespace Controllers
 
                     int skillsinlist = Settings.Settings.Instance.Skilllist.Count;
                     skilltotrainid = Settings.Settings.Instance.Skilllist;
+                    
                     if (firstread == false)
                     {
-                        vergleichlist = skilltotrainid;
+                        string[] bung = new string[skillsinlist];
+                        vergleichlist = Settings.Settings.Instance.Skilllist;
+                        skilltotrainid.CopyTo(bung);
+                        bung2 = bung;
                         firstread = true;
                     }
 
@@ -204,11 +209,15 @@ namespace Controllers
                     Frame.Log("Skillz = " + buk);                                                                               // logbuch
                     string[] a = buk.Split(new Char[] { });                                                                     // teile den string in typid und lvl
                     string a1 = a[0];                                                                                           // [0]
-                    string a2 = a[1];                                                                                           // [1]
+                    string a2 = a[1];        
+                    string a3 = a[2];
+                    int aa3 = Convert.ToInt32(a3);
                     int bunsch1 = Convert.ToInt32(a1);
                     itemid = bunsch1;
                     Frame.Log("Skillz Typid = " + a1);                                                                              // log
-                    Frame.Log("Skillz gewuenschter lvl = " + a2);                                                                              // log
+                    Frame.Log("Skillz gewuenschter lvl = " + a2);       
+                   Frame.Log("Skillz weitreleveln ? = " + a3);
+                  
                     long? blub = long.Parse(a1);
                     EveSkill bugg = neueskill2.Where(i => i.typeID == blub).FirstOrDefault();
                     if (bugg == null)
@@ -220,14 +229,14 @@ namespace Controllers
                         _States.BuyControllerState = BuyControllerStates.buy;
                         _States.SkillState = SkillState.buyskill;
 
-                        int remove = Math.Min(skilltotrainid.Count, 1);
-                        skilltotrainid.RemoveRange(0, remove);
-                        Frame.Log("Remove First entry of list ");
+                  //      int remove = Math.Min(skilltotrainid.Count, 1);
+                      //  skilltotrainid.RemoveRange(0, remove);
+                  //      Frame.Log("Remove First entry of list ");
                        // _States.SkillState = SkillState.wait;
                         break;
 
                     }
-                    if (bugg.Skilllvl > int.Parse(a2)) 
+                    if (bugg.Skilllvl >= int.Parse(a2)) 
                     {
                         int remove = Math.Min(skilltotrainid.Count, 1);
                         skilltotrainid.RemoveRange(0, remove);
@@ -305,7 +314,7 @@ namespace Controllers
                                 Frame.Client.GetItemHangar();               
                                itemlistee = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;
 
-                               foreach (string tmp in vergleichlist)
+                               foreach (string tmp in bung2)
                                {
                                    Frame.Log("Skill vergleichsliste2 = " + tmp);
                                    Frame.Log(".....");
@@ -343,7 +352,13 @@ namespace Controllers
                     break;
             }
 
+              }
+
+           
+            }
+
         }
-    }
-}
+    
+
+
 
