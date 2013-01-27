@@ -43,6 +43,23 @@ namespace EveModel
                 return null;
             }
         }
+
+        public EveInventoryContainer DroneBay
+        {
+            get
+            {
+                var containers = Frame.Client.GetPrimaryInventoryWindow.Containers[0].CallMethod("GetChildren", new object[0]).GetList<EveObject>();
+                foreach (var item in containers)
+                {
+                    if (item["invController"].CallMethod("GetName", new object[0]).GetValueAs<string>() == "Drone Bay")
+                    {
+                        return new EveInventoryContainer(item);
+                    }
+
+                }
+                return null;
+            }
+        }
         public long EntityId
         {
             get
