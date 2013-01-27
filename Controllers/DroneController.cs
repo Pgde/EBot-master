@@ -53,17 +53,17 @@ namespace Controllers
                     {
                         skilldronenmoeglich = 2;
                     }
-/*
+
                     if (Frame.Client.Session.InStation == true)
                     {
                         _localPulse = DateTime.Now.AddMilliseconds(GetRandom(8000, 9000));
                         break;
                     }
- * */
                         
                     if (Frame.Client.GetActiveShip.DronesInBay < skilldronenmoeglich)
                     {
-                        _States.DroneState = DroneState.vorhandenkaufen;
+                     //   _States.DroneState = DroneState.vorhandenkaufen;
+                        Frame.Log("Platzhalter vorhandenkaufen im dronestate");
                     }
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(3000, 3500));
 
