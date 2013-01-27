@@ -86,7 +86,6 @@ namespace Controllers.Settings
                        }
                        else
                        {
-                           Frame.Log("Loading Settings from [" + path + "]");
                            try
                            {
                                botxmlpath = (string)xml.Element(bottag) ?? "C:/botxml.xml";
@@ -95,6 +94,7 @@ namespace Controllers.Settings
                            {
                                Frame.Log("Error Loading Ship Name Settings [" + exception + "]");
                            }
+                           Frame.Log("botxml @ " + botxmlpath);
                        }
 
 
