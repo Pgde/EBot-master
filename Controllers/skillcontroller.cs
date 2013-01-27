@@ -217,16 +217,45 @@ namespace Controllers
                     Frame.Log("Skillz Typid = " + a1);                                                                              // log
                     Frame.Log("Skillz gewuenschter lvl = " + a2);       
                    Frame.Log("Skillz weitreleveln ? = " + a3);
+                   if (aa3 == 1 && neueQskill2.Count != 0)
+                   {
+                       Frame.Log("Skill benötigt eine leere Q");
+                       _States.SkillState = SkillState.wait;
+                       _States.MiningState = MiningState.letzgo;
+                       break;
+                   }
                   
                     long? blub = long.Parse(a1);
                     EveSkill bugg = neueskill2.Where(i => i.typeID == blub).FirstOrDefault();
                     if (bugg == null)
                     {
                         Frame.Log("Skill nicht vorhanden muss einkaufen");
-                     
+
+                        if (Frame.Client.getinvopen() == false)
+                        {
+                            Frame.Client.Getandopenwindow("leer");
+                            break;
+                        }
+
+                        Frame.Client.GetItemHangar();
+                        ersteitemlistee = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;
+                        EveItem skillbookitem2 = ersteitemlistee.Where(i => i.TypeId == itemid).FirstOrDefault();
+                        if (skillbookitem2 != null)
+                        {
+                            Frame.Log("Buch schon im Hanger");
+                         
+                            _States.BuyControllerState = BuyControllerStates.done;
+                            _States.SkillState = SkillState.buyskill;
+                            break;
+                           
+
+                        }
+
+
+
                        Tuple<int,int> tmp = new Tuple<int,int> (bunsch1,1);
                         BuyController.buylist.Add(tmp);
-                        _States.BuyControllerState = BuyControllerStates.buy;
+                      _States.BuyControllerState = BuyControllerStates.buy;
                         _States.SkillState = SkillState.buyskill;
 
                   //      int remove = Math.Min(skilltotrainid.Count, 1);
@@ -283,6 +312,7 @@ namespace Controllers
 
 
                 case SkillState.buyskill:
+                   /*
                     if (Frame.Client.getinvopen() == false)
                     {
                         Frame.Client.Getandopenwindow("leer");
@@ -297,13 +327,14 @@ namespace Controllers
                           Frame.Log("Buch schon im Hanger");
                      //     BuyController.buylist.Remove;
                           _States.BuyControllerState = BuyControllerStates.done;
+                         
                       }
+                 */
 
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                     if (_States.BuyControllerState == BuyControllerStates.done)
                     {
 
-                      
 
                         Frame.Log("Test22");   
                                       if (Frame.Client.getinvopen() == false)
@@ -337,7 +368,7 @@ namespace Controllers
                                         EveItem skillbookitem = itemlistee.Where(i => i.TypeId == buggy).FirstOrDefault();
                                         Frame.Client.InjectSkillIntoBrain(skillbookitem);
                                            Frame.Log("Inject skill");
-                                                                         }
+                                  }
                               
                                }
                                     

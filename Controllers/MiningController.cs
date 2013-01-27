@@ -164,6 +164,7 @@ namespace Controllers
 
 
                 case MiningState.Mining:
+                    List<EveQskill> qskillmining = Frame.Client.GetMyQueue();
                     if (miningcount == 10)
                     {
                         Frame.Log("Starte SQLtimecheck");
@@ -196,6 +197,22 @@ namespace Controllers
                         Frame.Log(fullcapcargo);
                         double carggoo = (fullcapcargo * 0.95);
                         Frame.Log("Maximal ladung(95% vom cargo" + carggoo);
+                          Frame.Log(" usd cargo " + usdcapcargo);
+                            Frame.Log(" qskillminingcount  =  " + qskillmining.Count); 
+                            if (usdcapcargo != 0 && qskillmining.Count == 0 )
+                            {
+                            if (Frame.Client.GetActiveShip.ActiveDrones.Count > 0)
+                            {
+                                _States.DroneState = states.DroneState.dronesback;
+                                break;
+                            }
+                            DroneController.astro = null;
+                            Frame.Log("");
+                            minersactiv = "Aus";
+                            EmptyBelts.Add(currentbelt);   // State um zurück zur Stations Bookmark zu warpen
+                            _States.MiningState = MiningState.warphome;
+                            break;
+                            }
                         if (usdcapcargo > carggoo)                                                                          // Wenn das cargo voll gehe heim
                         {
                             if (Frame.Client.GetActiveShip.ActiveDrones.Count > 0)
@@ -293,7 +310,9 @@ namespace Controllers
                             Frame.Log(" Used Cargo " + fullcapcargo);                                                               // Logausgabe Cargo insgesammt
                             restofcargo = (fullcapcargo * 0.95);                                                                     // Berechne 80% Des gesamten Cargos
                             Frame.Log(" 95% Cargo entspricht " + restofcargo);                                                       // Logausgabe Cargo insgesammt
-                            if (usdcapcargo > restofcargo)                                                                          // Wenn das benutze cargo 80% übersteigt
+                       
+
+                           if (usdcapcargo > restofcargo)                                                                          // Wenn das benutze cargo 80% übersteigt
                             {
                                 if (Frame.Client.GetActiveShip.ActiveDrones.Count > 0)
                                 {
