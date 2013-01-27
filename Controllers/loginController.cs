@@ -6,7 +6,7 @@ using EveModel;
 using MySql.Data.MySqlClient;
 using global::Controllers.states;
 using Controllers.Settings;
-
+using System.Diagnostics;
 namespace Controllers
 {
 
@@ -25,9 +25,12 @@ namespace Controllers
 
         ////////////////////////////////////////////////////////
         ///////////           VARIABLEN        ////////
-
+       
+       
         int failcount = 0;
         int maxfails = 3;
+
+        
         string charname = Settings.Settings.Instance.Charname;
         string accname = Settings.Settings.Instance.Accname;
         string psswd = Settings.Settings.Instance.Pw;
@@ -45,6 +48,7 @@ namespace Controllers
         public logincontroller()
         {
             Frame.Log("Starting a new LoginController");
+           
         }
 
 

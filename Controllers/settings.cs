@@ -8,11 +8,14 @@ namespace Controllers.Settings
     using System.Xml.Linq;
     using System.Globalization;
     using EveModel;
+    using System.Diagnostics;
 
     public class Settings
     {
-       
+        public int i = 0;
         public string path = "C:/botxml.xml";
+        public string bottopid = "C:/bottopid.xml";
+        public string botxmlpath { get; set; }
         public static Settings Instance = new Settings();
         public bool DebugIdle { get; set; }
         public string Charname { get; set; }
@@ -25,7 +28,8 @@ namespace Controllers.Settings
 
 
             Skilllist = new List<string>();
-                XElement xml = XDocument.Load(path).Root;
+            Frame.Log(getbotxml());
+                XElement xml = XDocument.Load(getbotxml()).Root;
                 if (xml == null)
                 {
                 return; 
@@ -64,7 +68,41 @@ namespace Controllers.Settings
                     }
 
 
+                }
+        }
 
+
+                   public string getbotxml()
+                    {
+                        Process currentProcess = Process.GetCurrentProcess();
+                        int pid = currentProcess.Id;
+                        string bottag = "a" + pid;
+                        Frame.Log(bottag);
+
+                       XElement xml = XDocument.Load(bottopid).Root;
+                       if (xml == null)
+                       {
+                           return "error";
+                       }
+                       else
+                       {
+                           Frame.Log("Loading Settings from [" + path + "]");
+                           try
+                           {
+                               botxmlpath = (string)xml.Element(bottag) ?? "C:/botxml.xml";
+                           }
+                           catch (Exception exception)
+                           {
+                               Frame.Log("Error Loading Ship Name Settings [" + exception + "]");
+                           }
+                       }
+
+
+
+
+
+                        return botxmlpath;
+                    }
 
 
 
@@ -123,6 +161,6 @@ namespace Controllers.Settings
         
 
    
-        }
-    }
+        
+    
 }}
