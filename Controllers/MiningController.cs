@@ -209,7 +209,7 @@ namespace Controllers
                             DroneController.astro = null;
                             Frame.Log("");
                             minersactiv = "Aus";
-                            EmptyBelts.Add(currentbelt);   // State um zurück zur Stations Bookmark zu warpen
+                          //  EmptyBelts.Add(currentbelt);   // State um zurück zur Stations Bookmark zu warpen
                             _States.MiningState = MiningState.warphome;
                             break;
                             }
