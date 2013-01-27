@@ -29,6 +29,11 @@ namespace Controllers
         List<EveItem> ersteitemlistee = new List<EveItem>();
         
         public static int itemid { get; set; }
+        public static int dronenmoeglich { get; set; }
+
+        
+        
+
         ////////////////////////////////////////////////////////
         ///////////           VARIABLEN        ////////
 
@@ -49,7 +54,7 @@ namespace Controllers
         public SkillController()
         {
             Frame.Log("Starting a new SkillController");
-
+            dronenmoeglich = 0;
             itemid = 0;
             _States.SkillState = SkillState.wait;
         }
@@ -65,12 +70,13 @@ namespace Controllers
             {
                 case SkillState.Initialise:
 
+                 
                     if (!Frame.Client.GetService("skillqueue").IsValid)
                     {
                         _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 3500));
                         break;
                     }
-              //      Frame.Client.refreshskillq();
+                    //      Frame.Client.refreshskillq();
 
                     List<EveSkill> neueskill = Frame.Client.GetMySkills();
                     List<EveQskill> neueQskill = Frame.Client.GetMyQueue();
@@ -92,15 +98,34 @@ namespace Controllers
                     Frame.Log("................");
                     Frame.Log("................");
 
+                  
+                    EveSkill droneskill = neueskill.Where(x => x.typeID == "test").FirstOrDefault();
+                    if (droneskill == null)
+                    {
+                       
+                    }
+                     Frame.Log("Droneskill ist Aktiv");
+                     int dronenlevel = droneskill.Skilllvl;
+                      Frame.Log("Droneskilllevel =" + dronenlevel );
+                     if (dronenlevel > 0)
+                     {
+                         Frame.Log("Aktiviere Dronen");
+                         dronenmoeglich = dronenlevel;
+                     }
+                     if (dronenlevel == 0)
+                     {
+                         Frame.Log("Dronenskill nicht vorhanden / Deaktivier Dronen");
+                         
+                     }
+                    
 
 
-
-          //        string skillscience = "3402";                                                                                                                            // typids der skills
-            //        string skillsminingfrigat = "32918";
-              //      string skillastroglo = "3410";
-                //    string skillmining = "3386";
-                  //  string skillminingup = "22578";
-                   // string skillindustry = "";
+                    //        string skillscience = "3402";                                                                                                                            // typids der skills
+                    //        string skillsminingfrigat = "32918";
+                    //      string skillastroglo = "3410";
+                    //    string skillmining = "3386";
+                    //  string skillminingup = "22578";
+                    // string skillindustry = "";
 
 
 
@@ -111,30 +136,30 @@ namespace Controllers
                         _States.SkillState = SkillState.done;
                         break;
                     }
-        //            int skillsinlist = Settings.Settings.Instance.Skilllist.Count;
-        //            skilltotrainid = Settings.Settings.Instance.Skilllist;
-        //            vergleichlist = skilltotrainid;
+                    //            int skillsinlist = Settings.Settings.Instance.Skilllist.Count;
+                    //            skilltotrainid = Settings.Settings.Instance.Skilllist;
+                    //            vergleichlist = skilltotrainid;
 
-                      int skillsinlist = Settings.Settings.Instance.Skilllist.Count;
-                        skilltotrainid = Settings.Settings.Instance.Skilllist;
-                        vergleichlist = skilltotrainid;
+                    int skillsinlist = Settings.Settings.Instance.Skilllist.Count;
+                    skilltotrainid = Settings.Settings.Instance.Skilllist;
+                    vergleichlist = skilltotrainid;
 
-         /*           skilltotrainid.Insert(skillsinlist, skillsminingfrigat + " " + "2");
-                    skillsinlist = skilltotrainid.Count();  // Miningfrigate 2
-                    skilltotrainid.Insert(skillsinlist, skillmining + " " + "3"); skillsinlist = skilltotrainid.Count(); // Mining 3
-                    skilltotrainid.Insert(skillsinlist, skillminingup + " " + "1"); skillsinlist = skilltotrainid.Count(); // Miningupgrade 1
-                    skilltotrainid.Insert(skillsinlist, skillsminingfrigat + " " + "3"); skillsinlist = skilltotrainid.Count();  // Mining frigate 3
-                    skilltotrainid.Insert(skillsinlist, skillmining + " " + "4"); skillsinlist = skilltotrainid.Count(); // Mining 4
-                    skilltotrainid.Insert(skillsinlist, skillsminingfrigat + " " + "4"); skillsinlist = skilltotrainid.Count(); // Mining frigate 4
-                    skilltotrainid.Insert(skillsinlist, skillscience + " " + "4"); skillsinlist = skilltotrainid.Count(); // Science 4
-                    skilltotrainid.Insert(skillsinlist, skillastroglo + " " + "3"); skillsinlist = skilltotrainid.Count(); // Astrology 3
-*/
+                    /*           skilltotrainid.Insert(skillsinlist, skillsminingfrigat + " " + "2");
+                               skillsinlist = skilltotrainid.Count();  // Miningfrigate 2
+                               skilltotrainid.Insert(skillsinlist, skillmining + " " + "3"); skillsinlist = skilltotrainid.Count(); // Mining 3
+                               skilltotrainid.Insert(skillsinlist, skillminingup + " " + "1"); skillsinlist = skilltotrainid.Count(); // Miningupgrade 1
+                               skilltotrainid.Insert(skillsinlist, skillsminingfrigat + " " + "3"); skillsinlist = skilltotrainid.Count();  // Mining frigate 3
+                               skilltotrainid.Insert(skillsinlist, skillmining + " " + "4"); skillsinlist = skilltotrainid.Count(); // Mining 4
+                               skilltotrainid.Insert(skillsinlist, skillsminingfrigat + " " + "4"); skillsinlist = skilltotrainid.Count(); // Mining frigate 4
+                               skilltotrainid.Insert(skillsinlist, skillscience + " " + "4"); skillsinlist = skilltotrainid.Count(); // Science 4
+                               skilltotrainid.Insert(skillsinlist, skillastroglo + " " + "3"); skillsinlist = skilltotrainid.Count(); // Astrology 3
+           */
 
                     foreach (string tmp in skilltotrainid)
                     {
                         Frame.Log("Skill = " + tmp);
                     }
-                     _States.SkillState = SkillState.Start; 
+                    _States.SkillState = SkillState.Start;
                     break;
 
 

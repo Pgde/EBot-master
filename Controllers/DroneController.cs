@@ -29,7 +29,7 @@ namespace Controllers
         {
             Frame.Log("Starting a new Drone Controller");
             _States.DroneState = DroneState.wait;
-            DroneController.dronecontrolleraktiv = true;
+           
         }
      
 
@@ -154,8 +154,15 @@ namespace Controllers
 
 
                 case DroneState.wait:
-                    
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
+                    if (SkillController.dronenmoeglich > 0)
+                    {
+                        DroneController.dronecontrolleraktiv = true;
+                        Frame.Log("Droncontroller / dronencontrolleraktiv = true");
+                        _States.DroneState = DroneState.Initialise;
+                        Frame.Log("Droncontroller / setze dronenstate auf initialse");
+                        break;
+                    }
                     break;
 
 
