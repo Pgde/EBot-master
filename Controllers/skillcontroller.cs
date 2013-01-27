@@ -30,7 +30,8 @@ namespace Controllers
         
         public static int itemid { get; set; }
         public static int dronenmoeglich { get; set; }
-
+        long? skilldronen = 3436;
+        long? skilldronenop = 3438;
         
         
 
@@ -98,26 +99,26 @@ namespace Controllers
                     Frame.Log("................");
                     Frame.Log("................");
 
-                  
-                    EveSkill droneskill = neueskill.Where(x => x.typeID == "test").FirstOrDefault();
+
+                    EveSkill droneskill = neueskill.Where(x => x.typeID == skilldronen).Where(x => x.Skilllvl > 0).FirstOrDefault();
                     if (droneskill == null)
                     {
-                       
+                        Frame.Log("Dronenskill == null");
                     }
-                     Frame.Log("Droneskill ist Aktiv");
-                     int dronenlevel = droneskill.Skilllvl;
-                      Frame.Log("Droneskilllevel =" + dronenlevel );
-                     if (dronenlevel > 0)
-                     {
-                         Frame.Log("Aktiviere Dronen");
-                         dronenmoeglich = dronenlevel;
-                     }
-                     if (dronenlevel == 0)
-                     {
-                         Frame.Log("Dronenskill nicht vorhanden / Deaktivier Dronen");
-                         
-                     }
-                    
+                    EveSkill droneskillop = neueskill.Where(x => x.typeID == skilldronenop).Where(x => x.Skilllvl > 0).FirstOrDefault();
+                    if (droneskillop == null)
+                    {
+                        Frame.Log("Dronenskillop == null");
+                    }
+                    if (droneskill != null && droneskillop != null)
+                    {
+                        Frame.Log("Droneskill ist Aktiv");
+                        int dronenlevel = droneskill.Skilllvl;
+                        Frame.Log("Droneskilllevel =" + dronenlevel);
+                        dronenmoeglich = dronenlevel;
+                    }
+                  
+                   
 
 
                     //        string skillscience = "3402";                                                                                                                            // typids der skills

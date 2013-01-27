@@ -13,7 +13,7 @@ namespace Controllers
 
 
         int dronesinbay = 0;
-
+        int skilldronenmoeglich = 0;
 
 
 
@@ -48,15 +48,22 @@ namespace Controllers
                         Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenDroneBayOfActiveShip);
                         break;
                     }
-
+                    string shipname = Frame.Client.GetActiveShip.TypeName;
+                    if (shipname == "Venture")
+                    {
+                        skilldronenmoeglich = 2;
+                    }
+/*
                     if (Frame.Client.Session.InStation == true)
                     {
                         _localPulse = DateTime.Now.AddMilliseconds(GetRandom(8000, 9000));
                         break;
                     }
-                    if (Frame.Client.GetActiveShip.DronesInBay > 0)
+ * */
+                        
+                    if (Frame.Client.GetActiveShip.DronesInBay < skilldronenmoeglich)
                     {
-                        //               DroneController.dronen = true;
+                        _States.DroneState = DroneState.vorhandenkaufen;
                     }
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(3000, 3500));
 
@@ -155,6 +162,12 @@ namespace Controllers
 
                 case DroneState.wait:
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
+                    Frame.Log("skillcontrollerdroenenmoeglich ==" + SkillController.dronenmoeglich);
+                    if (SkillController.dronenmoeglich == null)
+                    {
+                        _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
+                        break;
+                    }
                     if (SkillController.dronenmoeglich > 0)
                     {
                         DroneController.dronecontrolleraktiv = true;
@@ -162,6 +175,35 @@ namespace Controllers
                         _States.DroneState = DroneState.Initialise;
                         Frame.Log("Droncontroller / setze dronenstate auf initialse");
                         break;
+                    }
+                    break;
+
+
+                case DroneState.vorhandenkaufen:
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
+
+                    if (Frame.Client.getdronbay() == false)
+                    {
+                        Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenDroneBayOfActiveShip);
+                        break;
+                    }
+                    int dronenhanga = Frame.Client.GetActiveShip.DronesInBay;
+                    int dronen1id = 222;
+                    if (dronenhanga <= SkillController.dronenmoeglich && dronenhanga <= skilldronenmoeglich)
+                    {
+                        List<EveItem> itemlischt = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;
+                        EveItem itemsZZ = itemlischt.Where(x => x.TypeId == dronen1id).FirstOrDefault();
+                        if (itemsZZ == null)
+                        {
+                            Frame.Log("Keine Dronen in der menge vorrätig");
+                            Frame.Log("Auf die Einkaufsliste setzen");
+                        }
+
+                        if (itemsZZ != null)
+                        {
+                            Frame.Log("Dronen im Hanga vorrätig");
+                           // Frame.Client.GetPrimaryInventoryWindow.o         
+                        }
                     }
                     break;
 

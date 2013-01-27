@@ -13,6 +13,7 @@ namespace Controllers.states
         Startdrones,
         dronesback,
         dronesatwork,
+        vorhandenkaufen,
         wait
 
     }

@@ -174,24 +174,50 @@ namespace Controllers
                     _States.tutstates = tutstates.Error;
                     break;
 
+
+
                 case tutstates.wait:
 
-               //     Frame.Log(Frame.Client.wealth());
-             //     Frame.Log(Frame.Client.Session.LocationId);
+
+              //      Frame.Client.Session.ShipId;
+                    Frame.Log("typname =   " + Frame.Client.GetActiveShip.TypeName);
+                    Frame.Log("typid =  " + Frame.Client.GetActiveShip.TypeId);
+
+                    if (Frame.Client.getdronbay() == false)
+                    {
+                        Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenDroneBayOfActiveShip);
+                        break;
+                    }
                     /*
-                   Tuple<int,int> tmp2 = new Tuple<int,int> (22578,1);
-                    BuyController.buylist2.Add(tmp2);
-                   _States.BuyControllerState = BuyControllerStates.buy;
-                    _States.tutstates = tutstates.Idle;
+            
+                  List<EveItem> items;
+                  if (Frame.Client.getinvopen() == false)
+                  {
+                      Frame.Client.Getandopenwindow("leer");
+                      break;
+                  }
 
- */
-                    _States.BuyControllerState = BuyControllerStates.done;
-                     _States.SkillState = SkillState.buyskill;
-                   _States.tutstates = tutstates.Idle;
+                    Frame.Log("bin bei Unload");
+                    items = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;                                              // Get itemslist check fehlt
+                    Frame.Log(items.Count);                                                                                                         // Logbuch Items zahl
+                    if (items.Count == 0)
+                    {
+                        items = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;
+                    }
 
 
+                    if (items.Count != 0)                                                                                                          // Wenn items zahl ungleich 0 ist dann
+                    {
+                        foreach (EveItem tmp in items) 
+                        {
+                            Frame.Log("Eveitem tmp =  " +  tmp.TypeName + "  " + tmp.ItemId + "  " + tmp.TypeId );
 
-
+                        }
+                    
+                    }
+                     * 
+                     * */
+                    Frame.Log("Fertig");
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                     break;
                 
