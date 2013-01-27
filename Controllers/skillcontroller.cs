@@ -32,7 +32,7 @@ namespace Controllers
         public static int dronenmoeglich { get; set; }
         long? skilldronen = 3436;
         long? skilldronenop = 3438;
-        
+        bool firstread = false;
         
 
         ////////////////////////////////////////////////////////
@@ -58,6 +58,7 @@ namespace Controllers
             dronenmoeglich = 0;
             itemid = 0;
             _States.SkillState = SkillState.wait;
+          
         }
 
 
@@ -143,7 +144,11 @@ namespace Controllers
 
                     int skillsinlist = Settings.Settings.Instance.Skilllist.Count;
                     skilltotrainid = Settings.Settings.Instance.Skilllist;
-                    vergleichlist = skilltotrainid;
+                    if (firstread == false)
+                    {
+                        vergleichlist = skilltotrainid;
+                        firstread = true;
+                    }
 
                     /*           skilltotrainid.Insert(skillsinlist, skillsminingfrigat + " " + "2");
                                skillsinlist = skilltotrainid.Count();  // Miningfrigate 2
@@ -281,6 +286,7 @@ namespace Controllers
                       if (skillbookitem2 != null)
                       {
                           Frame.Log("Buch schon im Hanger");
+                     //     BuyController.buylist.Remove;
                           _States.BuyControllerState = BuyControllerStates.done;
                       }
 

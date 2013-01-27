@@ -202,7 +202,7 @@ namespace Controllers
                         if (itemsZZ != null)
                         {
                             Frame.Log("Dronen im Hanga vorrätig");
-                            Frame.Client   
+                          
                         }
                     }
                     break;
