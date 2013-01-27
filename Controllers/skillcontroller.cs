@@ -337,7 +337,7 @@ namespace Controllers
                                         EveItem skillbookitem = itemlistee.Where(i => i.TypeId == buggy).FirstOrDefault();
                                         Frame.Client.InjectSkillIntoBrain(skillbookitem);
                                            Frame.Log("Inject skill");
-                                   }
+                                                                         }
                               
                                }
                                     
