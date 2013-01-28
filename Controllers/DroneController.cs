@@ -53,19 +53,32 @@ namespace Controllers
                     {
                         skilldronenmoeglich = 2;
                     }
-
-                    if (Frame.Client.Session.InStation == true)
+                    if (shipname == "Startschiff")
+                    {
+                        skilldronenmoeglich = 0;
+                    }
+                    if (Frame.Client.Session.InSpace == true)
                     {
                         _localPulse = DateTime.Now.AddMilliseconds(GetRandom(8000, 9000));
                         break;
                     }
-                        
-                    if (Frame.Client.GetActiveShip.DronesInBay < skilldronenmoeglich)
+                    if (Frame.Client.Session.InStation == true)
                     {
-                     //   _States.DroneState = DroneState.vorhandenkaufen;
-                        Frame.Log("Platzhalter vorhandenkaufen im dronestate");
+                       // _localPulse = DateTime.Now.AddMilliseconds(GetRandom(8000, 9000));
+                       // break;
+                        if (Frame.Client.getdronbay() == false)
+                        {
+                            Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenDroneBayOfActiveShip);
+                            break;
+                        }
+                        if (Frame.Client.GetActiveShip.DronesInBay < skilldronenmoeglich)
+                        {
+                            //   _States.DroneState = DroneState.vorhandenkaufen;
+                            Frame.Log("Platzhalter vorhandenkaufen im dronestate");
+                        }
+                        _localPulse = DateTime.Now.AddMilliseconds(GetRandom(3000, 3500));
+
                     }
-                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(3000, 3500));
 
                     _States.DroneState = DroneState.Idle;
                     break;
@@ -121,6 +134,19 @@ namespace Controllers
                         Frame.Client.GetActiveShip.ReleaseDrones();
                         break;
                     }
+                    else if (Frame.Client.GetActiveShip.ActiveDrones.Count > 0)
+                    {
+                    Frame.Log("Drones start mining");
+                    Frame.Client.DroneMineRepeatedly();
+                    dronenaktiviern = true;                              // Dronen aktiv
+                    _States.DroneState = DroneState.dronesatwork;
+                    break;
+                          }
+                          break;
+
+
+                    /*
+
                     //               if (dronenaktiviern == false)
                     //               {
                     Frame.Log("Drones start mining");
@@ -130,8 +156,7 @@ namespace Controllers
                     break;
                 //             }
                 //               break;
-
-
+                    */
                 case DroneState.dronesatwork:
 
 
@@ -169,7 +194,7 @@ namespace Controllers
 
                 case DroneState.wait:
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
-                    Frame.Log("skillcontrollerdroenenmoeglich ==" + SkillController.dronenmoeglich);
+           //         Frame.Log("skillcontrollerdroenenmoeglich ==" + SkillController.dronenmoeglich);
                     if (SkillController.dronenmoeglich == null)
                     {
                         _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
@@ -197,7 +222,7 @@ namespace Controllers
                         break;
                     }
                     int dronenhanga = Frame.Client.GetActiveShip.DronesInBay;
-                    int dronen1id = 222;
+                    int dronen1id = 222;          // ITEM ID
                     if (dronenhanga <= SkillController.dronenmoeglich && dronenhanga <= skilldronenmoeglich)
                     {
                         List<EveItem> itemlischt = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;
@@ -216,6 +241,17 @@ namespace Controllers
                     }
                     break;
 
+
+                case DroneState.waitbuy:
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
+                    break;
+
+
+                case DroneState.donebuy:
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
+                     _States.DroneState = states.DroneState.Initialise;
+                    break;
+               
 
             }
             }

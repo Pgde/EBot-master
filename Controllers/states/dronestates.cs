@@ -14,7 +14,9 @@ namespace Controllers.states
         dronesback,
         dronesatwork,
         vorhandenkaufen,
-        wait
+        wait,
+        waitbuy,
+        donebuy
 
     }
 
