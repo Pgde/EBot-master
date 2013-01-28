@@ -134,6 +134,13 @@ namespace Controllers
 
                 case DroneState.dronesatwork:
 
+
+                    if (astrodronen == null || DroneController.astro == null)
+                    {
+                        dronenaktiviern = false;                              // Dronen aktiv
+                        _States.DroneState = DroneState.dronesback;
+                        break;
+                    }
                     if (astrodronen.Id == DroneController.astro.Id)
                     {
                         _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2000));
@@ -168,6 +175,7 @@ namespace Controllers
                         _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                         break;
                     }
+                    /*
                     if (SkillController.dronenmoeglich > 0)
                     {
                         DroneController.dronecontrolleraktiv = true;
@@ -176,6 +184,7 @@ namespace Controllers
                         Frame.Log("Droncontroller / setze dronenstate auf initialse");
                         break;
                     }
+                     * */
                     break;
 
 
