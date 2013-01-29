@@ -14,6 +14,8 @@ namespace Controllers
 
         int dronesinbay = 0;
         int skilldronenmoeglich = 0;
+        int dronen1idd = 22;
+        int dronen2idd = 0;
 
 
 
@@ -73,8 +75,9 @@ namespace Controllers
                         }
                         if (Frame.Client.GetActiveShip.DronesInBay < skilldronenmoeglich)
                         {
-                            //   _States.DroneState = DroneState.vorhandenkaufen;
+                          _States.DroneState = DroneState.vorhandenkaufen;
                             Frame.Log("Platzhalter vorhandenkaufen im dronestate");
+                            break;
                         }
                         _localPulse = DateTime.Now.AddMilliseconds(GetRandom(3000, 3500));
 
@@ -222,21 +225,33 @@ namespace Controllers
                         break;
                     }
                     int dronenhanga = Frame.Client.GetActiveShip.DronesInBay;
-                    int dronen1id = 222;          // ITEM ID
-                    if (dronenhanga <= SkillController.dronenmoeglich && dronenhanga <= skilldronenmoeglich)
+                     if (dronenhanga <= SkillController.dronenmoeglich && dronenhanga <= skilldronenmoeglich)
                     {
+                        if (Frame.Client.getinvopen() == false)
+                        {
+                            Frame.Client.Getandopenwindow("leer");
+                            break;
+                        }
                         List<EveItem> itemlischt = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;
-                        EveItem itemsZZ = itemlischt.Where(x => x.TypeId == dronen1id).FirstOrDefault();
+                        EveItem itemsZZ = itemlischt.Where(x => x.TypeId == dronen1idd).FirstOrDefault();
                         if (itemsZZ == null)
                         {
                             Frame.Log("Keine Dronen in der menge vorrätig");
                             Frame.Log("Auf die Einkaufsliste setzen");
+
+                            Tuple<int, int> tmp = new Tuple<int, int>(itemsZZ.TypeId, 1);
+                            BuyController.buylist.Add(tmp);
+                            _States.BuyControllerState = BuyControllerStates.buy;
+                            _States.DroneState = DroneState.waitbuy;
+                            break;
                         }
 
                         if (itemsZZ != null)
                         {
                             Frame.Log("Dronen im Hanga vorrätig");
-                          
+                            Frame.Client.GetPrimaryInventoryWindow.DroneBay.Add(itemsZZ, 1);
+                            Frame.Log("Dronen von Hanga in Dronenbay +1");
+                            _States.DroneState = DroneState.Initialise;
                         }
                     }
                     break;
@@ -244,6 +259,12 @@ namespace Controllers
 
                 case DroneState.waitbuy:
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
+                    if (_States.BuyControllerState == BuyControllerStates.done)
+                    {
+                        Frame.Log("Buycontroller == done, setze Dronestate auf Initialise");
+                        _States.DroneState = DroneState.Initialise;
+                        break;
+                    }
                     break;
 
 

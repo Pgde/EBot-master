@@ -180,13 +180,19 @@ namespace Controllers
 
 
               //      Frame.Client.Session.ShipId;
-                    Frame.Log("typname =   " + Frame.Client.GetActiveShip.TypeName);
-                    Frame.Log("typid =  " + Frame.Client.GetActiveShip.TypeId);
-
+               //     Frame.Log("typname =   " + Frame.Client.GetActiveShip.TypeName);
+               //     Frame.Log("typid =  " + Frame.Client.GetActiveShip.TypeId);
+/*
                     if (Frame.Client.getdronbay() == false)
                     {
                         Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenDroneBayOfActiveShip);
                         break;
+                    }
+*/
+                    List<EveItem> itte = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;
+                    foreach (EveItem tmp in itte)
+                    {
+                        Frame.Log("Items ID " + tmp.TypeId + "items name  =  " + tmp.TypeName);
                     }
                     /*
             
