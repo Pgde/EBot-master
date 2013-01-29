@@ -29,6 +29,7 @@ namespace Controllers
 
 
 
+        public static int fitcount = 0;
 
         public static Dictionary<long, List<double>> dictXYZ;
         public static double bestdistance = 999999999999;
@@ -55,6 +56,113 @@ namespace Controllers
             switch (_States.fittingstate)
             {
                 case fittingstate.Idle:
+           
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(5000, 5000));
+                    break;
+
+                case fittingstate.FitVult:
+
+                      _localPulse = DateTime.Now.AddMilliseconds(GetRandom(20000, 35000));
+                      _States.fittingstate = fittingstate.Idle;
+                    break;
+
+                case fittingstate.fitt2miner:
+                    fitcount = 0;
+
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(5000, 5500));
+                    if (!Frame.Client.IsUnifiedInventoryOpen)
+                    {
+                        Frame.Client.ExecuteCommand(EveCommand.OpenInventory);
+                        break;
+                    }
+                    var list = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items.Where(x => x.TypeName == "Civilian Miner");
+                    int count = 0;
+
+                    foreach (EveItem tmp in list)
+                    {
+                        count += tmp.Stacksize;
+                    }
+                    if (count < 2)
+                    {
+                        //einkaufen 
+                        Tuple<int, int> tmp = new Tuple<int, int>(483, 2-count);
+                        BuyController.buylist.Add(tmp);
+                        _States.BuyControllerState = BuyControllerStates.buy;
+                        _States.fittingstate = fittingstate.fitbuyt2miner;
+                        Frame.Log("weniger als 2 geh einkaufen etc");
+                        break;
+                    }
+
+                    
+                    Frame.Client.StripFitting(Frame.Client.GetActiveShip.ItemId);
+                    _States.fittingstate = fittingstate.fitt2miner2;
+                    break;
+
+                case fittingstate.fitt2miner2:
+                  
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(3000, 5000));
+
+                    foreach (EveItem testc in Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items)
+                    {
+                        Frame.Log(testc.TypeName); 
+                    }
+
+                    var tofit = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items.Where(x => x.TypeName == "Civilian Miner").FirstOrDefault();
+                    
+                    List<EveItem> temp = new List<EveItem>();
+                   
+                    
+
+                    if (tofit != null && fitcount <2)
+                    {
+                    fitcount = fitcount + 1;
+                    temp.Add(tofit);
+                    Frame.Client.tryfit(temp);
+                    break;
+                    }
+
+                    
+                    _States.fittingstate = fittingstate.Idle;
+                    break;
+
+                case fittingstate.FitCovetor:
+
+                      _localPulse = DateTime.Now.AddMilliseconds(GetRandom(20000, 35000));
+                      _States.fittingstate = fittingstate.Idle;
+                    break;
+
+
+                case fittingstate.Error:
+
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(200000000, 350000000));      //dirty 
+                    Frame.Log("Error fittingstate");
+                    _States.fittingstate = fittingstate.Error;
+                    break;
+
+                case fittingstate.wait:
+
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
+                    break;
+
+                case fittingstate.fitbuyt2miner:
+
+                      _localPulse = DateTime.Now.AddMilliseconds(GetRandom(5000, 7000));
+                     if (_States.BuyControllerState == BuyControllerStates.done)
+                     {
+                         _States.BuyControllerState = BuyControllerStates.Idle;
+                         _States.fittingstate = fittingstate.fitt2miner;
+                     }
+                         break;
+
+
+            }
+
+            
+        }
+    }
+}
+
+/*
 
             dictXYZ = new Dictionary<long, List<double>>();
             dictXYZ.Add(50013913, new List<double>() { 265806765196,468, 6079769755972.77, 1593583406762.97 });
@@ -158,39 +266,5 @@ namespace Controllers
 
                       //  double dist = Math.Sqrt((tmp.x - tmp.gotox) * (tmp.x - tmp.gotox) + (tmp.y - tmp.gotoy) * (tmp.y - tmp.gotoy) + (tmp.z - tmp.gotoz) * (tmp.z - tmp.gotoz));
 
-                    }
-                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(5000, 5000));
-                    break;
 
-                case fittingstate.FitVult:
-
-                      _localPulse = DateTime.Now.AddMilliseconds(GetRandom(20000, 35000));
-                      _States.fittingstate = fittingstate.Idle;
-                    break;
-
-                case fittingstate.FitCovetor:
-
-                      _localPulse = DateTime.Now.AddMilliseconds(GetRandom(20000, 35000));
-                      _States.fittingstate = fittingstate.Idle;
-                    break;
-
-
-                case fittingstate.Error:
-
-                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(200000000, 350000000));      //dirty 
-                    Frame.Log("Error fittingstate");
-                    _States.fittingstate = fittingstate.Error;
-                    break;
-
-                case fittingstate.wait:
-
-                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
-                    break;
-
-            }
-
-            
-        }
-    }
-}
-
+*/

@@ -971,7 +971,7 @@ namespace EveModel
                 {
                     if (Frame.Client.Session.InStation)
                     {
-                        Frame.Client.GetService("menu").CallMethod("AssembleShip", new object[] { invitems });
+                        Frame.Client.GetService("menu").CallMethod("AssembleShip", new object[] { invitems },true);
                         return true;
                     }
                     return false;
@@ -987,7 +987,7 @@ namespace EveModel
                         EveObject tmp = new EveObject();
 
                         tmp = Frame.Client.GetService("invCache").CallMethod("GetInventoryFromId", new object[] { shipid }).GetValueAs<EveObject>();
-                        tmp.CallMethod("StripFitting", new object[] { });
+                        tmp.CallMethod("StripFitting", new object[] { },true);
                         return true;
                     }
                     return false;

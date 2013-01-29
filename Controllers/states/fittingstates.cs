@@ -10,9 +10,13 @@ namespace Controllers.states
     {
         Idle,
         Start,
+        fitt2miner,
+        fitt2miner2,
         FitVult,
         FitCovetor,
+        fitbuyt2miner,
         Error,
+        done,
         wait
     }
 
