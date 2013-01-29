@@ -22,7 +22,35 @@ namespace Controllers.Settings
         public string Accname { get; set; }
         public string Pw { get; set; }
         public long homesys { get; set; }
+        public long homesys1 { get; set; }
+        public long homesys2 { get; set; }
+        public long homesys3 { get; set; }
+        public long homesys4 { get; set; }
         public List<String> Skilllist {get; set;}
+
+        public void rndhomesys()
+        {
+            Random random = new Random();
+            int i = random.Next(1, 4); 
+            if (i == 1)
+            {
+                homesys = homesys1;
+            }
+            if (i == 2)
+            {
+                homesys = homesys2;
+            }
+            if (i == 3)
+            {
+                homesys = homesys3;
+            }
+            if (i == 4)
+            {
+                homesys = homesys4;
+            }
+        }
+
+
         public void LoadSettings()
         {
 
@@ -42,7 +70,10 @@ namespace Controllers.Settings
                         Charname = (string)xml.Element("Charname") ?? "";
                         Accname = (string)xml.Element("Accname") ?? "";
                         Pw = (string)xml.Element("Pw") ?? "";
-                        homesys = (long)xml.Element("homesys");
+                        homesys1 = (long)xml.Element("homesys1");
+                        homesys2 = (long)xml.Element("homesys2");
+                        homesys3 = (long)xml.Element("homesys3");
+                        homesys4 = (long)xml.Element("homesys4");
                     }
                     catch (Exception exception)
                     {
@@ -69,6 +100,8 @@ namespace Controllers.Settings
 
 
                 }
+                rndhomesys();
+            Frame.Log(homesys);
         }
 
 
@@ -103,6 +136,7 @@ namespace Controllers.Settings
 
                         return botxmlpath;
                     }
+
 
 
 
