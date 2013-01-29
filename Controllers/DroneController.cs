@@ -145,6 +145,11 @@ namespace Controllers
                         astrodronen = DroneController.astro;
                         break;
                     }
+                    if (Frame.Client.getinvopen() == false)
+                    {
+                        Frame.Client.Getandopenwindow("leer");
+                        break;
+                    }
                     if (Frame.Client.getdronbay() == false)
                     {
                         Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenDroneBayOfActiveShip);
