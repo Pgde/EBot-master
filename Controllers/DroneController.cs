@@ -56,15 +56,22 @@ namespace Controllers
                     if (droneskill == null)
                     {
                         Frame.Log("Dronenskill == null");
+                         _States.DroneState = DroneState.donebuy;
+                         break;
                     }
                     EveSkill droneskillop = neueskill.Where(x => x.typeID == skilldronenop).Where(x => x.Skilllvl > 0).FirstOrDefault();
                     if (droneskillop == null)
                     {
                         Frame.Log("Dronenskillop == null");
+                        _States.DroneState = DroneState.donebuy;
+                        break;
+
                     }
                     if (droneskillop == null && droneskill != null)
                     {
                         Frame.Log("Dronenskillop == null aber schon einen mining skill");
+                        _States.DroneState = DroneState.donebuy;
+                        break;
                     }
                     if (droneskill != null && droneskillop != null)
                     {
@@ -105,15 +112,20 @@ namespace Controllers
                         {
                             Frame.Log("DroneninBay =  null");
                             _States.DroneState = DroneState.vorhandenkaufen;
-                            Frame.Log("Platzhalter vorhandenkaufen im dronestate");
+                            Frame.Log("starte vorhandenkaufen im dronestate");
                             break;
                         }
                       
                         _localPulse = DateTime.Now.AddMilliseconds(GetRandom(3000, 3500));
 
                     }
-                    Frame.Log("Change Dronestate to Idle..");
-                    _States.DroneState = DroneState.Idle;
+                    if (Frame.Client.GetPrimaryInventoryWindow.DroneBay.Items.Count == skilldronenmoeglich)
+                    {
+                        Frame.Log("Change Dronestate to Idle..");
+                        _States.DroneState = DroneState.donebuy;
+                        break;
+                    }
+                    Frame.Log("hier darf ich nie ankommen !!!");
                     break;
 
 
@@ -131,6 +143,11 @@ namespace Controllers
                     {
                         _States.DroneState = DroneState.Startdrones;
                         astrodronen = DroneController.astro;
+                        break;
+                    }
+                    if (Frame.Client.getdronbay() == false)
+                    {
+                        Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenDroneBayOfActiveShip);
                         break;
                     }
 
@@ -240,10 +257,11 @@ namespace Controllers
                     Frame.Log("count drones in bay = " + dronenhanga);
                     if (dronenhanga == skilldronenmoeglich)
                     {
-                        _States.DroneState = DroneState.Initialise;
+                        Frame.Log("dronenhanga == skilldronenmoeglich ");
+                        _States.DroneState = DroneState.donebuy;
                         break;
                     }
-                    if (dronenhanga <= SkillController.dronenmoeglich || dronenhanga <= skilldronenmoeglich)
+                    if (dronenhanga < SkillController.dronenmoeglich || dronenhanga < skilldronenmoeglich)
                     {
                         if (Frame.Client.getinvopen() == false)
                         {
@@ -257,7 +275,7 @@ namespace Controllers
                             Frame.Log("Keine Dronen in der menge vorrätig");
                             Frame.Log("Auf die Einkaufsliste setzen");
 
-                            Tuple<int, int> tmp = new Tuple<int, int>(dronen1idd, 1);
+                            Tuple<int, int> tmp = new Tuple<int, int>(dronen1idd, 2);
                             BuyController.buylist.Add(tmp);
                             _States.BuyControllerState = BuyControllerStates.buy;
                             _States.DroneState = DroneState.waitbuy;
@@ -270,9 +288,10 @@ namespace Controllers
                             Frame.Client.GetPrimaryInventoryWindow.DroneBay.Add(itemsZZ, 1);
                             Frame.Log("Dronen von Hanga in Dronenbay +1");
                             _States.DroneState = DroneState.Initialise;
+                            break;
                         }
                     }
-                     _States.DroneState = DroneState.Initialise;
+                    _States.DroneState = DroneState.donebuy;
                     break;
 
 
@@ -289,7 +308,7 @@ namespace Controllers
 
                 case DroneState.donebuy:
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
-                     _States.DroneState = states.DroneState.Initialise;
+              //       _States.DroneState = states.DroneState.Initialise;
                     break;
 
 

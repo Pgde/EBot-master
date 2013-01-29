@@ -89,10 +89,24 @@ namespace Controllers
                     {
                 //        restorestates();
                 //    _States.MiningState = MiningState.letzgo;
-                        _States.maincontrollerState = maincontrollerStates.checkbuy;
+                //alt        _States.maincontrollerState = maincontrollerStates.checkbuy;
+                        _States.DroneState = DroneState.Initialise;
+                        _States.maincontrollerState = maincontrollerStates.dronencheck;
                     }
                         _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                     break;
+
+                case maincontrollerStates.dronencheck:
+                
+                    if (_States.DroneState == DroneState.donebuy)
+                    {
+                        _States.maincontrollerState = maincontrollerStates.checkbuy;
+                         _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
+                        break;
+                    }
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
+                    break;
+
 
                 case maincontrollerStates.checkbuy:
 
@@ -132,6 +146,7 @@ namespace Controllers
                         _States.MiningState = MiningState.letzgo;
                         _States.maincontrollerState = maincontrollerStates.Idle;
                         _States.DroneState = DroneState.Idle;
+                    //    _States.DroneState = DroneState.Initialise;
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                     break;
 

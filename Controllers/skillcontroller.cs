@@ -190,22 +190,37 @@ namespace Controllers
 
 
                     string buk = skilltotrainid.FirstOrDefault();                                                               // ersten skill inder liste 
-                    Frame.Log("Skillz = " + buk);                                                                               // logbuch
+                     Frame.Log("Skillz = " + buk);                                                                               // logbuch
                     string[] a = buk.Split(new Char[] { });                                                                     // teile den string in typid und lvl
                     string a1 = a[0];                                                                                           // [0]
                     string a2 = a[1];        
                     string a3 = a[2];
+                    int a22 = Convert.ToInt32(a2);
                     int aa3 = Convert.ToInt32(a3);
                     int bunsch1 = Convert.ToInt32(a1);
                     itemid = bunsch1;
                     Frame.Log("Skillz Typid = " + a1);                                                                              // log
                     Frame.Log("Skillz gewuenschter lvl = " + a2);       
                    Frame.Log("Skillz weitreleveln ? = " + a3);
+                   EveSkill schkill = neueskill2.Where(x => x.typeID == itemid).FirstOrDefault();
+                    if (schkill != null)
+                    {
+                        if (schkill.Skilllvl >= a22)
+                        {
+                            int remove = Math.Min(skilltotrainid.Count, 1);
+                            skilltotrainid.RemoveRange(0, remove);
+                            Frame.Log("Remove First entry of list ");
+                            break;
+                        }
+                    }
+                   
+
                    if (aa3 == 1 && neueQskill2.Count != 0)
                    {
+                      
                        Frame.Log("Skill benötigt eine leere Q");
-                       _States.SkillState = SkillState.wait;
-                       _States.MiningState = MiningState.letzgo;
+                       _States.SkillState = SkillState.done;
+                    //  _States.MiningState = MiningState.letzgo;
                        break;
                    }
                   
@@ -231,21 +246,13 @@ namespace Controllers
                             _States.BuyControllerState = BuyControllerStates.done;
                             _States.SkillState = SkillState.buyskill;
                             break;
-                           
 
                         }
-
-
 
                        Tuple<int,int> tmp = new Tuple<int,int> (bunsch1,1);
                         BuyController.buylist.Add(tmp);
                       _States.BuyControllerState = BuyControllerStates.buy;
                         _States.SkillState = SkillState.buyskill;
-
-                  //      int remove = Math.Min(skilltotrainid.Count, 1);
-                      //  skilltotrainid.RemoveRange(0, remove);
-                  //      Frame.Log("Remove First entry of list ");
-                       // _States.SkillState = SkillState.wait;
                         break;
 
                     }
@@ -296,25 +303,7 @@ namespace Controllers
 
 
                 case SkillState.buyskill:
-                   /*
-                    if (Frame.Client.getinvopen() == false)
-                    {
-                        Frame.Client.Getandopenwindow("leer");
-                        break;
-                    }
-
-                      Frame.Client.GetItemHangar();               
-                      ersteitemlistee = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;
-                      EveItem skillbookitem2 = ersteitemlistee.Where(i => i.TypeId == itemid).FirstOrDefault();
-                      if (skillbookitem2 != null)
-                      {
-                          Frame.Log("Buch schon im Hanger");
-                     //     BuyController.buylist.Remove;
-                          _States.BuyControllerState = BuyControllerStates.done;
-                         
-                      }
-                 */
-
+   
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                     if (_States.BuyControllerState == BuyControllerStates.done)
                     {

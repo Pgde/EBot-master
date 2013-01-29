@@ -20,6 +20,8 @@ namespace Controllers.states
         checkbuy,
         startbuy,
         waitbuy,
+        dronencheck,
+        dronenbuy,
         resumemining
     }
 
