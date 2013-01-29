@@ -49,12 +49,6 @@ namespace EBotPilot
         //    _States.tutstates = tutstates.wait;
           //  _States.tutstates = tutstates.start; 
             _manager.AddController(new fittingcontroller());
-<<<<<<< HEAD
-        //    MainController.timecheck();
-            _States.fittingstate = fittingstate.fitt2miner;
-            _manager.AddController(new BuyController());
-=======
->>>>>>> .
         }
 
         private void button2_Click(object sender, EventArgs e)
