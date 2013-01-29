@@ -90,6 +90,7 @@ namespace EveModel
             PopUp,
             SelectedItem,
             Scanner,
+            CargoScanner,
             Stack,
             StationServices,
             Telecom,
@@ -168,6 +169,7 @@ namespace EveModel
                     case "form.DroneView": windowType = EveWindowType.Drones; break;
                     case "form.FittingWindow": windowType = EveWindowType.FittingWindow; break;
                     case "form.Telecom": windowType = EveWindowType.Telecom; break;
+                    case "form.CargoScan": windowType = EveWindowType.CargoScanner; break;
                 }
                 return windowType;
             }

@@ -1381,6 +1381,24 @@ namespace EveModel
                               
                 }
 
+                public List<string> cargoscanresults()
+                {
+
+                    List<string> result = new List<string>();
+                    EveWindow cargscan = Frame.Client.GetWindows.Where(x => x.Type == EveWindow.EveWindowType.CargoScanner).FirstOrDefault();
+                    if (cargscan != null)
+                    {
+                        List<EveObject> scan = cargscan["sr"]["scroll"].CallMethod("GetNodes", new object[] { }).GetList<EveObject>();
+                        foreach (EveObject scanob in scan)
+                        {
+                            result.Add(scanob["label"].GetValueAs<string>());
+
+                        }
+                        return result;
+                    }
+                    return result;
+                }
+
                 public List<long> GetDestinationPath()
                 {
                     return Frame.Client.GetService("starmap").CallMethod("GetDestinationPath", new object[] { }).GetList<long>();

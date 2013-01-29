@@ -189,7 +189,7 @@ namespace Controllers
                         break;
                     }
 */
-                    List<EveItem> itte = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;
+      /*              List<EveItem> itte = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;
                     foreach (EveItem tmp in itte)
                     {
                         Frame.Log("Items ID " + tmp.TypeId + "items name  =  " + tmp.TypeName);
@@ -223,6 +223,10 @@ namespace Controllers
                     }
                      * 
                      * */
+                    foreach (string a in Frame.Client.cargoscanresults())
+                    {
+                        Frame.Log(a);
+                    }
                     Frame.Log("Fertig");
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                     break;
