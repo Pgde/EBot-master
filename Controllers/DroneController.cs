@@ -14,7 +14,7 @@ namespace Controllers
 
         int dronesinbay = 0;
         int skilldronenmoeglich = 0;
-        int dronen1idd = 22;
+        int dronen1idd = 10246;
         int dronen2idd = 0;
 
 
@@ -73,8 +73,16 @@ namespace Controllers
                             Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenDroneBayOfActiveShip);
                             break;
                         }
+                        if (Frame.Client.GetActiveShip.DronesInBay == null)
+                        {
+                            Frame.Log("DroneninBay =  null");
+                            _States.DroneState = DroneState.vorhandenkaufen;
+                            Frame.Log("Platzhalter vorhandenkaufen im dronestate");
+                            break;
+                        }
                         if (Frame.Client.GetActiveShip.DronesInBay < skilldronenmoeglich)
                         {
+                            Frame.Log("DroneninBay =  " + Frame.Client.GetActiveShip.DronesInBay );
                           _States.DroneState = DroneState.vorhandenkaufen;
                             Frame.Log("Platzhalter vorhandenkaufen im dronestate");
                             break;

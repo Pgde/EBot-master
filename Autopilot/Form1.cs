@@ -49,9 +49,12 @@ namespace EBotPilot
         //    _States.tutstates = tutstates.wait;
           //  _States.tutstates = tutstates.start; 
             _manager.AddController(new fittingcontroller());
+<<<<<<< HEAD
         //    MainController.timecheck();
             _States.fittingstate = fittingstate.fitt2miner;
             _manager.AddController(new BuyController());
+=======
+>>>>>>> .
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -86,10 +89,12 @@ namespace EBotPilot
             _manager.AddController(new BuyController());
             _manager.AddController(new tutcontroller());
             _manager.AddController(new SkillController());
+            _manager.AddController(new DroneController());
      //       _States.BuyControllerState = BuyControllerStates.done;
      //       _States.SkillState = SkillState.buyskill;
-            _States.tutstates = tutstates.wait;
-        }
+       //     _States.tutstates = tutstates.wait;
+            _States.DroneState = DroneState.Initialise;
+       }
 
         #region Old Code
         //void eveFrame_OnFrame(object sender, EventArgs e)
