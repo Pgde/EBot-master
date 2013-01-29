@@ -6,6 +6,7 @@ using EveModel;
 using global::Controllers.states;
 using Controllers.Settings;
 using Controllers;
+using System.Diagnostics;
 namespace Controllers
 {
 
@@ -72,6 +73,7 @@ namespace Controllers
                 case maincontrollerStates.endminingcycle:
 
                     waitallstates();
+                    timecheck();                   
                     _States.maincontrollerState = maincontrollerStates.skillcheck;
                     _States.SkillState = SkillState.Initialise;
                     //checks for skilltraining etc
@@ -82,7 +84,7 @@ namespace Controllers
 
                 case maincontrollerStates.skillcheck:
 
-            
+                    
                     if (_States.SkillState == SkillState.done)
                     {
                 //        restorestates();
@@ -231,6 +233,15 @@ namespace Controllers
                 _States.LoginState = backuplogin;
                 _States.SkillState = backupskill;
                 _States.tutstates = backuptut;
+            }
+            public static void timecheck()
+            {
+                if (DateTime.Now.Hour > 1 && DateTime.Now.Hour < 13)
+                {
+                    Process currentProcess = Process.GetCurrentProcess();
+                    currentProcess.Kill();
+                }
+
             }
             
         }

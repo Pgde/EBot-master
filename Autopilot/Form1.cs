@@ -48,7 +48,8 @@ namespace EBotPilot
         //    _States.TravelerState = TravelerState.Initialise;
         //    _States.tutstates = tutstates.wait;
           //  _States.tutstates = tutstates.start; 
-            _manager.AddController(new fittingcontroller());
+        //    _manager.AddController(new fittingcontroller());
+            MainController.timecheck();
         }
 
         private void button2_Click(object sender, EventArgs e)
