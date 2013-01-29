@@ -88,6 +88,7 @@ namespace EBotPilot
      //       _States.SkillState = SkillState.buyskill;
        //     _States.tutstates = tutstates.wait;
             _States.DroneState = DroneState.Initialise;
+       //     _States.SkillState = SkillState.Initialise;
        }
 
         #region Old Code

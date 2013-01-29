@@ -102,23 +102,7 @@ namespace Controllers
                     Frame.Log("................");
 
 
-                    EveSkill droneskill = neueskill.Where(x => x.typeID == skilldronen).Where(x => x.Skilllvl > 0).FirstOrDefault();
-                    if (droneskill == null)
-                    {
-                        Frame.Log("Dronenskill == null");
-                    }
-                    EveSkill droneskillop = neueskill.Where(x => x.typeID == skilldronenop).Where(x => x.Skilllvl > 0).FirstOrDefault();
-                    if (droneskillop == null)
-                    {
-                        Frame.Log("Dronenskillop == null");
-                    }
-                    if (droneskill != null && droneskillop != null)
-                    {
-                        Frame.Log("Droneskill ist Aktiv");
-                        int dronenlevel = droneskill.Skilllvl;
-                        Frame.Log("Droneskilllevel =" + dronenlevel);
-                        dronenmoeglich = dronenlevel;
-                    }
+                
                   
                    
 

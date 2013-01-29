@@ -16,6 +16,7 @@ namespace Controllers.states
         vorhandenkaufen,
         wait,
         waitbuy,
+        sleeper,
         donebuy
 
     }
