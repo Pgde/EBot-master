@@ -245,6 +245,115 @@ namespace EveModel
         }
         #endregion
 
+        #region gotox
+        double? _gotox;
+        public double gotox
+        {
+            get
+            {
+                if (!_gotox.HasValue)
+                {
+                    _gotox = _ball["gotoX"] == null ? 0.0 : _ball["gotoX"].GetValueAs<double>();
+                }
+                return _gotox.Value;
+            }
+        }
+        #endregion
+
+        #region gotoy
+        double? _gotoy;
+        public double gotoy
+        {
+            get
+            {
+                if (!_gotoy.HasValue)
+                {
+                    _gotoy = _ball["gotoY"] == null ? 0.0 : _ball["gotoY"].GetValueAs<double>();
+                }
+                return _gotoy.Value;
+            }
+        }
+        #endregion
+
+        #region gotoz
+        double? _gotoz;
+        public double gotoz
+        {
+            get
+            {
+                if (!_gotoz.HasValue)
+                {
+                    _gotoz = _ball["gotoZ"] == null ? 0.0 : _ball["gotoZ"].GetValueAs<double>();
+                }
+                return _gotoz.Value;
+            }
+        }
+        #endregion
+
+
+        #region x
+        double? _x;
+        public double x
+        {
+            get
+            {
+                if (!_x.HasValue)
+                {
+                    _x = _ball["x"] == null ? 0.0 : _ball["x"].GetValueAs<double>();
+                }
+                return _x.Value;
+            }
+        }
+        #endregion
+
+        #region y
+        double? _y;
+        public double y
+        {
+            get
+            {
+                if (!_y.HasValue)
+                {
+                    _y = _ball["y"] == null ? 0.0 : _ball["y"].GetValueAs<double>();
+                }
+                return _y.Value;
+            }
+        }
+        #endregion
+
+
+        #region z
+        double? _z;
+        public double z
+        {
+            get
+            {
+                if (!_z.HasValue)
+                {
+                    _z = _ball["z"] == null ? 0.0 : _ball["z"].GetValueAs<double>();
+                }
+                return _z.Value;
+            }
+        }
+        #endregion
+
+        #region velo
+      
+
+        public double velo
+        {
+            get
+            {
+
+                 var   _velo = _ball["vx"] == null ? 0 : _ball["vx"].GetValueAs<int>();
+                 var   _velo2 = _ball["vy"] == null ? 0 : _ball["vy"].GetValueAs<int>();
+                 var   _velo3 = _ball["vz"] == null ? 0 : _ball["vz"].GetValueAs<int>();
+                 var speed = Math.Sqrt((_velo * _velo) + (_velo2 * _velo2) + (_velo3 * _velo3));
+                
+                return speed;
+            }
+        }
+        #endregion
 
 
         public void LockTarget()
