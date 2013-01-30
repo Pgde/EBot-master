@@ -178,51 +178,120 @@ namespace Controllers
 
                 case tutstates.wait:
 
+                    double t = 1228;
+                                List<EveMarketOrder> markyord = Frame.Client.GetCachedOrders();
+                                          if (markyord.Count == 0)
+                                          {
+                                              break;
+                                          }
+                                                                                                    List<EveMarketOrder> marketitemZ = markyord.Where(x => x.typeID == t).Where(x => x.inrange == true).Where(x => x.bid == true).ToList();
+                                         foreach (EveMarketOrder tmp in marketitemZ)
+                                         {
+                                            Frame.Log("Name = " + tmp.Name );
+                                            Frame.Log("_name = " + tmp._name);
+                                            Frame.Log("Solarsystemid = " + tmp.solarSystemID);
+                                            Frame.Log("range = " + tmp.range);
+                                            Frame.Log("price = " + tmp.price);
+                                            Frame.Log("OrderID = " + tmp.orderID);
+                                            Frame.Log("jumps = " + tmp.jumps);
+                                            Frame.Log("regionID = " + tmp.regionID);
+                                            Frame.Log("typeID = " + tmp.typeID);
+                                            Frame.Log("inrange = " + tmp.inrange);
+                                            Frame.Log("bid = " + tmp.bid);
+                                            Frame.Log("..................");
+                                            Frame.Log("..................");
+                                            Frame.Log("..................");
+                                            Frame.Log("..................");
+                                         }
+                                         EveMarketOrder marketitem;
+                                         marketitem = marketitemZ.OrderByDescending(x => x.price).Where(x => x.price > 15).FirstOrDefault();
+                                            Frame.Log("..................");
+                                            Frame.Log("..................");
+                                            Frame.Log("marketitem");
+                                            Frame.Log("..................");
+                                            Frame.Log("Name = " + marketitem.Name );
+                                            Frame.Log("_name = " + marketitem._name);
+                                            Frame.Log("Solarsystemid = " + marketitem.solarSystemID);
+                                            Frame.Log("range = " + marketitem.range);
+                                            Frame.Log("price = " + marketitem.price);
+                                            Frame.Log("OrderID = " + marketitem.orderID);
+                                            Frame.Log("jumps = " + marketitem.jumps);
+                                            Frame.Log("regionID = " + marketitem.regionID);
+                                            Frame.Log("typeID = " + marketitem.typeID);
+                                            Frame.Log("inrange = " + marketitem.inrange);
+                                            Frame.Log("bid = " + marketitem.bid);
+                                            Frame.Log("..................");
+                                            Frame.Log("..................");
+                                            Frame.Log("..................");
+                                            Frame.Log("..................");
+
+                                         break;
+                                      //    if (marketitemZ != null)
+                                      //    {
+                                      //      marketitem = marketitemZ.OrderByDescending(x => x.price).Where(x => x.price > 15).FirstOrDefault();
+                                      //    }
 
               //      Frame.Client.Session.ShipId;
                //     Frame.Log("typname =   " + Frame.Client.GetActiveShip.TypeName);
                //     Frame.Log("typid =  " + Frame.Client.GetActiveShip.TypeId);
-/*
-                    if (Frame.Client.getdronbay() == false)
-                    {
-                        Frame.Client.ExecuteCommand(EveModel.EveCommand.OpenDroneBayOfActiveShip);
-                        break;
-                    }
-*/
-      /*              List<EveItem> itte = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;
-                    foreach (EveItem tmp in itte)
-                    {
-                        Frame.Log("Items ID " + tmp.TypeId + "items name  =  " + tmp.TypeName);
-                    }
-                    /*
+
+
+            /*
+                                  List<EveItem> itte = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;
+                                  foreach (EveItem tmp in itte)
+                                  {
+                                      Frame.Log("Items ID " + tmp.TypeId + "items name  =  " + tmp.TypeName);
+                                  }
+                   
             
-                  List<EveItem> items;
-                  if (Frame.Client.getinvopen() == false)
-                  {
-                      Frame.Client.Getandopenwindow("leer");
-                      break;
-                  }
-
-                    Frame.Log("bin bei Unload");
-                    items = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;                                              // Get itemslist check fehlt
-                    Frame.Log(items.Count);                                                                                                         // Logbuch Items zahl
-                    if (items.Count == 0)
-                    {
-                        items = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;
-                    }
-
-
-                    if (items.Count != 0)                                                                                                          // Wenn items zahl ungleich 0 ist dann
-                    {
-                        foreach (EveItem tmp in items) 
-                        {
-                            Frame.Log("Eveitem tmp =  " +  tmp.TypeName + "  " + tmp.ItemId + "  " + tmp.TypeId );
-
-                        }
+                           _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
+                                  break;
                     
-                    }
-                     * 
-                     * */
+                    /*
+                                List<EveItem> items;
+                                if (Frame.Client.getinvopen() == false)
+                                {
+                                    Frame.Client.Getandopenwindow("leer");
+                                    break;
+                                }
+
+                                  Frame.Log("bin bei Unload");
+                                  items = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;                                              // Get itemslist check fehlt
+                                  Frame.Log(items.Count);                                                                                                         // Logbuch Items zahl
+                                  if (items.Count == 0)
+                                  {
+                                      items = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;
+                                  }
+
+
+                                  if (items.Count != 0)                                                                                                          // Wenn items zahl ungleich 0 ist dann
+                                  {
+                                      foreach (EveItem tmp in items) 
+                                      {
+                                          Frame.Log("Eveitem tmp =  " +  tmp.TypeName + "  " + tmp.ItemId + "  " + tmp.TypeId );
+
+                                      }
+                    
+                                  }
+                  
+
+                   
+                                   List<EveMarketOrder> markyord = Frame.Client.GetCachedOrders();
+                                          if (markyord.Count == 0)
+                                          {
+                                              break;
+                                          }
+
+                                          EveMarketOrder marketitem;
+                                          List<EveMarketOrder> marketitemZ = markyord.Where(x => x.typeID == "").Where(x => x.inrange == true).Where(x => x.bid == true).ToList();
+                                          if (marketitemZ != null)
+                                          {
+                                            marketitem = marketitemZ.OrderByDescending(x => x.price).Where(x => x.price > 15).FirstOrDefault();
+                                          }
+                                  
+
+                    /*
+
 
                     List<EveItem> a = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;
                     foreach (EveItem tmp in a)
@@ -230,13 +299,14 @@ namespace Controllers
                         Frame.Log(" Name =   " + tmp.TypeName + "   Typid =   " + tmp.TypeId);
                     }
                     Frame.Log("Fertig");
-                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
-                    break;
-                
+                     * 
+                     * */
 
+                   
+                    /*
        
-                /*
-                 *         _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
+                
+                       _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                       List<EveMarketOrder> markyord = Frame.Client.GetCachedOrders();
                         if (markyord.Count == 0)
                         {

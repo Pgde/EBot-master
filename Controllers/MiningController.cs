@@ -266,7 +266,7 @@ namespace Controllers
                         targetast = test3.Where(i =>
                         i.Distance < 65000
                            && (
-                        i.Name.ToLower().Contains("Massive Scordite")                                                                            // Magic dont touch
+                        i.Name.ToLower().Contains("massive scordite")                                                                            // Magic dont touch
                         )
                         ).OrderBy(i => i.Distance).FirstOrDefault();
                     }
@@ -278,7 +278,7 @@ namespace Controllers
                         targetast = test3.Where(i =>
                         i.Distance < 65000
                            && (
-                        i.Name.ToLower().Contains("Condensed Scordite")                                                                            // Magic dont touch
+                        i.Name.ToLower().Contains("condensed scordite")                                                                            // Magic dont touch
                         )
                         ).OrderBy(i => i.Distance).FirstOrDefault();
                     }
@@ -302,7 +302,7 @@ namespace Controllers
                         targetast = test3.Where(i =>
                         i.Distance < 65000
                         && (
-                        i.Name.ToLower().Contains("Concentrated Veldspar")                                                                              // Magic dont touch
+                        i.Name.ToLower().Contains("concentrated veldspar")                                                                              // Magic dont touch
                         )
                         ).OrderBy(i => i.Distance).FirstOrDefault();
                     }
@@ -314,7 +314,7 @@ namespace Controllers
                         targetast = test3.Where(i =>
                         i.Distance < 65000
                         && (
-                        i.Name.ToLower().Contains("Dense Veldspar")                                                                              // Magic dont touch
+                        i.Name.ToLower().Contains("dense veldspar")                                                                              // Magic dont touch
                         )
                         ).OrderBy(i => i.Distance).FirstOrDefault();
                     }
@@ -774,12 +774,12 @@ namespace Controllers
                                 break;
                             }
                            
-
+                             double t = 1228;
                             List<EveMarketOrder> marketitemZ = markyord.Where(x => x.typeID == itemsZZ.TypeId).Where(x => x.inrange == true).Where(x => x.bid == true).ToList();
                             if (marketitemZ != null)
                             {
-                              marketitem = marketitemZ.OrderByDescending(x => x.price).Where(x => x.price > 15).FirstOrDefault();
-                            }
+                                 marketitem = marketitemZ.OrderByDescending(x => x.price).Where(x => x.price > 15).FirstOrDefault();          // alles außer scordit nicht unter 15/isk
+                                }
 
 
                             if (marketitem == null)

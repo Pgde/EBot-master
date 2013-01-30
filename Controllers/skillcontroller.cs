@@ -193,6 +193,26 @@ namespace Controllers
                     }
                     List<EveSkill> neueskill2 = Frame.Client.GetMySkills();
                     List<EveQskill> neueQskill2 = Frame.Client.GetMyQueue();
+                        // Mining Drone 1 Typid = 10246
+        // Mining Upgrades Typid = 22578
+        // Science Typid = 3402
+        // Industry Typid = 3380
+        // Astrology Typid = 3410
+        // Mining Drone OP Typid = 3438
+                    double mindron = 10246;
+                        double dronop = 3438;
+            
+                        EveSkill dro1 = neueskill2.Where(x => x.typeID == mindron).FirstOrDefault();
+                        EveSkill dro1op = neueskill2.Where(x => x.typeID == dronop).FirstOrDefault();
+
+                        if (dro1 != null && dro1op != null)
+                        {
+                            if (dro1.Skilllvl >= 2 && dro1op.Skilllvl >= 1)
+                            {
+                                DroneController.aktiv = true;
+                            }
+                        }
+
 
 
                     string buk = skilltotrainid.FirstOrDefault();                                                               // ersten skill inder liste 

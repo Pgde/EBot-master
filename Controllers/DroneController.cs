@@ -27,13 +27,14 @@ namespace Controllers
         int dronenmoeglich = 0;
         long? skilldronen = 3436;
         long? skilldronenop = 3438;
-
+        public static bool aktiv { get; set; }
   
         List<EveWindow> Windows = new List<EveWindow>();
 
         public DroneController()
         {
             Frame.Log("Starting a new Drone Controller");
+            aktiv = false;
             _States.DroneState = DroneState.wait;
            
         }
@@ -48,6 +49,14 @@ namespace Controllers
             switch (_States.DroneState)
             {
                 case DroneState.Initialise:
+
+                    if (aktiv == false)
+                    {
+                        _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 1500));
+                        _States.DroneState = DroneState.wait;
+                        break;
+
+                    }
 
                     double money = Frame.Client.wealth();
                     if (money < 500000)
@@ -138,6 +147,12 @@ namespace Controllers
 
 
                 case DroneState.Idle:
+
+                    if (aktiv == false)
+                    {
+                        _States.DroneState = DroneState.wait;
+                        break;
+                    }
                   
                     if (Frame.Client.Session.InStation == true)
                     {
