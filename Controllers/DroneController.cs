@@ -49,6 +49,14 @@ namespace Controllers
             {
                 case DroneState.Initialise:
 
+                    double money = Frame.Client.wealth();
+                    if (money < 500000)
+                    {
+                        Frame.Log("Dronenstate == Nicht genug geld //  " + money);
+                        _States.DroneState = DroneState.donebuy;
+                        break;
+                    }
+
                     List<EveSkill> neueskill = Frame.Client.GetMySkills();
                     List<EveQskill> neueQskill = Frame.Client.GetMyQueue();
 

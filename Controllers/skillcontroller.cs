@@ -72,7 +72,13 @@ namespace Controllers
             switch (_States.SkillState)
             {
                 case SkillState.Initialise:
-
+                    double money = Frame.Client.wealth();
+                    if (money < 500000)
+                    {
+                        Frame.Log("Skillcontroller == nicht genug geld /  " + money);
+                        _States.SkillState = SkillState.done;
+                        break;
+                    }
                  
                     if (!Frame.Client.GetService("skillqueue").IsValid)
                     {

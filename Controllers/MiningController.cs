@@ -198,9 +198,13 @@ namespace Controllers
                         double carggoo = (fullcapcargo * 0.95);
                         Frame.Log("Maximal ladung(95% vom cargo" + carggoo);
                           Frame.Log(" usd cargo " + usdcapcargo);
-                            Frame.Log(" qskillminingcount  =  " + qskillmining.Count); 
-                            if (usdcapcargo != 0 && qskillmining.Count == 0 )
-                            {
+                            Frame.Log(" qskillminingcount  =  " + qskillmining.Count);
+                            double money = Frame.Client.wealth();
+                    if (money > 500000)
+                    {
+                        Frame.Log("Genug geld vorhanden checke skillliste");
+                        if (usdcapcargo != 0 && qskillmining.Count == 0)
+                        {
                             if (Frame.Client.GetActiveShip.ActiveDrones.Count > 0)
                             {
                                 _States.DroneState = states.DroneState.dronesback;
@@ -209,9 +213,10 @@ namespace Controllers
                             DroneController.astro = null;
                             Frame.Log("");
                             minersactiv = "Aus";
-                          //  EmptyBelts.Add(currentbelt);   // State um zurück zur Stations Bookmark zu warpen
+                            //  EmptyBelts.Add(currentbelt);   // State um zurück zur Stations Bookmark zu warpen
                             _States.MiningState = MiningState.warphome;
                             break;
+                        }
                             }
                         if (usdcapcargo > carggoo)                                                                          // Wenn das cargo voll gehe heim
                         {
@@ -253,6 +258,32 @@ namespace Controllers
                         ).OrderBy(i => i.Distance).FirstOrDefault();
                     }
 
+                   
+
+
+                     if (targetast == null)
+                    {
+                        targetast = test3.Where(i =>
+                        i.Distance < 65000
+                           && (
+                        i.Name.ToLower().Contains("Massive Scordite")                                                                            // Magic dont touch
+                        )
+                        ).OrderBy(i => i.Distance).FirstOrDefault();
+                    }
+                   
+
+
+                         if (targetast == null)
+                    {
+                        targetast = test3.Where(i =>
+                        i.Distance < 65000
+                           && (
+                        i.Name.ToLower().Contains("Condensed Scordite")                                                                            // Magic dont touch
+                        )
+                        ).OrderBy(i => i.Distance).FirstOrDefault();
+                    }
+
+
 
                     if (targetast == null)
                     {
@@ -260,6 +291,30 @@ namespace Controllers
                         i.Distance < 65000
                            && (
                         i.Name.ToLower().Contains("scordite")                                                                            // Magic dont touch
+                        )
+                        ).OrderBy(i => i.Distance).FirstOrDefault();
+                    }
+
+                  
+
+                           if (targetast == null)
+                    {
+                        targetast = test3.Where(i =>
+                        i.Distance < 65000
+                        && (
+                        i.Name.ToLower().Contains("Concentrated Veldspar")                                                                              // Magic dont touch
+                        )
+                        ).OrderBy(i => i.Distance).FirstOrDefault();
+                    }
+
+                   
+
+                        if (targetast == null)
+                    {
+                        targetast = test3.Where(i =>
+                        i.Distance < 65000
+                        && (
+                        i.Name.ToLower().Contains("Dense Veldspar")                                                                              // Magic dont touch
                         )
                         ).OrderBy(i => i.Distance).FirstOrDefault();
                     }
