@@ -41,17 +41,17 @@ namespace Controllers
 
 
 
+        // Mining Drone 1 Typid = 10246
+        // Mining Upgrades Typid = 22578
+        // Science Typid = 3402
+        // Industry Typid = 3380
+        // Astrology Typid = 3410
+        // Mining Drone OP Typid = 3438
+        // Mining Frigatte 32918
+        // Mining 3386
+        // Mining barge 17940
 
-
-
-
-
-
-
-
-
-
-     
+  
 
         public SkillController()
         {

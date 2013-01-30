@@ -223,9 +223,11 @@ namespace Controllers
                     }
                      * 
                      * */
-                    foreach (string a in Frame.Client.cargoscanresults())
+
+                    List<EveItem> a = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;
+                    foreach (EveItem tmp in a)
                     {
-                        Frame.Log(a);
+                        Frame.Log(" Name =   " + tmp.TypeName + "   Typid =   " + tmp.TypeId);
                     }
                     Frame.Log("Fertig");
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
