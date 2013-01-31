@@ -27,6 +27,7 @@ namespace Controllers
         List<EveItem> itemlistee = new List<EveItem>();
         List<string> vergleichlist2 = new List<string>();
         List<string> logoutliste = new List<string>();
+        List<int> logoutlisteint = new List<int>();
         List<EveItem> ersteitemlistee = new List<EveItem>();
          List<EveSkill> logoutitemliste = new List<EveSkill>();
         
@@ -390,7 +391,23 @@ namespace Controllers
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                     break;
 
-                case SkillState.logoutskills:
+                 case SkillState.logoutskills:
+                     int skillsinlist2 = Settings.Settings.Instance.Skilllist.Count;
+                    skilltotrainid = Settings.Settings.Instance.Skilllist;
+
+
+                     
+                        string[] bunglogout2 = new string[skillsinlist2];
+                        skilltotrainid.CopyTo(bunglogout2);
+                        bung2logout = bunglogout2;
+
+                        if (Frame.Client.GetService("skillqueue") == null)
+                        {
+                            Frame.Log("if (Frame.Client.GetService(skillqueue) == null)");
+                            _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 3500));
+                            break;
+                        }
+
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                     List<EveSkill> logoutskills = Frame.Client.GetMySkills();
                     List<EveQskill> logoutskillsQ = Frame.Client.GetMyQueue();
@@ -398,43 +415,75 @@ namespace Controllers
                     EveQskill logoutskillQ;
 
 
-                    if (Frame.Client.GetService("skillqueue").IsValid)
+                    if (Frame.Client.GetService("skillqueue") == null)
                     {
                         double debugg = Frame.Client.qlengdouble;
                         Frame.Log("Debugg float lenge = " + debugg);
-                        if (Frame.Client.placeinq())
-                        {
-                            foreach (string tmp in bung2logout)
-                            {
-                                if (!Frame.Client.placeinq())
+                    }
+
+                          if (!Frame.Client.placeinq())
                                 {
                                     _States.SkillState = SkillState.logoutskillsdone;
                                     _States.maincontrollerState = maincontrollerStates.endminingcycle;
                                     break;
                                 }
-                                Frame.Log("Skill vergleichsliste2 = " + tmp);
-                                Frame.Log(".....");
-                                string[] aa = tmp.Split(new Char[] { });                                                                     // teile den string in typid und lvl
-                                string aa1 = aa[0];
-                                int aa2 = Convert.ToInt32(aa[0]);                  // Skillid
-                                int aa4 = Convert.ToInt32(aa[1]);                   // sksilllevle
-                                //     logoutliste.Add(aa1);
-                                logoutskill = logoutskills.Where(x => x.typeID == aa2).FirstOrDefault();
-                                if (logoutskill != null)
-                                {
-                                    logoutskillQ = logoutskillsQ.Where(x => x.typeID == aa2).FirstOrDefault();
-                                    if (logoutskillQ == null)
-                                    {
-                                        if (logoutskill.Skilllvl < aa4)
-                                        {
-                                            Frame.Client.AddSkillToEnd(logoutskill, logoutskill.Skilllvl);
-                                            Frame.Log("Skill hinzugefügt");
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                          if (Frame.Client.placeinq())
+                          {
+                              if (logoutliste.Count == 0)
+                              {
+                                  foreach (string tmp in bung2logout)
+                                  {
+                                      Frame.Log("Skill in bung2logout = " + tmp);
+                                      Frame.Log(".....");
+                                      string[] aa = tmp.Split(new Char[] { });                                                                     // teile den string in typid und lvl
+                                      string aa1 = aa[0];
+                                      int aa2 = Convert.ToInt32(aa[0]);                  // Skillid
+                                      int aa4 = Convert.ToInt32(aa[1]);                   // sksilllevle
+                                      logoutliste.Add(aa1);
+                                      logoutlisteint.Add(aa4);
+                                  }
+                              }
+                              
+                              int anzahlinliste = logoutliste.Count;
+                              string logliststring = logoutliste.FirstOrDefault();
+                              int logliststringint = Convert.ToInt32(logliststring);
+                              int loglistint = logoutlisteint.FirstOrDefault();
+                              Frame.Log("logliststring = " + logliststring);
+                              Frame.Log("loglistint = " + loglistint);
+
+                              logoutskill = logoutskills.Where(x => x.typeID == logliststringint).FirstOrDefault();
+                              if (logoutskill != null)
+                              {
+                                  Frame.Log("skill is vorhanden");
+                                  logoutskillQ = logoutskillsQ.Where(x => x.typeID == logliststringint).FirstOrDefault();
+                                  if (logoutskillQ == null)
+                                  {
+                                      Frame.Log("skill aber nicht in der Que");
+                                      if (logoutskill.Skilllvl < loglistint)
+                                      {
+                                          Frame.Log("skill kleiner als gewuenscht");
+                                          Frame.Client.AddSkillToEnd(logoutskill, logoutskill.Skilllvl);
+                                          Frame.Log("Skill hinzugefügt");
+                                      }
+                                  }
+                              }
+                              int remove = Math.Min(logoutliste.Count, 1);
+                              logoutliste.RemoveRange(0, remove);
+                              Frame.Log("Remove First entry of list ");
+                              int remove2 = Math.Min(logoutlisteint.Count, 1);
+                              logoutlisteint.RemoveRange(0, remove2);
+                              Frame.Log("Remove First entry of list ");
+
+                              if (logoutliste.Count > 0)
+                              {
+                                  Frame.Log("noch skills vorhanden");
+                                  break;
+                              }
+
+                          }
+
+
+                          Frame.Log("keine skills mehr in in liste");
                     _States.SkillState = SkillState.logoutskillsdone;
                     _States.maincontrollerState = maincontrollerStates.endminingcycle;
                     break;

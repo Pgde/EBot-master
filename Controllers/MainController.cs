@@ -77,8 +77,9 @@ namespace Controllers
                     Frame.Log("starte maincontroller endminingcycle");
                     waitallstates();
                     timecheck();
-                    if (DateTime.Now.Hour < 12 && DateTime.Now.Hour < 20)                                    // operator wieder ändern nur für testzwecke
+                    if (DateTime.Now.Hour > 12 && DateTime.Now.Hour < 20)                                    // operator wieder ändern nur für testzwecke
                     {
+                        Frame.Log("kontrolle wegen zeit");
                         if (vollgeknallt == false)
                         {
                             Frame.Log("skillsvollknallen");
