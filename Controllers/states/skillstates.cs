@@ -12,7 +12,11 @@ namespace Controllers.states
         Start,
         buyskill,
         wait,
-        done
+        done,
+        logoutskills,
+        logoutskillsdone
+
+
     
     }
 

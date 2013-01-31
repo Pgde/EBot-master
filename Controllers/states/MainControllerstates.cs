@@ -22,7 +22,8 @@ namespace Controllers.states
         waitbuy,
         dronencheck,
         dronenbuy,
-        resumemining
+        resumemining,
+        logo
     }
 
 }

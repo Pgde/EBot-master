@@ -1158,6 +1158,30 @@ namespace EveModel
                             return;
                         }
 
+
+
+                        public bool dronconaktiv()
+                        {
+                            double mindron = 3436;
+                            double dronop = 3438;
+                            List<EveSkill> neueskill2 = Frame.Client.GetMySkills();
+                            EveSkill dro1 = neueskill2.Where(x => x.typeID == mindron).FirstOrDefault();
+                            EveSkill dro1op = neueskill2.Where(x => x.typeID == dronop).FirstOrDefault();
+
+                            if (dro1 != null && dro1op != null)
+                            {
+                                if (dro1.Skilllvl >= 2 && dro1op.Skilllvl >= 1)
+                                {
+                                    return true;
+                                }
+                             }
+                            return false;
+                        }               
+
+
+
+
+
                         public bool getinvopen()
                         {
                             List<EveWindow> mywindow;
@@ -1243,8 +1267,9 @@ namespace EveModel
                             }
                             return true;
                         }
-      
-   
+
+
+                    
 
                         /*
                          *  def AddSkillToEnd(self, skillID, current, nextLevel = None):

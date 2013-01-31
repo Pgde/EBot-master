@@ -28,7 +28,8 @@ namespace Controllers
         public SkillState backupskill;
         public tutstates backuptut;
         public static bool pausebot { get; set; }
-
+        public static bool vollgeknallt { get; set; }
+   
 
 
 
@@ -54,7 +55,8 @@ namespace Controllers
             switch (_States.maincontrollerState)
             {
                 case maincontrollerStates.Idle:
-
+                    vollgeknallt = false;
+                  Frame.Log("maincontrollerStates.Idle:");
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(20000, 35000));
                     break;
 
@@ -66,37 +68,57 @@ namespace Controllers
                     break;
 
                 case maincontrollerStates.wait:
-
+                    Frame.Log("maincontrollerStates.wait:");
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                     break;
 
                 case maincontrollerStates.endminingcycle:
-
-                    waitallstates();
-                    timecheck();                   
-                    _States.maincontrollerState = maincontrollerStates.skillcheck;
-                    _States.SkillState = SkillState.Initialise;
-                    //checks for skilltraining etc
-                   // _States.MiningState = MiningState.letzgo;
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
-                    break;
-
+                    Frame.Log("starte maincontroller endminingcycle");
+                    waitallstates();
+                    timecheck();
+                    if (DateTime.Now.Hour < 12 && DateTime.Now.Hour < 20)                                    // operator wieder ändern nur für testzwecke
+                    {
+                        if (vollgeknallt == false)
+                        {
+                            Frame.Log("skillsvollknallen");
+                            _States.SkillState = SkillState.logoutskills;
+                            _States.maincontrollerState = maincontrollerStates.wait;
+                            vollgeknallt = true;
+                            break;
+                        }
+                     
+                       }
+                 
+                        _States.maincontrollerState = maincontrollerStates.skillcheck;
+                        _States.SkillState = SkillState.Initialise;
+                        //checks for skilltraining etc
+                        // _States.MiningState = MiningState.letzgo;
+                        _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
+                        break;
+               
 
                 case maincontrollerStates.skillcheck:
-
+                    Frame.Log("maincontroller.skillcheck angekommen");
                     
                     if (_States.SkillState == SkillState.done)
                     {
+                        Frame.Log("skillstate done");
                 //        restorestates();
                 //    _States.MiningState = MiningState.letzgo;
                 //alt        _States.maincontrollerState = maincontrollerStates.checkbuy;
-
-                        if (DroneController.aktiv == true)
+                        bool ak = Frame.Client.dronconaktiv();
+                        Frame.Log("ak == " + ak);
+                        if (ak == true)
                         {
+                            Frame.Log("true starte dronestate initi");
+                            DroneController.aktiv = true;
                             _States.DroneState = DroneState.Initialise;
                         }
-                        if (DroneController.aktiv == false)
+                        if (ak == false)
                         {
+                            Frame.Log("done .... dronestate donebuy");
+                            DroneController.aktiv = false;
                             _States.DroneState = DroneState.donebuy;
                         }
                         _States.maincontrollerState = maincontrollerStates.dronencheck;
@@ -213,6 +235,10 @@ namespace Controllers
                     }
 
                     break;
+
+             case maincontrollerStates.logo:
+
+                    break;
             }
        
         }
@@ -259,8 +285,9 @@ namespace Controllers
             }
             public static void timecheck()
             {
-                if (DateTime.Now.Hour > 1 && DateTime.Now.Hour < 13)
+                if (DateTime.Now.Hour > 1 && DateTime.Now.Hour < 11)
                 {
+                   
                     Process currentProcess = Process.GetCurrentProcess();
                     currentProcess.Kill();
                 }

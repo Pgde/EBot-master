@@ -26,7 +26,9 @@ namespace Controllers
         List<string> vergleichlist = new List<string>();
         List<EveItem> itemlistee = new List<EveItem>();
         List<string> vergleichlist2 = new List<string>();
+        List<string> logoutliste = new List<string>();
         List<EveItem> ersteitemlistee = new List<EveItem>();
+         List<EveSkill> logoutitemliste = new List<EveSkill>();
         
         public static int itemid { get; set; }
         public static int dronenmoeglich { get; set; }
@@ -34,6 +36,7 @@ namespace Controllers
         long? skilldronenop = 3438;
         bool firstread = false;
         string[] bung2;
+        string[] bung2logout;
         
 
         ////////////////////////////////////////////////////////
@@ -80,10 +83,11 @@ namespace Controllers
                         _States.SkillState = SkillState.done;
                         break;
                     }
-
+                    Frame.Log("frame.client.getservice(skillque).isvalid != true");
                   //  if (!Frame.Client.GetService("skillqueue").IsValid != true)
                         if (Frame.Client.GetService("skillqueue") == null)
                     {
+                        Frame.Log("if (Frame.Client.GetService(skillqueue) == null)");
                         _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 3500));
                         break;
                     }
@@ -141,9 +145,13 @@ namespace Controllers
                     if (firstread == false)
                     {
                         string[] bung = new string[skillsinlist];
+                        string[] bunglogout = new string[skillsinlist];
                         vergleichlist = Settings.Settings.Instance.Skilllist;
                         skilltotrainid.CopyTo(bung);
+                        skilltotrainid.CopyTo(bunglogout);
                         bung2 = bung;
+                        bung2logout = bunglogout;
+
                         firstread = true;
                     }
 
@@ -201,9 +209,8 @@ namespace Controllers
         // Industry Typid = 3380
         // Astrology Typid = 3410
         // Mining Drone OP Typid = 3438
-                    double mindron = 10246;
+                        double mindron = 10246;
                         double dronop = 3438;
-            
                         EveSkill dro1 = neueskill2.Where(x => x.typeID == mindron).FirstOrDefault();
                         EveSkill dro1op = neueskill2.Where(x => x.typeID == dronop).FirstOrDefault();
 
@@ -382,6 +389,110 @@ namespace Controllers
                 case SkillState.done:
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                     break;
+
+                case SkillState.logoutskills:
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
+                    List<EveSkill> logoutskills = Frame.Client.GetMySkills();
+                    List<EveQskill> logoutskillsQ = Frame.Client.GetMyQueue();
+                    EveSkill logoutskill;
+                    EveQskill logoutskillQ;
+
+
+                    if (Frame.Client.GetService("skillqueue").IsValid)
+                    {
+                        double debugg = Frame.Client.qlengdouble;
+                        Frame.Log("Debugg float lenge = " + debugg);
+                        if (Frame.Client.placeinq())
+                        {
+                            foreach (string tmp in bung2logout)
+                            {
+                                if (!Frame.Client.placeinq())
+                                {
+                                    _States.SkillState = SkillState.logoutskillsdone;
+                                    _States.maincontrollerState = maincontrollerStates.endminingcycle;
+                                    break;
+                                }
+                                Frame.Log("Skill vergleichsliste2 = " + tmp);
+                                Frame.Log(".....");
+                                string[] aa = tmp.Split(new Char[] { });                                                                     // teile den string in typid und lvl
+                                string aa1 = aa[0];
+                                int aa2 = Convert.ToInt32(aa[0]);                  // Skillid
+                                int aa4 = Convert.ToInt32(aa[1]);                   // sksilllevle
+                                //     logoutliste.Add(aa1);
+                                logoutskill = logoutskills.Where(x => x.typeID == aa2).FirstOrDefault();
+                                if (logoutskill != null)
+                                {
+                                    logoutskillQ = logoutskillsQ.Where(x => x.typeID == aa2).FirstOrDefault();
+                                    if (logoutskillQ == null)
+                                    {
+                                        if (logoutskill.Skilllvl < aa4)
+                                        {
+                                            Frame.Client.AddSkillToEnd(logoutskill, logoutskill.Skilllvl);
+                                            Frame.Log("Skill hinzugefügt");
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    _States.SkillState = SkillState.logoutskillsdone;
+                    _States.maincontrollerState = maincontrollerStates.endminingcycle;
+                    break;
+
+
+                case SkillState.logoutskillsdone:
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
+                    break;
+
+
+
+/*
+                    foreach (string tmp in bung2logout)
+                    {
+                        Frame.Log("Skill vergleichsliste2 = " + tmp);
+                        Frame.Log(".....");
+                        string[] aa = tmp.Split(new Char[] { });                                                                     // teile den string in typid und lvl
+                        string aa1 = aa[0];
+                        int levelgewu = Convert.ToInt32(aa[1]);
+                        logoutliste.Add(aa1);
+                        foreach (EveSkill tmp2 in logoutskills)
+                        {
+                            
+                              Frame.Log("Skill = " + tmp2.typeID);
+                                   long? buggy = tmp2.typeID;
+                                   string buggy22 = buggy.ToString();
+                                   string[] aa2 = buggy22.Split(new Char[] { });                                                                     // teile den string in typid und lvl
+                                   string aa11 = aa2[0];
+                                   Frame.Log("Sstring nach teilung  " + aa11);
+                                   if (logoutliste.Contains(aa11))
+                                   {
+                                       Frame.Log("Skill gefunden");
+
+                                       int skilllvl = tmp2.Skilllvl;
+                                       EveSkill aktuskill = logoutskills.Where(x => x.typeID == buggy).FirstOrDefault();
+                                       if (aktuskill.Skilllvl < levelgewu)
+                                       {
+                                           Frame.Log("Skill gefunden und kleiner als gewuenscht");
+
+                                           break;
+                                       }
+                                       Frame.Log("Skill gefunden und schon gewuenschte level erreicht");
+                                       int remove = Math.Min(skilltotrainid.Count, 1);
+                                       skilltotrainid.RemoveRange(0, remove);
+                                       Frame.Log("Remove First entry of list ");
+                                       break;
+                                   }
+                                   _States.SkillState = SkillState.logoutskillsdone;
+                               }
+                    }
+
+           */
+                  
+
+
+
+
+                   
             }
 
               }

@@ -814,7 +814,9 @@ namespace Controllers
                     Frame.Log("keine items mehr wieder losfliegen");                                                                                // Log buchausgabe
                                                                         // Abdocken und losfliegen
                     _States.MiningState = MiningState.wait;
+                    Frame.Log("_States.MiningState = MiningState.wait;");  
                     _States.maincontrollerState = maincontrollerStates.endminingcycle;
+                    Frame.Log("_States.maincontrollerState = maincontrollerStates.endminingcycle;");
                     break;
 
 
@@ -965,7 +967,7 @@ namespace Controllers
                     break;
 
                 case MiningState.wait:
-
+                    Frame.Log("Miningstate.wait erreicht");
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                     break;
 
