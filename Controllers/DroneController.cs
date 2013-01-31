@@ -50,13 +50,7 @@ namespace Controllers
             {
                 case DroneState.Initialise:
 
-                    if (aktiv == false)
-                    {
-                        _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 1500));
-                        _States.DroneState = DroneState.wait;
-                        break;
-
-                    }
+                   
 
                     double money = Frame.Client.wealth();
                     if (money < 500000)

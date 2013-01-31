@@ -42,6 +42,7 @@ namespace Controllers
 
 
         // Mining Drone 1 Typid = 10246
+        // Dronen  = 3436
         // Mining Upgrades Typid = 22578
         // Science Typid = 3402
         // Industry Typid = 3380
@@ -79,8 +80,9 @@ namespace Controllers
                         _States.SkillState = SkillState.done;
                         break;
                     }
-                 
-                    if (!Frame.Client.GetService("skillqueue").IsValid)
+
+                  //  if (!Frame.Client.GetService("skillqueue").IsValid != true)
+                        if (Frame.Client.GetService("skillqueue") == null)
                     {
                         _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 3500));
                         break;

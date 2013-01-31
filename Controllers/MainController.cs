@@ -90,7 +90,15 @@ namespace Controllers
                 //        restorestates();
                 //    _States.MiningState = MiningState.letzgo;
                 //alt        _States.maincontrollerState = maincontrollerStates.checkbuy;
-                        _States.DroneState = DroneState.Initialise;
+
+                        if (DroneController.aktiv == true)
+                        {
+                            _States.DroneState = DroneState.Initialise;
+                        }
+                        if (DroneController.aktiv == false)
+                        {
+                            _States.DroneState = DroneState.donebuy;
+                        }
                         _States.maincontrollerState = maincontrollerStates.dronencheck;
                     }
                         _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));

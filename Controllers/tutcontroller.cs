@@ -177,7 +177,33 @@ namespace Controllers
 
 
                 case tutstates.wait:
+                  
+                    List<EveItem> items;
+                                              items = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;                                              // Get itemslist check fehlt
+                                  Frame.Log(items.Count);                                                                                                         // Logbuch Items zahl
+                                  if (items.Count == 0)
+                                  {
+                                      items = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;
+                                  }
 
+
+                                  if (items.Count != 0)                                                                                                          // Wenn items zahl ungleich 0 ist dann
+                                  {
+                                      foreach (EveItem tmp in items)
+                                      {
+                                          Frame.Log("Eveitem tmp =  " + tmp.TypeName + "  " + tmp.ItemId + "  " + tmp.TypeId);
+
+                                      }
+                                  }
+                                  break;
+                                     
+                
+                
+                
+                /*
+                     * 
+                     * 
+                     * 
                     double t = 1228;
                                 List<EveMarketOrder> markyord = Frame.Client.GetCachedOrders();
                                           if (markyord.Count == 0)
@@ -226,6 +252,7 @@ namespace Controllers
                                             Frame.Log("..................");
 
                                          break;
+                    */
                                       //    if (marketitemZ != null)
                                       //    {
                                       //      marketitem = marketitemZ.OrderByDescending(x => x.price).Where(x => x.price > 15).FirstOrDefault();
