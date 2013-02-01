@@ -68,7 +68,14 @@ namespace Controllers
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(5000, 5000));
                     break;
 
-
+                case fittingstate.shipitemcheck2:
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 1500));
+                    long shipid = Frame.Client.GetActiveShip.ItemId;
+                    Frame.Client.StripFitting(shipid);
+                    Frame.Log("Alles vom schiff entfernt");
+                    _States.fittingstate = fittingstate.shipitemscheck;
+                      break;
+                 
 
                 case fittingstate.shipitemscheck:
                   _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 1500));
@@ -93,14 +100,13 @@ namespace Controllers
                     Frame.Log("mlu = " + mlu1fittet + " " + " miner2fittet =  " + miner2fittet);
 
                   string shipname = Frame.Client.GetActiveShip.TypeName;
-                  long shipid = Frame.Client.Session.ShipId;
+                
 
                   if (shipname == "Venture")
                   {
                       _localPulse = DateTime.Now.AddMilliseconds(GetRandom(5000, 5000));
                       Frame.Log("Schiff = " +shipname);
-                      Frame.Client.StripFitting(shipid);                         // alles runter
-                      _States.fittingstate = fittingstate.FitVult;
+                     _States.fittingstate = fittingstate.FitVult;
                       break;
 
                   }
@@ -108,8 +114,7 @@ namespace Controllers
                   {
                       _localPulse = DateTime.Now.AddMilliseconds(GetRandom(5000, 5000));
                       Frame.Log("Schiff = " + shipname);
-                      Frame.Client.StripFitting(shipid);   
-                      _States.fittingstate = fittingstate.FitCovetor;
+                     _States.fittingstate = fittingstate.FitCovetor;
                       break;
                   }
                   Frame.Log("unbekanntes schiff = " + shipname);

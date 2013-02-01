@@ -164,6 +164,14 @@ namespace Controllers
 
 
                 case MiningState.Mining:
+
+                    if (Frame.Client.GetActiveShip.Miners.Count == 0)
+                    {
+                            _States.MiningState = MiningState.warphome;
+                            break;
+                    }
+
+
                     List<EveQskill> qskillmining = Frame.Client.GetMyQueue();
                     if (miningcount == 10)
                     {

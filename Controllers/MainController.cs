@@ -137,7 +137,7 @@ namespace Controllers
                     {
                         Frame.Log("dronestate == done");
                         _States.maincontrollerState = maincontrollerStates.fittincheck;
-                        _States.fittingstate = fittingstate.shipitemscheck;
+                        _States.fittingstate = fittingstate.shipitemcheck2;
                          _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                         break;
                     }

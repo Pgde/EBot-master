@@ -18,6 +18,7 @@ namespace Controllers.states
         fitbuyt2miner,
         fitbuymluI,
         shipitemscheck,
+        shipitemcheck2,
         Error,
         done,
         wait
