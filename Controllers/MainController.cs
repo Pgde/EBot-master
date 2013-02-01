@@ -77,7 +77,7 @@ namespace Controllers
                     Frame.Log("starte maincontroller endminingcycle");
                     waitallstates();
                     timecheck();
-                    if (DateTime.Now.Hour > 12 && DateTime.Now.Hour < 20)                                    // operator wieder ändern nur für testzwecke
+                    if (DateTime.Now.Hour > 0 && DateTime.Now.Hour < 1)                                    // operator wieder ändern nur für testzwecke
                     {
                         Frame.Log("kontrolle wegen zeit");
                         if (vollgeknallt == false)
@@ -286,7 +286,7 @@ namespace Controllers
             }
             public static void timecheck()
             {
-                if (DateTime.Now.Hour > 1 && DateTime.Now.Hour < 11)
+                if (DateTime.Now.Hour > 1 && DateTime.Now.Hour < 12)
                 {
                    
                     Process currentProcess = Process.GetCurrentProcess();

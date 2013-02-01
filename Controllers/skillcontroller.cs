@@ -395,7 +395,6 @@ namespace Controllers
                      int skillsinlist2 = Settings.Settings.Instance.Skilllist.Count;
                     skilltotrainid = Settings.Settings.Instance.Skilllist;
 
-
                      
                         string[] bunglogout2 = new string[skillsinlist2];
                         skilltotrainid.CopyTo(bunglogout2);
