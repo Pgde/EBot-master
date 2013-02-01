@@ -71,7 +71,7 @@ namespace Controllers
                     break;
 
                 case maincontrollerStates.wait:
-                    Frame.Log("maincontrollerStates.wait:");
+              //      Frame.Log("maincontrollerStates.wait:");
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                     break;
 
@@ -105,7 +105,7 @@ namespace Controllers
                
 
                 case maincontrollerStates.skillcheck:
-                    Frame.Log("maincontroller.skillcheck angekommen");
+                 //   Frame.Log("maincontroller.skillcheck angekommen");
                     
                     if (_States.SkillState == SkillState.done)
                     {
