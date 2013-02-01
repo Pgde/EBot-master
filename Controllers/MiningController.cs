@@ -786,7 +786,7 @@ namespace Controllers
                             List<EveMarketOrder> marketitemZ = markyord.Where(x => x.typeID == itemsZZ.TypeId).Where(x => x.inrange == true).Where(x => x.bid == true).ToList();
                             if (marketitemZ != null)
                             {
-                                 marketitem = marketitemZ.OrderByDescending(x => x.price).Where(x => x.price > 15).FirstOrDefault();          // alles außer scordit nicht unter 15/isk
+                                marketitem = marketitemZ.OrderByDescending(x => x.price).Where(x => x.price > 15).First();        // first or default        
                                 }
 
 
@@ -975,7 +975,7 @@ namespace Controllers
                     break;
 
                 case MiningState.wait:
-                    Frame.Log("Miningstate.wait erreicht");
+                //    Frame.Log("Miningstate.wait erreicht");
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                     break;
 

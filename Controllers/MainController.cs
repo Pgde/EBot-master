@@ -81,7 +81,7 @@ namespace Controllers
                     waitallstates();
                     timecheck();
 
-
+/*
                     if (DateTime.Now.Hour > 0 && DateTime.Now.Hour < 1)                                    // operator wieder ändern nur für testzwecke
                     {
                         Frame.Log("kontrolle wegen zeit");
@@ -89,12 +89,13 @@ namespace Controllers
                         {
                             Frame.Log("skillsvollknallen");
                             _States.SkillState = SkillState.logoutskills;
-                            _States.maincontrollerState = maincontrollerStates.wait;
+                            _States.maincontrollerState = maincontrollerStates.wait;                                        // Testweise raus, wieder rein wenns mit skillzeiten net passt
                             vollgeknallt = true;
                             break;
                         }
                      
                        }
+ * */
                  
                         _States.maincontrollerState = maincontrollerStates.skillcheck;
                         _States.SkillState = SkillState.Initialise;
