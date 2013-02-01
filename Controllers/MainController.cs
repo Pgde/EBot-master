@@ -77,6 +77,8 @@ namespace Controllers
                     Frame.Log("starte maincontroller endminingcycle");
                     waitallstates();
                     timecheck();
+
+
                     if (DateTime.Now.Hour > 0 && DateTime.Now.Hour < 1)                                    // operator wieder ändern nur für testzwecke
                     {
                         Frame.Log("kontrolle wegen zeit");
@@ -122,14 +124,30 @@ namespace Controllers
                             DroneController.aktiv = false;
                             _States.DroneState = DroneState.donebuy;
                         }
+                        Frame.Log("done ....dronencheck");
                         _States.maincontrollerState = maincontrollerStates.dronencheck;
+
                     }
                         _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                     break;
 
                 case maincontrollerStates.dronencheck:
-                
+                    Frame.Log("bei....dronencheck");
                     if (_States.DroneState == DroneState.donebuy)
+                    {
+                        Frame.Log("dronestate == done");
+                        _States.maincontrollerState = maincontrollerStates.fittincheck;
+                        _States.fittingstate = fittingstate.shipitemscheck;
+                         _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
+                        break;
+                    }
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
+                    break;
+
+
+                case maincontrollerStates.fittincheck:
+                    Frame.Log("bin bei fitting check und warte auf done");
+                    if (_States.fittingstate == fittingstate.done)
                     {
                         _States.maincontrollerState = maincontrollerStates.checkbuy;
                          _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
@@ -137,6 +155,7 @@ namespace Controllers
                     }
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                     break;
+
 
 
                 case maincontrollerStates.checkbuy:

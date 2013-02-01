@@ -75,6 +75,7 @@ namespace EBotPilot
             _manager.AddController(new TravelController());
             _manager.AddController(new MainController());
             _manager.AddController(new BuyController());
+            _manager.AddController(new fittingcontroller());
         }
 
         private void button4_Click(object sender, EventArgs e)

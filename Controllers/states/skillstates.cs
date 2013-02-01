@@ -14,7 +14,9 @@ namespace Controllers.states
         wait,
         done,
         logoutskills,
-        logoutskillsdone
+        logoutskillsdone,
+        fittingread,
+        fittingreaddone
 
 
     

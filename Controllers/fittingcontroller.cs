@@ -37,11 +37,19 @@ namespace Controllers
 
         public static List<string> blacklist = new List<string>();
 
+        public bool ventu { get; set; }
+        public bool conv { get; set; }
+        public bool mlu1fittet { get; set; }
+        public bool miner2fittet { get; set; }
 
         public fittingcontroller()
         {
             Frame.Log("Starting a new FittingController");
-          
+            ventu = false;
+            conv = false;
+            mlu1fittet = false;
+            miner2fittet = false;
+        
         }
 
 
@@ -60,11 +68,135 @@ namespace Controllers
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(5000, 5000));
                     break;
 
+
+
+                case fittingstate.shipitemscheck:
+                  _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 1500));
+
+                  /* Frame.Log("dronestate == done");
+                                    if (shipname == "Venture")
+                                    {
+                                        Frame.Log("Schiff = " + shipname);
+                                        _States.fittingstate = fittingstate.FitVult;                                  schiff ei name, und alles zurücksetzen wenn man im ei sitzt
+                                        break;
+
+                                    }
+                  */
+
+                  Frame.Log("Fittingcontroller shipitemcheck");
+                    if (mlu1fittet == true && miner2fittet == true)
+                    {
+                        Frame.Log("Schiff wurde schon gefittet wie gewuenscht");
+                         _States.fittingstate = fittingstate.done;                                 
+                           break;
+                    }
+                    Frame.Log("mlu = " + mlu1fittet + " " + " miner2fittet =  " + miner2fittet);
+
+                  string shipname = Frame.Client.GetActiveShip.TypeName;
+                  long shipid = Frame.Client.Session.ShipId;
+
+                  if (shipname == "Venture")
+                  {
+                      _localPulse = DateTime.Now.AddMilliseconds(GetRandom(5000, 5000));
+                      Frame.Log("Schiff = " +shipname);
+                      Frame.Client.StripFitting(shipid);                         // alles runter
+                      _States.fittingstate = fittingstate.FitVult;
+                      break;
+
+                  }
+                  if (shipname == "Coventor")
+                  {
+                      _localPulse = DateTime.Now.AddMilliseconds(GetRandom(5000, 5000));
+                      Frame.Log("Schiff = " + shipname);
+                      Frame.Client.StripFitting(shipid);   
+                      _States.fittingstate = fittingstate.FitCovetor;
+                      break;
+                  }
+                  Frame.Log("unbekanntes schiff = " + shipname);
+                  Frame.Log("Beende Fitting");
+                    _States.fittingstate = fittingstate.done;
+                      break;
+
+
+
+
+          
+
+
+
                 case fittingstate.FitVult:
 
-                      _localPulse = DateTime.Now.AddMilliseconds(GetRandom(20000, 35000));
-                      _States.fittingstate = fittingstate.Idle;
+
+
+                      if (miner2fittet == false)
+                      {
+
+
+                          _localPulse = DateTime.Now.AddMilliseconds(GetRandom(5000, 5000));
+                          if (!Frame.Client.IsUnifiedInventoryOpen)
+                          {
+                              Frame.Client.ExecuteCommand(EveCommand.OpenInventory);
+                              break;
+                          }
+                          double minertyp = 482;
+                          var listMinerII = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items.Where(x => x.TypeId == minertyp);
+                          int countminerII = 0;
+
+                          foreach (EveItem tmp in listMinerII)
+                          {
+                              countminerII += tmp.Stacksize;
+                          }
+                          if (countminerII < 2)
+                          {
+                              //einkaufen 
+                              Tuple<int, int> tmp = new Tuple<int, int>(482, 2 - countminerII);
+                              BuyController.buylist.Add(tmp);
+                              _States.BuyControllerState = BuyControllerStates.buy;
+                              _States.fittingstate = fittingstate.fitbuyt2miner;
+                              Frame.Log("weniger als 2 geh einkaufen etc");
+                              break;
+                          }
+                          Frame.Client.StripFitting(Frame.Client.GetActiveShip.ItemId);
+                          _States.fittingstate = fittingstate.fitt2miner2;
+                          break;
+                      }
+                      if (mlu1fittet == false)
+                      {
+
+                          if (!Frame.Client.IsUnifiedInventoryOpen)
+                          {
+                              Frame.Client.ExecuteCommand(EveCommand.OpenInventory);
+                              break;
+                          }
+                          double mluid = 22542;
+                          var MluI = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items.Where(x => x.TypeId == mluid);
+                          int countmluI = 0;
+
+                          foreach (EveItem tmp2 in MluI)
+                          {
+                              countmluI += tmp2.Stacksize;
+                          }
+                          if (countmluI < 1)
+                          {
+                              //einkaufen 
+                              Tuple<int, int> tmp2 = new Tuple<int, int>(22542, 1 - countmluI);
+                              BuyController.buylist.Add(tmp2);
+                              _States.BuyControllerState = BuyControllerStates.buy;
+                              _States.fittingstate = fittingstate.fitbuymluI;
+                              Frame.Log("weniger als 1 geh einkaufen etc");
+                              break;
+                          }
+                          Frame.Client.StripFitting(Frame.Client.GetActiveShip.ItemId);
+                          _States.fittingstate = fittingstate.fitt2miner2;
+                          break;
+                      }
+                      _States.fittingstate = fittingstate.done;
                     break;
+
+
+                  //    _States.fittingstate = fittingstate.Idle;
+                  
+
 
                 case fittingstate.fitt2miner:
                     fitcount = 0;
@@ -75,7 +207,8 @@ namespace Controllers
                         Frame.Client.ExecuteCommand(EveCommand.OpenInventory);
                         break;
                     }
-                    var list = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items.Where(x => x.TypeName == "Civilian Miner");
+                    double minertyp2 = 482;
+                    var list = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items.Where(x => x.TypeId == minertyp2);
                     int count = 0;
 
                     foreach (EveItem tmp in list)
@@ -85,18 +218,18 @@ namespace Controllers
                     if (count < 2)
                     {
                         //einkaufen 
-                        Tuple<int, int> tmp = new Tuple<int, int>(483, 2-count);
+                        Tuple<int, int> tmp = new Tuple<int, int>(482, 2-count);
                         BuyController.buylist.Add(tmp);
                         _States.BuyControllerState = BuyControllerStates.buy;
                         _States.fittingstate = fittingstate.fitbuyt2miner;
                         Frame.Log("weniger als 2 geh einkaufen etc");
                         break;
                     }
-
-                    
                     Frame.Client.StripFitting(Frame.Client.GetActiveShip.ItemId);
                     _States.fittingstate = fittingstate.fitt2miner2;
                     break;
+
+
 
                 case fittingstate.fitt2miner2:
                   
@@ -106,13 +239,11 @@ namespace Controllers
                     {
                         Frame.Log(testc.TypeName); 
                     }
-
-                    var tofit = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items.Where(x => x.TypeName == "Civilian Miner").FirstOrDefault();
+                    double minertyp3 = 482;
+                    var tofit = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items.Where(x => x.TypeId == minertyp3).FirstOrDefault();
                     
                     List<EveItem> temp = new List<EveItem>();
                    
-                    
-
                     if (tofit != null && fitcount <2)
                     {
                     fitcount = fitcount + 1;
@@ -120,10 +251,37 @@ namespace Controllers
                     Frame.Client.tryfit(temp);
                     break;
                     }
-
-                    
-                    _States.fittingstate = fittingstate.Idle;
+                    miner2fittet = true;
+                    Frame.Log("Miner II Gefittet schaue nach mlu");
+                    _States.fittingstate = fittingstate.shipitemscheck;
                     break;
+
+                case fittingstate.fittmlu1:
+
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(3000, 5000));
+
+                    foreach (EveItem testc in Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items)
+                    {
+                        Frame.Log(testc.TypeName);
+                    }
+                    double mluid2 = 22542;
+                    var tofitmlu = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items.Where(x => x.TypeId == mluid2).FirstOrDefault();
+
+                    List<EveItem> temp2 = new List<EveItem>();
+
+                    if (tofitmlu != null && fitcount < 2)
+                    {
+                        fitcount = fitcount + 1;
+                        temp2.Add(tofitmlu);
+                        Frame.Client.tryfit(temp2);
+                        break;
+                    }
+                    mlu1fittet = true;
+                    Frame.Log("Mlu gefittet");
+                    _States.fittingstate = fittingstate.shipitemscheck;
+                    break;
+
+
 
                 case fittingstate.FitCovetor:
 
@@ -152,6 +310,17 @@ namespace Controllers
                          _States.BuyControllerState = BuyControllerStates.Idle;
                          _States.fittingstate = fittingstate.fitt2miner;
                      }
+                         break;
+
+
+                case fittingstate.fitbuymluI:
+
+                         _localPulse = DateTime.Now.AddMilliseconds(GetRandom(5000, 7000));
+                         if (_States.BuyControllerState == BuyControllerStates.done)
+                         {
+                             _States.BuyControllerState = BuyControllerStates.Idle;
+                             _States.fittingstate = fittingstate.fittmlu1;
+                         }
                          break;
 
 

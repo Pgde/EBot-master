@@ -23,7 +23,8 @@ namespace Controllers.states
         dronencheck,
         dronenbuy,
         resumemining,
-        logo
+        logo,
+        fittincheck
     }
 
 }

@@ -12,9 +12,12 @@ namespace Controllers.states
         Start,
         fitt2miner,
         fitt2miner2,
+        fittmlu1,
         FitVult,
         FitCovetor,
         fitbuyt2miner,
+        fitbuymluI,
+        shipitemscheck,
         Error,
         done,
         wait

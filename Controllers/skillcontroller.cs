@@ -38,6 +38,11 @@ namespace Controllers
         bool firstread = false;
         string[] bung2;
         string[] bung2logout;
+        public bool  firstfittingread { get; set; }
+
+        public bool miner2rdy { get; set; }
+        public bool mlu1rdy { get; set; }
+        
         
 
         ////////////////////////////////////////////////////////
@@ -64,6 +69,9 @@ namespace Controllers
             dronenmoeglich = 0;
             itemid = 0;
             _States.SkillState = SkillState.wait;
+            firstfittingread = false;
+            miner2rdy = false;
+            mlu1rdy = false;
           
         }
 
@@ -78,13 +86,13 @@ namespace Controllers
             {
                 case SkillState.Initialise:
                     double money = Frame.Client.wealth();
-                    if (money < 500000)
+                    if (money < 1500000)
                     {
                         Frame.Log("Skillcontroller == nicht genug geld /  " + money);
                         _States.SkillState = SkillState.done;
                         break;
                     }
-                    Frame.Log("frame.client.getservice(skillque).isvalid != true");
+                     Frame.Log("frame.client.getservice(skillque).isvalid != true");
                   //  if (!Frame.Client.GetService("skillqueue").IsValid != true)
                         if (Frame.Client.GetService("skillqueue") == null)
                     {
@@ -96,6 +104,30 @@ namespace Controllers
 
                     List<EveSkill> neueskill = Frame.Client.GetMySkills();
                     List<EveQskill> neueQskill = Frame.Client.GetMyQueue();
+                                               
+                    long miner2 = 3386;    // Mining
+                    long mlu1 = 22578;       // Mining upgrade
+                    EveSkill miner2fit = neueskill.Where(x => x.typeID == miner2).FirstOrDefault();
+                    EveSkill mlu1fit = neueskill.Where(x => x.typeID == mlu1).FirstOrDefault();
+
+
+                    if (miner2fit.Skilllvl >= 4)
+                    {
+                        Frame.Log("skill hochgenug fuer miner2");
+                        miner2rdy = true;
+                    }
+                    if (mlu1fit != null)
+                    {
+                        if (mlu1fit.Skilllvl >= 1)
+                        {
+                            Frame.Log("skill hochgenug fuer mlu1");
+                            mlu1rdy = true;
+                        }
+                    }
+                    Frame.Log("Skills festgelegt");
+
+
+
 
                     foreach (EveSkill tmp in neueskill)
                     {
@@ -492,7 +524,10 @@ namespace Controllers
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                     break;
 
+                case SkillState.fittingread:
 
+         
+                    break;
 
 /*
                     foreach (string tmp in bung2logout)
