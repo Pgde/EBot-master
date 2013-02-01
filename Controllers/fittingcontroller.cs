@@ -30,6 +30,7 @@ namespace Controllers
 
 
         public static int fitcount = 0;
+        public static int fitcount2 = 0;
 
         public static Dictionary<long, List<double>> dictXYZ;
         public static double bestdistance = 999999999999;
@@ -70,6 +71,16 @@ namespace Controllers
 
                 case fittingstate.shipitemcheck2:
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 1500));
+
+                      Frame.Log("Fittingcontroller shipitemcheck");
+                    if (mlu1fittet == true && miner2fittet == true)
+                    {
+                        Frame.Log("Schiff wurde schon gefittet wie gewuenscht");
+                         _States.fittingstate = fittingstate.done;                                 
+                           break;
+                    }
+
+                   
                     long shipid = Frame.Client.GetActiveShip.ItemId;
                     Frame.Client.StripFitting(shipid);
                     Frame.Log("Alles vom schiff entfernt");
@@ -161,8 +172,7 @@ namespace Controllers
                               Frame.Log("weniger als 2 geh einkaufen etc");
                               break;
                           }
-                          Frame.Client.StripFitting(Frame.Client.GetActiveShip.ItemId);
-                          _States.fittingstate = fittingstate.fitt2miner2;
+                           _States.fittingstate = fittingstate.fitt2miner2;
                           break;
                       }
                       if (mlu1fittet == false)
@@ -191,8 +201,7 @@ namespace Controllers
                               Frame.Log("weniger als 1 geh einkaufen etc");
                               break;
                           }
-                          Frame.Client.StripFitting(Frame.Client.GetActiveShip.ItemId);
-                          _States.fittingstate = fittingstate.fitt2miner2;
+                        _States.fittingstate = fittingstate.fittmlu1;
                           break;
                       }
                       _States.fittingstate = fittingstate.done;
@@ -201,39 +210,6 @@ namespace Controllers
 
                   //    _States.fittingstate = fittingstate.Idle;
                   
-
-
-                case fittingstate.fitt2miner:
-                    fitcount = 0;
-
-                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(5000, 5500));
-                    if (!Frame.Client.IsUnifiedInventoryOpen)
-                    {
-                        Frame.Client.ExecuteCommand(EveCommand.OpenInventory);
-                        break;
-                    }
-                    double minertyp2 = 482;
-                    var list = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items.Where(x => x.TypeId == minertyp2);
-                    int count = 0;
-
-                    foreach (EveItem tmp in list)
-                    {
-                        count += tmp.Stacksize;
-                    }
-                    if (count < 2)
-                    {
-                        //einkaufen 
-                        Tuple<int, int> tmp = new Tuple<int, int>(482, 2-count);
-                        BuyController.buylist.Add(tmp);
-                        _States.BuyControllerState = BuyControllerStates.buy;
-                        _States.fittingstate = fittingstate.fitbuyt2miner;
-                        Frame.Log("weniger als 2 geh einkaufen etc");
-                        break;
-                    }
-                    Frame.Client.StripFitting(Frame.Client.GetActiveShip.ItemId);
-                    _States.fittingstate = fittingstate.fitt2miner2;
-                    break;
-
 
 
                 case fittingstate.fitt2miner2:
@@ -274,9 +250,9 @@ namespace Controllers
 
                     List<EveItem> temp2 = new List<EveItem>();
 
-                    if (tofitmlu != null && fitcount < 2)
+                    if (tofitmlu != null && fitcount2 < 1)
                     {
-                        fitcount = fitcount + 1;
+                        fitcount2 = fitcount2 + 1;
                         temp2.Add(tofitmlu);
                         Frame.Client.tryfit(temp2);
                         break;

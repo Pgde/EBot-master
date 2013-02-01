@@ -40,8 +40,9 @@ namespace Controllers
         string[] bung2logout;
         public bool  firstfittingread { get; set; }
 
-        public bool miner2rdy { get; set; }
-        public bool mlu1rdy { get; set; }
+        public static bool miner2rdy { get; set; }
+        public static bool mlu1rdy { get; set; }
+        public static bool firstlogin { get; set; }
         
         
 
@@ -72,6 +73,7 @@ namespace Controllers
             firstfittingread = false;
             miner2rdy = false;
             mlu1rdy = false;
+            firstlogin = true;
           
         }
 
@@ -85,6 +87,17 @@ namespace Controllers
             switch (_States.SkillState)
             {
                 case SkillState.Initialise:
+/*
+                    if (firstlogin == true)
+                    {
+                        List<EveQskill> neueQskill33 = Frame.Client.GetMyQueue();
+                        if (neueQskill33.Count != 0)
+                        {
+                            Frame.Client.q
+                        }
+                    }
+                    */
+
                     double money = Frame.Client.wealth();
                     if (money < 1500000)
                     {

@@ -29,6 +29,7 @@ namespace Controllers
         public tutstates backuptut;
         public static bool pausebot { get; set; }
         public static bool vollgeknallt { get; set; }
+        public static bool notwenigskills { get; set; }
    
 
 
@@ -39,6 +40,8 @@ namespace Controllers
         public MainController()
         {
             Frame.Log("Starting a new MainController");
+
+            notwenigskills = false;
 
 
         }
@@ -135,19 +138,24 @@ namespace Controllers
                     Frame.Log("bei....dronencheck");
                     if (_States.DroneState == DroneState.donebuy)
                     {
-                        Frame.Log("dronestate == done");
-                        _States.maincontrollerState = maincontrollerStates.fittincheck;
-                        _States.fittingstate = fittingstate.shipitemcheck2;
+                        if (SkillController.miner2rdy == true && SkillController.mlu1rdy == true)
+                        {
+                            Frame.Log("dronestate == done");
+                            _States.maincontrollerState = maincontrollerStates.fittincheck;
+                            _States.fittingstate = fittingstate.shipitemcheck2;
+                            break;
+                        }
                          _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
-                        break;
+                         _States.fittingstate = fittingstate.done;
+                         _States.maincontrollerState = maincontrollerStates.fittincheck;
+                              break;
                     }
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
                     break;
 
 
                 case maincontrollerStates.fittincheck:
-                    Frame.Log("bin bei fitting check und warte auf done");
-                    if (_States.fittingstate == fittingstate.done)
+                     if (_States.fittingstate == fittingstate.done)
                     {
                         _States.maincontrollerState = maincontrollerStates.checkbuy;
                          _localPulse = DateTime.Now.AddMilliseconds(GetRandom(1000, 2500));
