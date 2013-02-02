@@ -28,6 +28,8 @@ namespace EBotPilot
 
         private void Form1_Load(object sender, EventArgs e)
         {
+
+            System.Threading.Thread.Sleep(10000);
             _manager = new EBotManager();
             Controllers.Settings.Settings.Instance.LoadSettings();
             System.Threading.Thread.Sleep(10);
