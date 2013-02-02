@@ -49,6 +49,7 @@ namespace Controllers
 //        bool dronen = false;
 
         /////////////////////////////////////////////                           Verkaufspreise ca.
+        public static int sellcount = 0;
 
 
 
@@ -789,11 +790,25 @@ namespace Controllers
                        break;
                     }                                                                                                                               // Wenn kein items mehr da ist / oder da war 
 
+                    if (sellcount > 10)
+                    {
+                        sellcount = 0;
+                        stationtrip = (stationtrip + 1);
+                        Frame.Log("sellerror, quickfix for the moment");                                                                                // Log buchausgabe
+                        // Abdocken und losfliegen
+                        _States.MiningState = MiningState.wait;
+                        Frame.Log("_States.MiningState = MiningState.wait;");
+                        _States.maincontrollerState = maincontrollerStates.endminingcycle;
+                        Frame.Log("_States.maincontrollerState = maincontrollerStates.endminingcycle;");
+                        break;
+
+                    }
                         Frame.Client.GetItemHangar();
                         List<EveItem> itemlischt = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;
                         EveItem itemsZZ = itemlischt.Where(x => x.Stacksize > 1000).FirstOrDefault();
                         if (itemsZZ == null)
                         {
+                            sellcount = sellcount + 1;
                             Frame.Log("Keine items in der menge vorrätig");
                         }
                         
@@ -802,6 +817,7 @@ namespace Controllers
 
                             if (Frame.Client.getmarketopen() == false)
                             {
+                                sellcount = sellcount + 1;
                                 Frame.Client.Getandopenwindow("market");
                                 return;
 
@@ -810,6 +826,7 @@ namespace Controllers
                             verkaufsintemszahl = (itemsZZ.Quantity);
                             if (!Frame.Client.GetService("marketQuote").IsValid)
                             {
+                                sellcount = sellcount + 1;
                                 break;
                             }
                         //    sellitemsZ(verkaufsintemszahl, itemsZZ);
@@ -821,6 +838,7 @@ namespace Controllers
                             List<EveMarketOrder> markyord = Frame.Client.GetCachedOrders();
                             if (markyord.Count == 0)
                             {
+                                sellcount = sellcount + 1;
                                 break;
                             }
                            
@@ -828,16 +846,19 @@ namespace Controllers
                             List<EveMarketOrder> marketitemZ = markyord.Where(x => x.typeID == itemsZZ.TypeId).Where(x => x.inrange == true).Where(x => x.bid == true).ToList();
                             if (marketitemZ != null)
                             {
+                                sellcount = sellcount + 1;
                                 marketitem = marketitemZ.OrderByDescending(x => x.price).Where(x => x.price > 15).First();        // first or default        
                                 }
 
 
                             if (marketitem == null)
                             {
+                                sellcount = sellcount + 1;
                                 Frame.Log("kein eintrag mit -1");
                                 return;
                             }
 
+                            sellcount = sellcount + 1;
                             Frame.Log("Marketitem Name =  " + marketitem.Name);                                                                                                // Funktion für verkaufen infos
                             Frame.Log("Marketitem Price =  " + marketitem.price);
                             Frame.Log("Marketitem Volentered =  " + marketitem.volEntered);
@@ -862,7 +883,7 @@ namespace Controllers
 
                     stationtrip = (stationtrip + 1);
                     Frame.Log("keine items mehr wieder losfliegen");                                                                                // Log buchausgabe
-                                                                        // Abdocken und losfliegen
+                    sellcount = 0;                                                    // Abdocken und losfliegen
                     _States.MiningState = MiningState.wait;
                     Frame.Log("_States.MiningState = MiningState.wait;");  
                     _States.maincontrollerState = maincontrollerStates.endminingcycle;
