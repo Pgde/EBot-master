@@ -165,6 +165,8 @@ namespace Controllers
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(20000000, 35000000));      //dirty 
 
                     Frame.Log("Error");
+                    Process currentProcess = Process.GetCurrentProcess();
+                    currentProcess.Kill();
                     _States.LoginState = loginstate.Error;
                     break;
 
