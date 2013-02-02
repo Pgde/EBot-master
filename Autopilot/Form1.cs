@@ -30,6 +30,15 @@ namespace EBotPilot
         {
             _manager = new EBotManager();
             Controllers.Settings.Settings.Instance.LoadSettings();
+            System.Threading.Thread.Sleep(10);
+            _manager.AddController(new logincontroller());
+            _manager.AddController(new MiningController());
+            _manager.AddController(new DroneController());
+            _manager.AddController(new SkillController());
+            _manager.AddController(new TravelController());
+            _manager.AddController(new MainController());
+            _manager.AddController(new BuyController());
+            _manager.AddController(new fittingcontroller());
             #region Old Code
             //// Intialize
             //pulse = DateTime.MinValue;
