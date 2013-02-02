@@ -177,28 +177,11 @@ namespace Controllers
 
 
                 case tutstates.wait:
-                  
-                    List<EveItem> items;
-                                              items = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;                                              // Get itemslist check fehlt
-                                  Frame.Log(items.Count);                                                                                                         // Logbuch Items zahl
-                                  if (items.Count == 0)
-                                  {
-                                      items = Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Items;
-                                  }
 
 
-                                  if (items.Count != 0)                                                                                                          // Wenn items zahl ungleich 0 ist dann
-                                  {
-                                      foreach (EveItem tmp in items)
-                                      {
-                                          Frame.Log("Eveitem tmp =  " + tmp.TypeName + "  " + tmp.ItemId + "  " + tmp.TypeId);
-
-                                      }
-                                  }
-                                  break;
-                                     
-                
-                
+                    Frame.Log(Frame.Client.Session.LocationId);
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(200000000, 350000000));      //dirty 
+                    break;
                 
                 /*
                      * 

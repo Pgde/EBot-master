@@ -28,7 +28,8 @@ namespace Controllers.states
         travStart,
         changebook,
         wait,       
-        schelling
+        schelling,
+        backandaway
     }
 
 }

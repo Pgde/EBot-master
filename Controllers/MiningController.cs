@@ -36,6 +36,7 @@ namespace Controllers
         int stationtrip = 0;
         List<string> skilltotrainid = new List<string>();
         List<string> skillZ = new List<string>();
+        List<long> syssis = new List<long>();
         double verkaufswertinsg;
         int verkaufsintemszahl;
         EveMarketOrder marketitem = null;
@@ -79,6 +80,14 @@ namespace Controllers
         public MiningController()
         {
             Frame.Log("Starting a new MiningController");
+
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys1);                // Homesys1
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys2);                // Homesys2
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys3);                // Homesys3
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys4);                // Homesys4
+
+
+
                 _States.MiningState = MiningState.wait;
         }
         public MiningController(long destinationId)
@@ -540,6 +549,19 @@ namespace Controllers
                 case MiningState.letzgo:
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(18000, 50000));
                     targetast = null;                                                                                       // Setze Astroiden Target == Null
+                    
+                        List<EveWindow> mywindow2;
+                        mywindow2 = Frame.Client.GetWindows;
+                        string con = "incursion";
+                        EveWindow ne = mywindow2.Where(x => x.Name.Contains(con)).FirstOrDefault();
+                        if (ne != null)
+                        {
+                            Frame.Log("NPC in Belt WARP HOME and blacklist");
+                            _States.MiningState = MiningState.changebook;
+                            break;
+
+                        }
+
                     if (Frame.Client.Session.InStation)
                     {
 
@@ -548,23 +570,9 @@ namespace Controllers
                         _localPulse = DateTime.Now.AddMilliseconds(GetRandom(18000, 25000));
                     }
                     {
-                        if (Frame.Client.Session.InSpace)
-                        {
-                            List<EveWindow> mywindow2;
-                            mywindow2 = Frame.Client.GetWindows;
-                            string con = "incursion";
-                            EveWindow ne = mywindow2.Where(x => x.Name.Contains(con)).FirstOrDefault();
-                            if (ne != null)
-                            {
-                              Frame.Log("NPC in Belt WARP HOME and blacklist");
-                              _States.MiningState = MiningState.changebook;
-                              break;
-                               
-                            }
-
-                            _States.MiningState = MiningState.warptobelt;
+                        if (Frame.Client.Session.InSpace)                   
+                         _States.MiningState = MiningState.warptobelt;
                         }
-                    }
 
                     Frame.Log("Starte SQLtimecheck");
                     //      sqltimecheck();
@@ -592,7 +600,8 @@ namespace Controllers
                     if (belt == null)
                     {
                         Frame.Log("Alle belts auf Blacklist oder Keine Belts im System");
-                        _States.MiningState = MiningState.changebook;
+                        _States.MiningState = MiningState.backandaway;
+                 //       _States.MiningState = MiningState.changebook;
                         break;
                     }
                     currentbelt = belt.Id;
@@ -634,6 +643,15 @@ namespace Controllers
 
                     break;
 
+                case MiningState.backandaway:
+                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(4500, 6500));
+                     if (Frame.Client.Session.InStation)                                                                             // Bin ich in der station? 
+                     {                                                                                                                // Wenn ja
+                         Frame.Log("In Station angekommen setzte neue desti");                                                                          // Log
+                         _States.MiningState = MiningState.changebook;
+                         break;                            // Warte zwischen 4,5 und 6,5 secunden
+                     }                           
+                    break;
 
                 case MiningState.unload:
 
@@ -850,7 +868,19 @@ namespace Controllers
                     EmptyBelts.Clear();
 
 
-                    Frame.Log("state changebook");
+                    long desti = syssis.FirstOrDefault();
+                    if (desti == Frame.Client.Session.LocationId)
+                    {
+                        Frame.Log("wir befinden uns in diese system");
+                        int remove = Math.Min(syssis.Count, 1);
+                        syssis.RemoveRange(0, remove);
+                        Frame.Log("ersten listeneintrag gelöscht");
+                        break;
+                    }
+                    Frame.Log("setze Destination");
+                    Frame.Client.SetDestination(desti);
+                    
+                    /*
                     List<EveBookmark> test2 = new List<EveBookmark>();
                      test2 = Frame.Client.GetMyBookmarks();
                      if (test2.Count <= 0)
@@ -869,8 +899,9 @@ namespace Controllers
                         _States.MiningState = MiningState.changebook;               // Abdocken und losfliegen
                         break;
                     }
-
+                    
                     booky1.SetDestination();
+                     * */
 
                     _States.MiningState = MiningState.travStart;
                     break;
@@ -925,6 +956,15 @@ namespace Controllers
                     */
 
                 case MiningState.travStart:
+
+                     if (Frame.Client.Session.InStation)
+                    {
+
+                        Frame.Client.ExecuteCommand(EveModel.EveCommand.CmdExitStation);
+                        Frame.Log("Undocking from station");
+                        _localPulse = DateTime.Now.AddMilliseconds(GetRandom(18000, 25000));
+                         break;
+                    }
 
                     _destinationId = _destinationId > 0 ? _destinationId : Frame.Client.GetLastWaypointLocationId();
                     if (_destinationId == -1 || Frame.Client.Session.LocationId == _destinationId)
