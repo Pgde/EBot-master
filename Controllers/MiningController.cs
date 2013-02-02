@@ -138,7 +138,7 @@ namespace Controllers
                         break;
                     }
                     EveInventoryContainer cargoho = Frame.Client.GetPrimaryInventoryWindow.OreHoldOfActiveShip;           //  Container wird erstellt "cargoho" und wird mit aktivem Cargohold verknüpft
-                    usdcapcargo = cargoho.UsedCapacity;                                                                     // Variablen werden gesetzt Verbrauchtes Cargo <--
+                    usdcapcargo = cargoho.UsedCapacity;   //bugged manchmal nullcheck fehlt                               // Variablen werden gesetzt Verbrauchtes Cargo <--
                     fullcapcargo = cargoho.Capacity;                                                                        // Variablen werden gesetzen Cargo insgesammt <---
                     Frame.Log(usdcapcargo);
                     Frame.Log(fullcapcargo);

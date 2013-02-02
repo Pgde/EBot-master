@@ -26,12 +26,15 @@ namespace Controllers.Settings
         public long homesys2 { get; set; }
         public long homesys3 { get; set; }
         public long homesys4 { get; set; }
+        public long homesys5 { get; set; }
+        public long homesys6 { get; set; }
+        public long homesys7 { get; set; }
         public List<String> Skilllist {get; set;}
 
         public void rndhomesys()
         {
             Random random = new Random();
-            int i = random.Next(1, 4); 
+            int i = random.Next(1, 7); 
             if (i == 1)
             {
                 homesys = homesys1;
@@ -47,6 +50,18 @@ namespace Controllers.Settings
             if (i == 4)
             {
                 homesys = homesys4;
+            }
+            if (i == 5)
+            {
+                homesys = homesys5;
+            }
+            if (i == 6)
+            {
+                homesys = homesys6;
+            }
+            if (i == 7)
+            {
+                homesys = homesys7;
             }
         }
 
@@ -74,6 +89,9 @@ namespace Controllers.Settings
                         homesys2 = (long)xml.Element("homesys2");
                         homesys3 = (long)xml.Element("homesys3");
                         homesys4 = (long)xml.Element("homesys4");
+                        homesys5 = (long)xml.Element("homesys5");
+                        homesys6 = (long)xml.Element("homesys6");
+                        homesys7 = (long)xml.Element("homesys7");
                     }
                     catch (Exception exception)
                     {

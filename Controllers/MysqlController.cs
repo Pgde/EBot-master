@@ -78,7 +78,7 @@ namespace Controllers
             {
                     
                 case MysqlState.Initialise:
-                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(20000, 35000));
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(35000, 55000));
                     if (Frame.Client.Session.InStation == true || Frame.Client.Session.InSpace == true)
                     {
                         ///   MySql INIZALISIERN ///
@@ -204,7 +204,8 @@ namespace Controllers
             {
                 sqlsettime();
                 Frame.Log("Char id nicht Gefunden INSERT INTO");
-                command.CommandText = "INSERT INTO evedaten (id,name,state,shipname,cargmax,cargousd,minersactive,time,itemzahl) VALUES ('" + charid.ToString() + "','Hans','" + stringstate.ToString() + "','shipname','" + usdcapcargo.ToString() + "', '" + fullcapcargo.ToString() + "', '" + minersactiv.ToString() + "','" + aktime.ToString() + "','" + itemwert.ToString() + "', '" + itemzahl.ToString() + "', '" + starttime.ToString() + "','" + stationtrip.ToString() + "')";
+                command.CommandText = "INSERT INTO evedaten (id,name,state,shipname,cargmax,cargousd,minersactive,time,itemzahl,itemwert,starttime,stationtrip) VALUES ('" + charid.ToString() + "','Hans','" + stringstate.ToString() + "','shipname','" + fullcapcargo.ToString() + "', '" + usdcapcargo.ToString() + "', '" + minersactiv.ToString() + "','" + aktime.ToString() + "','" + itemzahl.ToString() + "', '" + itemwert.ToString() + "', '" + starttime.ToString() + "','" + stationtrip.ToString() +"')";
+               //                                                                                                                                                              charid               name            state                       shipname        usdcarg                             fullcarg                        minersactiv                         aktim                   itemwert                    itemzahl                            aktime                  stationtrip                         itemwert                        starttime                       stationtrip                         
                 command.ExecuteNonQuery();
                                                                                           
             }
