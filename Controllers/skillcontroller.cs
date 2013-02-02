@@ -99,7 +99,7 @@ namespace Controllers
                     */
 
                     double money = Frame.Client.wealth();
-                    if (money < 1500000)
+                    if (money < 500000)
                     {
                         Frame.Log("Skillcontroller == nicht genug geld /  " + money);
                         _States.SkillState = SkillState.done;

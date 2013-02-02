@@ -41,6 +41,7 @@ namespace EBotPilot
             _manager.AddController(new MainController());
             _manager.AddController(new BuyController());
             _manager.AddController(new fittingcontroller());
+            _manager.AddController(new MysqlController());
             #region Old Code
             //// Intialize
             //pulse = DateTime.MinValue;
@@ -87,6 +88,7 @@ namespace EBotPilot
             _manager.AddController(new MainController());
             _manager.AddController(new BuyController());
             _manager.AddController(new fittingcontroller());
+            _manager.AddController(new MysqlController());
         }
 
         private void button4_Click(object sender, EventArgs e)

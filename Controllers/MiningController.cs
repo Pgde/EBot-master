@@ -602,6 +602,13 @@ namespace Controllers
                         Frame.Log("Alle belts auf Blacklist oder Keine Belts im System");
                         _States.MiningState = MiningState.backandaway;
                  //       _States.MiningState = MiningState.changebook;
+                                                                                                                        // Dann 
+                            EveEntity station = Frame.Client.Entities.Where(i => i.Group == Group.Station).FirstOrDefault();        // Setze variablen der Station
+                            Frame.Log("Docking");                                                                                   // Logbuch
+                            station.Dock();                                                                                         // Docke an dieser station/Warp dahin
+                            _localPulse = DateTime.Now.AddMilliseconds(GetRandom(3000, 5000));                                      // Warte zwischen 3 und 5 Sekunden
+                                                                               // Setze state auf warphome
+   
                         break;
                     }
                     currentbelt = belt.Id;
@@ -957,6 +964,8 @@ namespace Controllers
 
                 case MiningState.travStart:
 
+                    _currentLocation = 0;
+
                      if (Frame.Client.Session.InStation)
                     {
 
@@ -984,14 +993,16 @@ namespace Controllers
 
                 case MiningState.Start:
 
-                    _States.MiningState = MiningState.Travel; 
+                   
                     if (Frame.Client.Session.InStation)
                     {
                         Frame.Client.ExecuteCommand(EveModel.EveCommand.CmdExitStation);
                         Frame.Log("Undocking from station");
                         _localPulse = DateTime.Now.AddMilliseconds(GetRandom(18000, 25000));
                     }
+                    _States.MiningState = MiningState.Travel; 
                     break;
+
                 case MiningState.Travel:
                     if (_destinationId == -1 || Frame.Client.Session.LocationId == _destinationId)
                     {

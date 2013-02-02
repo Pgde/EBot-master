@@ -23,6 +23,7 @@ namespace Controllers
 
         int stationtrip = 0;
         int charid;
+        string charname;
         bool charon = false;
  //       bool needupdate = false;
   //      string row = "";
@@ -75,28 +76,31 @@ namespace Controllers
             }
             switch (_States.MysqlState)
             {
+                    
                 case MysqlState.Initialise:
-
-
-
-                    ///   MySql INIZALISIERN ///
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(20000, 35000));
-                    stringstate = _States.MysqlState.ToString();
-                    shipname = Frame.Client.GetActiveShip.GivenName;
-                    charid = Frame.Client.Session.CharId;
-
-
-                    DateTime currentDate = DateTime.Now;
-                    int h = currentDate.Hour;
-                    int m = currentDate.Minute;
-                    Frame.Log(h + ":" + m);
-                    starttime = (h + ":" + m);
-
- 
+                    if (Frame.Client.Session.InStation == true || Frame.Client.Session.InSpace == true)
+                    {
+                        ///   MySql INIZALISIERN ///
+                        _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 3500));
+                        stringstate = _States.MysqlState.ToString();
+                        shipname = Frame.Client.GetActiveShip.GivenName;
+                        charid = Frame.Client.Session.CharId;
 
 
 
-                    _States.MysqlState = MysqlState.Start;
+                        DateTime currentDate = DateTime.Now;
+                        int h = currentDate.Hour;
+                        int m = currentDate.Minute;
+                        Frame.Log(h + ":" + m);
+                        starttime = (h + ":" + m);
+
+
+
+
+
+                        _States.MysqlState = MysqlState.Start;
+                    }
                     break;
 
 
@@ -142,7 +146,7 @@ namespace Controllers
     
         public void sqlcheck()
         {
-            string connString = "Server=127.0.0.1;Uid=root;Pwd=;Database=evetest;";
+            string connString = "Server=192.168.0.21;Uid=root;Pwd=;Database=evetest;";
             MySqlConnection connection = new MySqlConnection(connString);
              MySqlCommand command = connection.CreateCommand();
             command.CommandText = "SELECT id FROM evedaten";
