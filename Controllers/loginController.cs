@@ -120,7 +120,7 @@ namespace Controllers
                 case loginstate.selectchar:
 
 
-                    errorwait = DateTime.Now.AddMilliseconds(GetRandom(500000, 85000));
+                    errorwait = DateTime.Now.AddMilliseconds(GetRandom(50000, 85000));
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 3500));
                     Frame.Client.selectchar(charname);
                     Frame.Log("Selecting Char: "+ charname);

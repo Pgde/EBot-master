@@ -1001,6 +1001,7 @@ namespace Controllers
                         TravelController.desti = syssis.FirstOrDefault();
                         _States.TravelerState = TravelerState.Initialise;
                         _States.maincontrollerState = maincontrollerStates.homesysarriv;
+                        _States.MiningState = MiningState.wait;
                     }
                     else
                     {
