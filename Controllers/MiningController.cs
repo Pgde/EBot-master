@@ -165,6 +165,9 @@ namespace Controllers
 
                 case MiningState.Mining:
 
+               
+
+                 
                     if (Frame.Client.GetActiveShip.Miners.Count == 0)
                     {
                             _States.MiningState = MiningState.warphome;
@@ -537,7 +540,7 @@ namespace Controllers
                 case MiningState.letzgo:
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(18000, 50000));
                     targetast = null;                                                                                       // Setze Astroiden Target == Null
-                   if (Frame.Client.Session.InStation)
+                    if (Frame.Client.Session.InStation)
                     {
 
                         Frame.Client.ExecuteCommand(EveModel.EveCommand.CmdExitStation);
@@ -546,8 +549,22 @@ namespace Controllers
                     }
                     {
                         if (Frame.Client.Session.InSpace)
-                        _States.MiningState = MiningState.warptobelt;
-                      }
+                        {
+                            List<EveWindow> mywindow2;
+                            mywindow2 = Frame.Client.GetWindows;
+                            string con = "incursion";
+                            EveWindow ne = mywindow2.Where(x => x.Name.Contains(con)).FirstOrDefault();
+                            if (ne != null)
+                            {
+                              Frame.Log("NPC in Belt WARP HOME and blacklist");
+                              _States.MiningState = MiningState.changebook;
+                              break;
+                               
+                            }
+
+                            _States.MiningState = MiningState.warptobelt;
+                        }
+                    }
 
                     Frame.Log("Starte SQLtimecheck");
                     //      sqltimecheck();

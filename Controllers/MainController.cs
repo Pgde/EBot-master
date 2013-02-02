@@ -57,6 +57,7 @@ namespace Controllers
 
             switch (_States.maincontrollerState)
             {
+                              
                 case maincontrollerStates.Idle:
                     vollgeknallt = false;
                   Frame.Log("maincontrollerStates.Idle:");
@@ -314,7 +315,7 @@ namespace Controllers
             }
             public static void timecheck()
             {
-                if (DateTime.Now.Hour > 1 && DateTime.Now.Hour < 12)
+                if (DateTime.Now.Hour > 1 && DateTime.Now.Hour < 9)   // 12
                 {
                    
                     Process currentProcess = Process.GetCurrentProcess();
