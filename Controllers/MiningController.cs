@@ -886,7 +886,11 @@ namespace Controllers
                     }
                     Frame.Log("setze Destination");
                     Frame.Client.SetDestination(desti);
-                    
+
+
+                   
+
+
                     /*
                     List<EveBookmark> test2 = new List<EveBookmark>();
                      test2 = Frame.Client.GetMyBookmarks();
@@ -964,6 +968,19 @@ namespace Controllers
 
                 case MiningState.travStart:
 
+                    if (Frame.Client.Session.LocationId != syssis.FirstOrDefault())
+                    {
+                        TravelController.desti = syssis.FirstOrDefault();
+                        _States.TravelerState = TravelerState.Initialise;
+                        _States.maincontrollerState = maincontrollerStates.homesysarriv;
+                    }
+                    else
+                    {
+                        _States.maincontrollerState = maincontrollerStates.Idle;
+                        _States.MiningState = MiningState.Initialise;
+                    }
+
+/*
                     _currentLocation = 0;
 
                      if (Frame.Client.Session.InStation)
@@ -988,6 +1005,7 @@ namespace Controllers
                         Frame.Client.SetDestination(_destinationId);
                     }
                     _States.MiningState = MiningState.Start; 
+ * */
                     break;
 
 
