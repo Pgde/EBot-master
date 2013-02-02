@@ -847,7 +847,10 @@ namespace Controllers
                             if (marketitemZ != null)
                             {
                                 sellcount = sellcount + 1;
-                                marketitem = marketitemZ.OrderByDescending(x => x.price).Where(x => x.price > 15).First();        // first or default        
+                                if (marketitem == marketitemZ.OrderByDescending(x => x.price).Where(x => x.price > 15).First() != null)
+                                {
+                                    marketitem = marketitemZ.OrderByDescending(x => x.price).Where(x => x.price > 15).First();        // first or default    
+                                }
                                 }
 
 
