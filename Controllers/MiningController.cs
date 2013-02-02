@@ -86,9 +86,9 @@ namespace Controllers
             syssis.Add(Controllers.Settings.Settings.Instance.homesys2);                // Homesys2
             syssis.Add(Controllers.Settings.Settings.Instance.homesys3);                // Homesys3
             syssis.Add(Controllers.Settings.Settings.Instance.homesys4);                // Homesys4
-
-
-
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys5);
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys6);
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys7);
                 _States.MiningState = MiningState.wait;
         }
         public MiningController(long destinationId)
