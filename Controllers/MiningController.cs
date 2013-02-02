@@ -873,18 +873,22 @@ namespace Controllers
 
                 case MiningState.changebook:
                     EmptyBelts.Clear();
-
-
+                    int remove = Math.Min(syssis.Count, 1);
+                    if (syssis.Count <= 0)
+                    {
+                        _States.MiningState = MiningState.wait;
+                    }
                     long desti = syssis.FirstOrDefault();
                     if (desti == Frame.Client.Session.LocationId)
                     {
                         Frame.Log("wir befinden uns in diese system");
-                        int remove = Math.Min(syssis.Count, 1);
+                        remove = Math.Min(syssis.Count, 1);
                         syssis.RemoveRange(0, remove);
                         Frame.Log("ersten listeneintrag gelöscht");
                         break;
                     }
                     Frame.Log("setze Destination");
+                    syssis.RemoveRange(0, remove);
                     Frame.Client.SetDestination(desti);
 
 
