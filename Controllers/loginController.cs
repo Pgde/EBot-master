@@ -77,7 +77,7 @@ namespace Controllers
 
 
                 case loginstate.login:
-                    errorwait = DateTime.Now.AddMilliseconds(GetRandom(20000, 35000));
+                    errorwait = DateTime.Now.AddMilliseconds(GetRandom(50000, 55000));
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 3500));
                     failcount++;
                     if (failcount > maxfails)
@@ -112,7 +112,7 @@ namespace Controllers
                     if (Frame.Client.ischarsel())
                     {
                         _States.LoginState = loginstate.selectchar;
-                        errorwait = DateTime.Now.AddMilliseconds(GetRandom(20000, 35000));
+                        errorwait = DateTime.Now.AddMilliseconds(GetRandom(50000, 85000));
                         break;
                     }
                     break;
@@ -120,7 +120,7 @@ namespace Controllers
                 case loginstate.selectchar:
 
 
-                    errorwait = DateTime.Now.AddMilliseconds(GetRandom(20000, 35000));
+                    errorwait = DateTime.Now.AddMilliseconds(GetRandom(500000, 85000));
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 3500));
                     Frame.Client.selectchar(charname);
                     Frame.Log("Selecting Char: "+ charname);
@@ -134,14 +134,14 @@ namespace Controllers
                         _States.LoginState = loginstate.Error;
                         break;
                     }
-                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(40000, 40000));
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(10000, 20000));
 
                     Frame.Log("Waiting for Ingame");
 
                     if (Frame.Client.Session.InStation)                 //dreckig da muss es nen besseren weg geben aber fürs erste sollts reichen
                     {
                         MainController.logintimer = DateTime.Now.AddMinutes(1);
-                        _localPulse = DateTime.Now.AddMilliseconds(GetRandom(40000, 40000));
+                        _localPulse = DateTime.Now.AddMilliseconds(GetRandom(10000, 15000));
                         _States.LoginState = loginstate.Idle;
                         _States.maincontrollerState = maincontrollerStates.Startup;
                         break;
@@ -150,7 +150,7 @@ namespace Controllers
                     if (Frame.Client.Session.InSpace)
                     {
                         MainController.logintimer = DateTime.Now.AddMinutes(1);
-                        _localPulse = DateTime.Now.AddMilliseconds(GetRandom(40000, 55000));
+                        _localPulse = DateTime.Now.AddMilliseconds(GetRandom(10000,15000));
                         _States.LoginState = loginstate.Idle;
                         _States.maincontrollerState = maincontrollerStates.Startup;
                         break;
