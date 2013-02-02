@@ -315,7 +315,7 @@ namespace Controllers
             }
             public static void timecheck()
             {
-                if (DateTime.Now.Hour > 1 && DateTime.Now.Hour < 9)   // 12
+                if (DateTime.Now.Hour > 1 && DateTime.Now.Hour < 13)   // 13
                 {
                    
                     Process currentProcess = Process.GetCurrentProcess();
