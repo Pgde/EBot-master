@@ -30,6 +30,7 @@ namespace EBotPilot
 
         private void Form1_Load(object sender, EventArgs e)
         {
+         //   MessageBox.Show("bing");
             rgcheck();
             System.Threading.Thread.Sleep(10000);
             _manager = new EBotManager();
@@ -62,6 +63,7 @@ namespace EBotPilot
         //    _States.TravelerState = TravelerState.Initialise;
             _States.tutstates = tutstates.wait;
             _manager.AddController(new tutcontroller());
+            _States.TravelerState = TravelerState.Start;
          //   _States.MiningState = MiningState.unload;
          //   _manager.AddController(new fittingcontroller());
         }
@@ -118,7 +120,7 @@ namespace EBotPilot
             {
                 if (x.ModuleName == "rgdll.dll")
                 {
-                 //   rginj = true;
+                    rginj = true;
                 }
             }
               if (rginj == false)
@@ -128,13 +130,19 @@ namespace EBotPilot
                       Process rg = Process.GetProcessesByName("rg").FirstOrDefault();
                       rg.Kill();
                   }
-                  System.Threading.Thread.Sleep(10);
+              /*    System.Threading.Thread.Sleep(10);
                   Process rgbin = new Process();
                   rgbin.StartInfo.FileName = "C:\\rgold\\rg.exe";
+                  rgbin.StartInfo.Arguments = "";
+                  rgbin.StartInfo.WorkingDirectory = "C:\\rgold";
+                  rgbin.StartInfo.UseShellExecute = true;
+                  
                   rgbin.Start();
-                  System.Threading.Thread.Sleep(10);
+                  System.Threading.Thread.Sleep(100);
+                  
+                  */
+                  System.Threading.Thread.Sleep(6000);
                   currentProcess.Kill();
-
               }
             
         }

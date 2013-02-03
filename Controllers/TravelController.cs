@@ -11,7 +11,7 @@ namespace Controllers
         long _destinationId, _currentLocation, _currentDestGateId;
         bool _waitforsessionChange;
         public static long desti { get; set; }
- 
+        public DateTime idelout;
 
         public TravelController()
         {
@@ -34,6 +34,7 @@ namespace Controllers
 
 
                 case TravelerState.Initialise:
+                    idelout = DateTime.Now.AddMinutes(3);
                     _currentLocation = 0;
                     _destinationId = desti;
                     _destinationId = _destinationId > 0 ? _destinationId : Frame.Client.GetLastWaypointLocationId();
@@ -100,14 +101,22 @@ namespace Controllers
                         {
                             destEntity.JumpStargate();
                             Frame.Log("Warping to and jumping through stargate - " + destEntity.Name);
+                            idelout = DateTime.Now.AddMinutes(3);
                         }
                         else if (destEntity.Group == Group.Station)
                         {
                             destEntity.Dock();
                             Frame.Log("Warping to and docking at station - " + destEntity.Name);
+                            idelout = DateTime.Now.AddMinutes(3);
                         }
                         _currentLocation = Frame.Client.Session.LocationId;
+                        
                     }
+                    if (DateTime.Now > idelout)
+                    {
+                        _currentLocation = 0;
+                    }
+
                     break;
 
 

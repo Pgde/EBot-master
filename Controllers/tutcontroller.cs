@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using EveModel;
 using global::Controllers.states;
+using System.IO;
 
 namespace Controllers
 {
@@ -18,8 +19,8 @@ namespace Controllers
 
         DateTime errorwait = DateTime.Now;
         string TutAgent = "Abishi Tian";
-
-
+        public static int csystem = 0;
+       
 
 
 
@@ -179,11 +180,30 @@ namespace Controllers
                 case tutstates.wait:
 
 
-                    Frame.Log(Frame.Client.Session.LocationId);
-                    if (Frame.Client.incursionaktiv() == true)
+                    if (Frame.Client.Session.SystemSecurity >= 0.9 && csystem != Frame.Client.Session.SolarSystemId)
                     {
-                        Frame.Log("Incursion aktiv");
-                    }
+                        if (Frame.Client.Entities.Where(i => i.Group == Group.Station).Any())
+                        {
+                            Frame.Log(Frame.Client.Entities.Where(i => i.Group == Group.Station).FirstOrDefault().Id);
+                            Frame.Log(Frame.Client.Entities.Where(i => i.Group == Group.Station).FirstOrDefault().Name);
+                            Frame.Log(Frame.Client.Entities.Where(i => i.Group == Group.Station).FirstOrDefault().LocationId);
+                            Frame.Log(Frame.Client.GetLocalChat.MemberCount);
+
+                            string path = @"c:\syses.txt";
+                          using (StreamWriter sw = File.AppendText(path))
+                          {
+                               sw.WriteLine(Frame.Client.Entities.Where(i => i.Group == Group.Station).FirstOrDefault().Id);
+                               sw.WriteLine(Frame.Client.Entities.Where(i => i.Group == Group.Station).FirstOrDefault().Name);
+                               sw.WriteLine("People in Space: " + Frame.Client.GetLocalChat.MemberCount);
+                            }    
+                        }
+           }
+
+
+                        
+                        csystem = Frame.Client.Session.SolarSystemId;
+                    
+
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(200000000, 350000000));      //dirty 
                     break;
                 
