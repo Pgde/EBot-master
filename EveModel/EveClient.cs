@@ -1359,6 +1359,23 @@ namespace EveModel
             Frame.Client.GetService("marketQuote").CallMethod("RefreshJumps", new object[] { item.TypeId }, true);
         }
 
+        public bool incursionaktiv()
+        {
+            List<int> incursedsystems = new List<int>();
+           incursedsystems = Frame.Client.GetService("incursion")["incursionData"]["incursedSystems"].GetList<int>();
+
+            if (incursedsystems.Count > 0)
+            {
+                foreach (int sys in incursedsystems)
+                {
+                    if (sys == Frame.Client.Session.SolarSystemId)
+                        return true;
+                }
+            }
+            return false;
+      
+        }
+
         public List<EveEntity> GetNPCTargets()
         {
             return Entities.Where(

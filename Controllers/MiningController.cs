@@ -551,11 +551,12 @@ namespace Controllers
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(18000, 50000));
                     targetast = null;                                                                                       // Setze Astroiden Target == Null
                     
-                        List<EveWindow> mywindow2;
+                   /*     List<EveWindow> mywindow2;
                         mywindow2 = Frame.Client.GetWindows;
                         string con = "incursion";
                         EveWindow ne = mywindow2.Where(x => x.Name.Contains(con)).FirstOrDefault();
-                        if (ne != null)
+                      */
+                    if (Frame.Client.incursionaktiv())
                         {
                             Frame.Log("NPC in Belt WARP HOME and blacklist");
                             _States.MiningState = MiningState.changebook;

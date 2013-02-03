@@ -180,6 +180,10 @@ namespace Controllers
 
 
                     Frame.Log(Frame.Client.Session.LocationId);
+                    if (Frame.Client.incursionaktiv() == true)
+                    {
+                        Frame.Log("Incursion aktiv");
+                    }
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(200000000, 350000000));      //dirty 
                     break;
                 
