@@ -8,6 +8,8 @@ using System.Text;
 using System.Windows.Forms;
 using Controllers;
 using Controllers.states;
+using System.Diagnostics;
+
 namespace EBotPilot
 {
     public partial class Form1 : Form
@@ -28,7 +30,7 @@ namespace EBotPilot
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            rgcheck();
             System.Threading.Thread.Sleep(10000);
             _manager = new EBotManager();
             Controllers.Settings.Settings.Instance.LoadSettings();
@@ -106,6 +108,36 @@ namespace EBotPilot
        //     _States.SkillState = SkillState.Initialise;
        }
 
+        private void rgcheck()
+        {
+            bool rginj = false;
+            Process currentProcess = Process.GetCurrentProcess();
+            int pid = currentProcess.Id;
+            ProcessModuleCollection t = currentProcess.Modules;
+            foreach (ProcessModule x in t)
+            {
+                if (x.ModuleName == "rgdll.dll")
+                {
+                 //   rginj = true;
+                }
+            }
+              if (rginj == false)
+              {
+                  if (Process.GetProcessesByName("rg").Any())
+                  {
+                      Process rg = Process.GetProcessesByName("rg").FirstOrDefault();
+                      rg.Kill();
+                  }
+                  System.Threading.Thread.Sleep(10);
+                  Process rgbin = new Process();
+                  rgbin.StartInfo.FileName = "C:\\rgold\\rg.exe";
+                  rgbin.Start();
+                  System.Threading.Thread.Sleep(10);
+                  currentProcess.Kill();
+
+              }
+            
+        }
         #region Old Code
         //void eveFrame_OnFrame(object sender, EventArgs e)
         //{

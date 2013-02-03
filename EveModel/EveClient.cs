@@ -1346,6 +1346,8 @@ namespace EveModel
 
         }
 
+
+
         public float maxActiveDrones
         {
             get
