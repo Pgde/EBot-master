@@ -918,13 +918,17 @@ namespace EveModel
             return tmp3.ConvertAll<EveMarketOrder>(EveObject2EveMarketOrder);
         }
 
-     /*   public List<EveSkill> GetMySkills()
-        {
-            List<EveObject> mys;
-           mys = Frame.Client.SkillService["myskills"].GetList<EveObject>();
-           return mys.ConvertAll<EveSkill>(EveObject2EveSkill);
-        }
+        /*   public List<EveSkill> GetMySkills()
+           {
+               List<EveObject> mys;
+              mys = Frame.Client.SkillService["myskills"].GetList<EveObject>();
+              return mys.ConvertAll<EveSkill>(EveObject2EveSkill);
+           }
+         * 
+         * def Sell(self, typeID, invItem = None, placeOrder = 0):
+
 */
+
         public List<EveSkill> GetMySkills()
         {
             List<EveObject> mys;

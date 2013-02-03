@@ -86,7 +86,7 @@ namespace Controllers
                         stringstate = _States.MysqlState.ToString();
                         shipname = Frame.Client.GetActiveShip.GivenName;
                         charid = Frame.Client.Session.CharId;
-
+                        charname = Frame.Client.Charname;
 
 
                         DateTime currentDate = DateTime.Now;
@@ -176,7 +176,7 @@ namespace Controllers
                  sqlsettime();
                  command.CommandText = "Update evedaten SET id='" + charid.ToString() +"' WHERE id='" + rowid +"'";
                  command.ExecuteNonQuery();
-                 command.CommandText = "Update evedaten SET name='testjehaha' WHERE id='" + rowid + "'";
+                 command.CommandText = "Update evedaten SET name='" + charname + "' WHERE id='" + rowid + "'";
                  command.ExecuteNonQuery();
                  command.CommandText = "Update evedaten SET state='" + stringstate.ToString() + "' WHERE id='" + rowid + "'";
                  command.ExecuteNonQuery();
