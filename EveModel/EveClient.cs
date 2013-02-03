@@ -1332,6 +1332,20 @@ namespace EveModel
             
             return true;
         }
+       
+    
+        public bool RemoveSkillFromQueue(EveSkill skill, int skilllvl) //needs testing
+        {
+               if (Frame.Client.GetService("skillqueue").IsValid)
+                {
+                    Frame.Client.GetService("skillqueue").CallMethod("RemoveSkillFromQueue", new object[] { skill.typeID, skilllvl }, true);
+                    return true;
+                }
+                return false;
+            
+
+        }
+
         public float maxActiveDrones
         {
             get
