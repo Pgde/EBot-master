@@ -31,7 +31,7 @@ namespace Controllers
 
         string minersactiv = "Aus";
         string shipname = "";
-        string stringstate = "";
+       public static string stringstate = "";
         string aktime = "";
         string starttime = "";
 
@@ -105,7 +105,8 @@ namespace Controllers
 
 
                 case MysqlState.Start:
-                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(20000, 35000));  
+                    _localPulse = DateTime.Now.AddMilliseconds(GetRandom(20000, 35000));
+                    stringstate = _States.MysqlState.ToString() + "//Minig:" + _States.MiningState.ToString() + "//Maincont:" + _States.maincontrollerState.ToString() + "//buycont" + _States.BuyControllerState.ToString();
                     sqlsettime();
                     sqlcheck();
                     break;
