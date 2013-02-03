@@ -33,8 +33,8 @@ namespace Controllers
         
         public static int itemid { get; set; }
         public static int dronenmoeglich { get; set; }
-        long? skilldronen = 3436;
-        long? skilldronenop = 3438;
+        //long? skilldronen = 3436;
+        //long? skilldronenop = 3438;
         bool firstread = false;
         string[] bung2;
         string[] bung2logout;

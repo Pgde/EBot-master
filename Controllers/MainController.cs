@@ -315,13 +315,27 @@ namespace Controllers
             }
             public static void timecheck()
             {
-                if (DateTime.Now.Hour > 1 && DateTime.Now.Hour < 13)   // 13
+                if (Settings.Settings.Instance.timecheckbool == true)
                 {
-                   
-                    Process currentProcess = Process.GetCurrentProcess();
-                    currentProcess.Kill();
-                }
+                    if (DateTime.Now.Hour > 1 && DateTime.Now.Hour < 13)   // 13
+                    {
 
+                        Process currentProcess = Process.GetCurrentProcess();
+                        currentProcess.Kill();
+                    }
+                }
+            }
+
+            public static void emztimecheck() //for sql controller make sure after 2 they are gone
+            {
+                if (Settings.Settings.Instance.timecheckbool == true)
+                {
+                    if (DateTime.Now.Hour > 2 && DateTime.Now.Hour < 13)   // 13
+                    {
+                        Process currentProcess = Process.GetCurrentProcess();
+                        currentProcess.Kill();
+                    }
+                }
             }
             
         }

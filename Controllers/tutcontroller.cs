@@ -82,7 +82,7 @@ namespace Controllers
                         _States.tutstates = tutstates.start;
                     }
                    break;
-                    break;
+                
 
                 case tutstates.getmission:
                      _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 3500));

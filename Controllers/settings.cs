@@ -30,7 +30,8 @@ namespace Controllers.Settings
         public long homesys6 { get; set; }
         public long homesys7 { get; set; }
         public List<String> Skilllist {get; set;}
-
+        public string timechecktmp { get; set; }
+        public bool timecheckbool { get; set; }
         public void rndhomesys()
         {
             Random random = new Random();
@@ -85,6 +86,7 @@ namespace Controllers.Settings
                         Charname = (string)xml.Element("Charname") ?? "";
                         Accname = (string)xml.Element("Accname") ?? "";
                         Pw = (string)xml.Element("Pw") ?? "";
+                        timechecktmp = (string)xml.Element("timecheck") ?? "true";
                         homesys1 = (long)xml.Element("homesys1");
                         homesys2 = (long)xml.Element("homesys2");
                         homesys3 = (long)xml.Element("homesys3");
@@ -119,6 +121,16 @@ namespace Controllers.Settings
 
                 }
                 rndhomesys();
+
+                if (timechecktmp == "true")
+                {
+                    timecheckbool = true;
+                }
+                else
+                {
+                    timecheckbool = false;
+                }
+
             Frame.Log(homesys);
         }
 

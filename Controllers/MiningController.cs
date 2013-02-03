@@ -86,9 +86,9 @@ namespace Controllers
             syssis.Add(Controllers.Settings.Settings.Instance.homesys2);                // Homesys2
             syssis.Add(Controllers.Settings.Settings.Instance.homesys3);                // Homesys3
             syssis.Add(Controllers.Settings.Settings.Instance.homesys4);                // Homesys4
-            syssis.Add(Controllers.Settings.Settings.Instance.homesys5);
-            syssis.Add(Controllers.Settings.Settings.Instance.homesys6);
-            syssis.Add(Controllers.Settings.Settings.Instance.homesys7);
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys5);                // homesys5
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys6);                // homesys6
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys7);                // homesys7
                 _States.MiningState = MiningState.wait;
         }
         public MiningController(long destinationId)
@@ -842,14 +842,14 @@ namespace Controllers
                                 break;
                             }
                            
-                             double t = 1228;
+                           //  double t = 1228;
                             List<EveMarketOrder> marketitemZ = markyord.Where(x => x.typeID == itemsZZ.TypeId).Where(x => x.inrange == true).Where(x => x.bid == true).ToList();
                             if (marketitemZ != null)
                             {
                                 sellcount = sellcount + 1;
-                                if (marketitem == marketitemZ.OrderByDescending(x => x.price).Where(x => x.price > 15).First() != null)
+                                if (marketitemZ.OrderByDescending(x => x.price).Where(x => x.price > 13).Any())
                                 {
-                                    marketitem = marketitemZ.OrderByDescending(x => x.price).Where(x => x.price > 15).First();        // first or default    
+                                    marketitem = marketitemZ.OrderByDescending(x => x.price).Where(x => x.price > 13).First();        // first or default    
                                 }
                                 }
 
