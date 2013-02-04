@@ -957,6 +957,7 @@ namespace Controllers
                         Frame.Log("ersten listeneintrag gelöscht");
                         break;
                     }
+                    Settings.Settings.Instance.homesys = desti;
                     Frame.Log("setze Destination");
                     syssis.RemoveRange(0, remove);
                     Frame.Client.SetDestination(desti);
