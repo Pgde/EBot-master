@@ -30,7 +30,9 @@ namespace Controllers
         List<int> logoutlisteint = new List<int>();
         List<EveItem> ersteitemlistee = new List<EveItem>();
          List<EveSkill> logoutitemliste = new List<EveSkill>();
-        
+
+
+        List<int> skillint = new List<int>();
         public static int itemid { get; set; }
         public static int dronenmoeglich { get; set; }
         //long? skilldronen = 3436;
@@ -43,6 +45,8 @@ namespace Controllers
         public static bool miner2rdy { get; set; }
         public static bool mlu1rdy { get; set; }
         public static bool firstlogin { get; set; }
+
+        public static bool starteritem { get; set; }
         
         
 
@@ -74,7 +78,15 @@ namespace Controllers
             miner2rdy = false;
             mlu1rdy = false;
             firstlogin = true;
-          
+            starteritem = false;
+
+            skillint.Add(22578); // Mining Upgrade
+            skillint.Add(3436); // Dronen
+            skillint.Add(3438);  // DronenOP
+            skillint.Add(3402); // Sience
+            skillint.Add(3410); // astrology
+
+
         }
 
 
@@ -118,6 +130,9 @@ namespace Controllers
                     List<EveSkill> neueskill = Frame.Client.GetMySkills();
                     List<EveQskill> neueQskill = Frame.Client.GetMyQueue();
                                                
+
+
+
                     long miner2 = 3386;    // Mining
                     long mlu1 = 22578;       // Mining upgrade
                     EveSkill miner2fit = neueskill.Where(x => x.typeID == miner2).FirstOrDefault();
@@ -160,9 +175,12 @@ namespace Controllers
                     Frame.Log("................");
 
 
-                
-                  
+                 Frame.Log("Checke Starter Items");
+              
+
                    
+
+
 
 
                     //        string skillscience = "3402";                                                                                                                            // typids der skills
