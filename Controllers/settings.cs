@@ -29,6 +29,13 @@ namespace Controllers.Settings
         public long homesys5 { get; set; }
         public long homesys6 { get; set; }
         public long homesys7 { get; set; }
+        public long homesys8 { get; set; }
+        public long homesys9 { get; set; }
+        public long homesys10 { get; set; }
+        public long homesys11 { get; set; }
+        public long homesys12 { get; set; }
+        public long homesys13 { get; set; }
+        public long homesys14 { get; set; }
         public List<String> Skilllist {get; set;}
         public string timechecktmp { get; set; }
         public bool timecheckbool { get; set; }
@@ -64,6 +71,35 @@ namespace Controllers.Settings
             {
                 homesys = homesys7;
             }
+
+            if (i == 8)
+            {
+                homesys = homesys8;
+            }
+            if (i == 9)
+            {
+                homesys = homesys9;
+            }
+            if (i == 10)
+            {
+                homesys = homesys10;
+            }
+            if (i == 11)
+            {
+                homesys = homesys11;
+            }
+            if (i == 12)
+            {
+                homesys = homesys12;
+            }
+            if (i == 13)
+            {
+                homesys = homesys13;
+            }
+            if (i == 14)
+            {
+                homesys = homesys14;
+            }
         }
 
 
@@ -94,6 +130,13 @@ namespace Controllers.Settings
                         homesys5 = (long)xml.Element("homesys5");
                         homesys6 = (long)xml.Element("homesys6");
                         homesys7 = (long)xml.Element("homesys7");
+                        homesys8 = (long)xml.Element("homesys8");
+                        homesys9 = (long)xml.Element("homesys9");
+                        homesys10 = (long)xml.Element("homesys10");
+                        homesys11 = (long)xml.Element("homesys11");
+                        homesys12 = (long)xml.Element("homesys12");
+                        homesys13 = (long)xml.Element("homesys13");
+                        homesys14 = (long)xml.Element("homesys14");
                     }
                     catch (Exception exception)
                     {

@@ -187,6 +187,7 @@ namespace Controllers
 
 
                     case BuyControllerStates.buyjita:
+                    MysqlController.lastaction = DateTime.Now; 
 
                     if (Frame.Client.GetService("marketQuote").IsValid != true)
                     {

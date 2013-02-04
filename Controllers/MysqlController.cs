@@ -21,7 +21,8 @@ namespace Controllers
         ////////////////////////////////////////////////////////
         ///////////          MySql VARIABLEN        ////////
 
-        int stationtrip = 0;
+       public static int stationtrip = 0;
+       public static DateTime lastaction = DateTime.Now;
         int charid;
         string charname;
         bool charon = false;
@@ -87,16 +88,16 @@ namespace Controllers
                         shipname = Frame.Client.GetActiveShip.GivenName;
                         charid = Frame.Client.Session.CharId;
                         charname = Frame.Client.Charname;
-
-
+                        fullcapcargo = Frame.Client.wealth();
+                        usdcapcargo = Frame.Client.qlengdouble; //not working yet
+                        string system = Frame.Client.Session.SolarSystemId.ToString(); //solid
                         DateTime currentDate = DateTime.Now;
                         int h = currentDate.Hour;
                         int m = currentDate.Minute;
                         Frame.Log(h + ":" + m);
                         starttime = (h + ":" + m);
 
-
-
+            
 
 
                         _States.MysqlState = MysqlState.Start;
@@ -106,7 +107,7 @@ namespace Controllers
 
                 case MysqlState.Start:
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(20000, 35000));
-                    stringstate = _States.MysqlState.ToString() + "//Minig:" + _States.MiningState.ToString() + "//Maincont:" + _States.maincontrollerState.ToString() + "//buycont" + _States.BuyControllerState.ToString();
+                    stringstate = "//MySqlctrl: " + _States.MysqlState.ToString() + " //Minig: " + _States.MiningState.ToString() + " //Maincont: " + _States.maincontrollerState.ToString() + " //buyctrl: " + _States.BuyControllerState.ToString() + " //travlctrl: " + _States.TravelerState.ToString();
                     sqlsettime();
                     sqlcheck();
                     break;

@@ -121,11 +121,13 @@ namespace Controllers
 
 
                 case TravelerState.ArrivedAtDestination:
+                    MysqlController.lastaction = DateTime.Now; 
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(4000, 6000));
                     Frame.Log("Destination reached");
                     break;
 
                 case TravelerState.wait:
+                    MysqlController.lastaction = DateTime.Now; 
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(4000, 6000));
                     Frame.Log("waiting");
                     break;

@@ -33,7 +33,6 @@ namespace Controllers
         long itemzahl = 0;
         long itemwert = 0;
         string minersactiv = "Aus";
-        int stationtrip = 0;
         List<string> skilltotrainid = new List<string>();
         List<string> skillZ = new List<string>();
         List<long> syssis = new List<long>();
@@ -89,6 +88,14 @@ namespace Controllers
             syssis.Add(Controllers.Settings.Settings.Instance.homesys5);                // homesys5
             syssis.Add(Controllers.Settings.Settings.Instance.homesys6);                // homesys6
             syssis.Add(Controllers.Settings.Settings.Instance.homesys7);                // homesys7
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys8);                // Homesys8
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys9);                // Homesys9
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys10);                // Homesys10
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys11);                // Homesys11
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys12);                // homesys12
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys13);                // homesys13
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys14);                // homesys14
+
                 _States.MiningState = MiningState.wait;
         }
         public MiningController(long destinationId)
@@ -646,6 +653,7 @@ namespace Controllers
                         }
                         else
                         {
+                           
                             _States.MiningState = MiningState.Mining;
                          }
                     }
@@ -663,7 +671,7 @@ namespace Controllers
                     break;
 
                 case MiningState.unload:
-
+                    MysqlController.lastaction = DateTime.Now; 
                     if (Frame.Client.GetService("marketQuote") == null)
                     {
                         break;
@@ -794,7 +802,7 @@ namespace Controllers
                     if (sellcount > 10)
                     {
                         sellcount = 0;
-                        stationtrip = (stationtrip + 1);
+                        MysqlController.stationtrip = (MysqlController.stationtrip + 1);
                         Frame.Log("sellerror, quickfix for the moment");                                                                                // Log buchausgabe
                         // Abdocken und losfliegen
                         _States.MiningState = MiningState.wait;
@@ -881,11 +889,11 @@ namespace Controllers
                             break;
 
                         }
-                     
-                        
 
 
-                    stationtrip = (stationtrip + 1);
+
+
+                        MysqlController.stationtrip = (MysqlController.stationtrip + 1);
                     Frame.Log("keine items mehr wieder losfliegen");                                                                                // Log buchausgabe
                     sellcount = 0;                                                    // Abdocken und losfliegen
                     _States.MiningState = MiningState.wait;
@@ -897,6 +905,7 @@ namespace Controllers
 
 
                 case MiningState.changebook:
+                    MysqlController.lastaction = DateTime.Now; 
                     EmptyBelts.Clear();
                     int remove = Math.Min(syssis.Count, 1);
                     if (syssis.Count <= 0)

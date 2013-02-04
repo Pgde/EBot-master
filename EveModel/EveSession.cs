@@ -57,6 +57,7 @@ namespace EveModel
         }
         #endregion
 
+
         #region NextSessionChange
         private DateTime? _nextSessionChange;
         /// <summary>
