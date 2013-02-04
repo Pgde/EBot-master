@@ -42,7 +42,7 @@ namespace Controllers.Settings
         public void rndhomesys()
         {
             Random random = new Random();
-            int i = random.Next(1, 7); 
+            int i = random.Next(1, 14); 
             if (i == 1)
             {
                 homesys = homesys1;

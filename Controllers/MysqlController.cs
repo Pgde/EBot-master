@@ -110,6 +110,7 @@ namespace Controllers
                     stringstate = "//MySqlctrl: " + _States.MysqlState.ToString() + " //Minig: " + _States.MiningState.ToString() + " //Maincont: " + _States.maincontrollerState.ToString() + " //buyctrl: " + _States.BuyControllerState.ToString() + " //travlctrl: " + _States.TravelerState.ToString();
                     sqlsettime();
                     sqlcheck();
+                    MainController.emztimecheck();
                     break;
 
                 case MysqlState.wait:

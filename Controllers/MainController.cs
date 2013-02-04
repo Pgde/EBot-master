@@ -317,7 +317,7 @@ namespace Controllers
             {
                 if (Settings.Settings.Instance.timecheckbool == true)
                 {
-                    if (DateTime.Now.Hour > 1 && DateTime.Now.Hour < 13)   // 13
+                    if (DateTime.Now.Hour > 0 && DateTime.Now.Hour < 13)   // 13
                     {
 
                         Process currentProcess = Process.GetCurrentProcess();
