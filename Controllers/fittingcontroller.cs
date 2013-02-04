@@ -289,7 +289,7 @@ namespace Controllers
                      if (_States.BuyControllerState == BuyControllerStates.done)
                      {
                          _States.BuyControllerState = BuyControllerStates.Idle;
-                         _States.fittingstate = fittingstate.fitt2miner;
+                         _States.fittingstate = fittingstate.fitt2miner2;
                      }
                          break;
 
