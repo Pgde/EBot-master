@@ -95,6 +95,42 @@ namespace Controllers
             syssis.Add(Controllers.Settings.Settings.Instance.homesys12);                // homesys12
             syssis.Add(Controllers.Settings.Settings.Instance.homesys13);                // homesys13
             syssis.Add(Controllers.Settings.Settings.Instance.homesys14);                // homesys14
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys15);                // Homesys15
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys16);                // Homesys16
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys17);                // Homesys17
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys18);                // Homesys18
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys19);                // homesys19
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys20);                // homesys20
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys21);                // homesys21
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys22);                // Homesys22
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys23);                // Homesys23
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys24);                // Homesys24
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys25);                // Homesys25
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys26);                // homesys26
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys27);                // homesys27
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys28);                // homesys28
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys29);                // Homesys29
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys30);                // Homesys30
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys31);                // Homesys31
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys32);                // Homesys32
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys33);                // homesys33
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys34);                // homesys34
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys35);                // homesys35
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys36);                // Homesys36
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys37);                // Homesys37
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys38);                // Homesys38
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys39);                // Homesys39
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys40);                // homesys40
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys41);                // homesys41
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys42);                // homesys42
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys43);                // Homesys43
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys44);                // Homesys44
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys45);                // Homesys45
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys46);                // Homesys46
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys47);                // homesys47
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys48);                // homesys48
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys49);                // homesys49
+            syssis.Add(Controllers.Settings.Settings.Instance.homesys50);                // Homesys50
 
                 _States.MiningState = MiningState.wait;
         }
