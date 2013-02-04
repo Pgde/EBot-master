@@ -61,9 +61,9 @@ namespace EBotPilot
         //    _manager.AddController(new TravelController());
         //    TravelController.desti = 60003760;
         //    _States.TravelerState = TravelerState.Initialise;
-            _States.tutstates = tutstates.wait;
-            _manager.AddController(new tutcontroller());
-            _States.TravelerState = TravelerState.Start;
+         //   _States.tutstates = tutstates.wait;
+         //   _manager.AddController(new tutcontroller());
+            _States.maincontrollerState = maincontrollerStates.endminingcycle;
          //   _States.MiningState = MiningState.unload;
          //   _manager.AddController(new fittingcontroller());
         }
