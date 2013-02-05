@@ -50,9 +50,10 @@ namespace Controllers
 
 
 
-        public static  long itemzahl { get; set; }
+        public static  double itemzahl { get; set; }
         public static long itemwert { get; set; }
-
+        public static double money { get; set; }
+        public static string akship { get; set; }
 
 
 
@@ -80,9 +81,13 @@ namespace Controllers
                     
                 case MysqlState.Initialise:
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(35000, 55000));
-                    if (Frame.Client.Session.InStation == true || Frame.Client.Session.InSpace == true)
+
+                      if (Frame.Client.Session.InStation == true || Frame.Client.Session.InSpace == true)
                     {
                         ///   MySql INIZALISIERN ///
+                        ///   
+                        akship = "0";
+                        money = Frame.Client.wealth();
                         _localPulse = DateTime.Now.AddMilliseconds(GetRandom(2000, 3500));
                         stringstate = _States.MysqlState.ToString();
                         shipname = Frame.Client.GetActiveShip.GivenName;
@@ -149,6 +154,8 @@ namespace Controllers
     
         public void sqlcheck()
         {
+            itemzahl = Frame.Client.wealth();  
+            akship = Frame.Client.GetActiveShip.TypeName;
             string connString = "Server=192.168.0.21;Uid=root;Pwd=;Database=evetest;";
             MySqlConnection connection = new MySqlConnection(connString);
              MySqlCommand command = connection.CreateCommand();
@@ -183,17 +190,17 @@ namespace Controllers
                  command.ExecuteNonQuery();
                  command.CommandText = "Update evedaten SET state='" + stringstate.ToString() + "' WHERE id='" + rowid + "'";
                  command.ExecuteNonQuery();
-                 command.CommandText = "Update evedaten SET shipname='test' WHERE id='" + rowid + "'";
+                 command.CommandText = "Update evedaten SET shipname='" + akship.ToString() + "' WHERE id='" + rowid + "'";
                  command.ExecuteNonQuery();
                  command.CommandText = "Update evedaten SET cargmax='" + fullcapcargo.ToString() + "' WHERE id='" + rowid + "'";
                  command.ExecuteNonQuery();
                  command.CommandText = "Update evedaten SET cargousd='" + usdcapcargo.ToString() + "' WHERE id='" + rowid + "'";
                  command.ExecuteNonQuery();
-                 command.CommandText = "Update evedaten SET minersactive='" + minersactiv.ToString() + "' WHERE id='" + rowid + "'";
+                 command.CommandText = "Update evedaten SET startmoney='" + money.ToString() + "' WHERE id='" + rowid + "'";                            // Kontostand beim einloggen
                  command.ExecuteNonQuery();
                  command.CommandText = "Update evedaten SET time='" + aktime.ToString() + "' WHERE id='" + rowid + "'";
                  command.ExecuteNonQuery();
-                 command.CommandText = "Update evedaten SET itemzahl='" + itemzahl.ToString() + "' WHERE id='" + rowid + "'";
+                 command.CommandText = "Update evedaten SET itemzahl='" + itemzahl.ToString() + "' WHERE id='" + rowid + "'";                   // Momentaner Kontosand
                  command.ExecuteNonQuery();
                  command.CommandText = "Update evedaten SET itemwert='" + itemwert.ToString() + "' WHERE id='" + rowid + "'";
                  command.ExecuteNonQuery();
@@ -207,9 +214,9 @@ namespace Controllers
             {
                 sqlsettime();
                 Frame.Log("Char id nicht Gefunden INSERT INTO");
-                command.CommandText = "INSERT INTO evedaten (id,name,state,shipname,cargmax,cargousd,minersactive,time,itemzahl,itemwert,starttime,stationtrip) VALUES ('" + charid.ToString() + "','Hans','" + stringstate.ToString() + "','shipname','" + fullcapcargo.ToString() + "', '" + usdcapcargo.ToString() + "', '" + minersactiv.ToString() + "','" + aktime.ToString() + "','" + itemzahl.ToString() + "', '" + itemwert.ToString() + "', '" + starttime.ToString() + "','" + stationtrip.ToString() +"')";
-               //                                                                                                                                                              charid               name            state                       shipname        usdcarg                             fullcarg                        minersactiv                         aktim                   itemwert                    itemzahl                            aktime                  stationtrip                         itemwert                        starttime                       stationtrip                         
-                command.ExecuteNonQuery();
+                command.CommandText = "INSERT INTO evedaten (id,name,state,shipname,cargmax,cargousd,startmoney,time,itemzahl,itemwert,starttime,stationtrip) VALUES ('" + charid.ToString() + "','Hans','" + stringstate.ToString() + "','shipname','" + fullcapcargo.ToString() + "', '" + usdcapcargo.ToString() + "', '" + money.ToString() + "','" + aktime.ToString() + "','" + itemzahl.ToString() + "', '" + itemwert.ToString() + "', '" + starttime.ToString() + "','" + stationtrip.ToString() + "')";
+               //                                                                                                                                                              charid               name            state                       shipname        usdcarg                             fullcarg                        minersactiv                         aktim                   itemwert                    Momentaner Kontostand           aktime                  stationtrip                         itemwert                        starttime                       stationtrip                         
+                command.ExecuteNonQuery();                                                                                                                                                                                                                                                                                  //            money
                                                                                           
             }
             

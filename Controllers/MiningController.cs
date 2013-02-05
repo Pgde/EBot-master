@@ -30,8 +30,7 @@ namespace Controllers
        // List<EveItem> items2;        // <--- OreHold
         List<long?> Emptysys = new List<long?>();
         int miningcount = 0;
-        long itemzahl = 0;
-        long itemwert = 0;
+        double itemwert = 0;
         string minersactiv = "Aus";
         List<string> skilltotrainid = new List<string>();
         List<string> skillZ = new List<string>();
@@ -593,6 +592,9 @@ namespace Controllers
 
                 case MiningState.letzgo:
                     _localPulse = DateTime.Now.AddMilliseconds(GetRandom(18000, 50000));
+                    //
+             //       MysqlController.akship = Frame.Client.GetActiveShip.TypeName;         // Setze für MySQL den Schiffcontroller
+                    //
                     targetast = null;                                                                                       // Setze Astroiden Target == Null
                     
                    /*     List<EveWindow> mywindow2;
@@ -744,86 +746,9 @@ namespace Controllers
                     {
                         Frame.Log("item gefunden");                                                                                                 // Logbuch items gefunden
                         EveItem itemZ = items.OrderBy(x => x.ItemId).FirstOrDefault();                                                              // Nimm das erste items in der liste
-                        itemzahl = (itemZ.Quantity);
-                        Frame.Log("itemzahl = " + itemzahl);
                         string namee = itemZ.TypeName;
                         Frame.Log("givenname = " + namee);
-
-                        if (namee == "Veldspar")
-                        {
-                            itemwert = itemwert + (itemzahl * Veldsparwert);
-                            Frame.Log(namee + " = " + (itemzahl * Veldsparwert) + " = " + itemwert);
-                            MysqlController.itemwert = itemwert;
-                        }
-                        if (namee == "Concentrated Veldspar")
-                        {
-                            itemwert = itemwert + (itemzahl * ConcentratedVeldsparwert);
-                            Frame.Log(namee + " = " + (itemzahl * ConcentratedVeldsparwert) + " = " + itemwert);
-                            MysqlController.itemwert = itemwert;
-                        }
-                        if (namee == "Dense Veldspar")
-                        {
-                            itemwert = itemwert = itemwert + (itemzahl * DenseVeldsparwert);
-                            Frame.Log(namee + " = " + (itemzahl * DenseVeldsparwert) + " = " + itemwert);
-                            MysqlController.itemwert = itemwert;
-                        }
-
-                        if (namee == "Scordite")
-                        {
-                            itemwert = itemwert = itemwert + (itemzahl * Scorditewert);
-                            Frame.Log(namee + " = " + (itemzahl * Scorditewert) + " = " + itemwert);
-                            MysqlController.itemwert = itemwert;
-                        }
-                        if (namee == "Condensed Scordite")
-                        {
-                            itemwert = itemwert = itemwert + (itemzahl * CondensedScordite);
-                            Frame.Log(namee + " = " + (itemzahl * CondensedScordite) + " = " + itemwert);
-                            MysqlController.itemwert = itemwert;
-                        }
-                        if (namee == "Massive Scordite")
-                        {
-                            itemwert = itemwert = itemwert + (itemzahl * MassiveScordite);
-                            Frame.Log(namee + " = " + (itemzahl * MassiveScordite) + " = " + itemwert);
-                            MysqlController.itemwert = itemwert;
-                        }
-
-                        if (namee == "Pyroxeres")
-                        {
-                            itemwert = itemwert = itemwert + (itemzahl * Pyroxeres);
-                            Frame.Log(namee + " = " + (itemzahl * Pyroxeres) + " = " + itemwert);
-                            MysqlController.itemwert = itemwert;
-                        }
-                        if (namee == "Solid Pyroxeres")
-                        {
-                            itemwert = itemwert = itemwert + (itemzahl * SolidPyroxeres);
-                            Frame.Log(namee + " = " + (itemzahl * SolidPyroxeres) + " = " + itemwert);
-                            MysqlController.itemwert = itemwert;
-                        }
-                        if (namee == "Viscous Pyroxeres")
-                        {
-                            itemwert = itemwert = itemwert + (itemzahl * ViscousPyroxeres);
-                            Frame.Log(namee + " = " + (itemzahl * ViscousPyroxeres) + " = " + itemwert);
-                            MysqlController.itemwert = itemwert;
-                        }
-
-                        if (namee == "Plagioclase")
-                        {
-                            itemwert = itemwert = itemwert + (itemzahl * Plagioclase);
-                            Frame.Log(namee + " = " + (itemzahl * Plagioclase) + " = " + itemwert);
-                            MysqlController.itemwert = itemwert;
-                        }
-                        if (namee == "Azure Plagioclase")
-                        {
-                            itemwert = itemwert = itemwert + (itemzahl * AzurePlagioclase);
-                            Frame.Log(namee + " = " + (itemzahl * AzurePlagioclase) + " = " + itemwert);
-                            MysqlController.itemwert = itemwert;
-                        }
-                        if (namee == "Rich Plagioclase")
-                        {
-                            itemwert = itemwert = itemwert + (itemzahl * RichPlagioclase);
-                            Frame.Log(namee + " = " + (itemzahl * RichPlagioclase) + " = " + itemwert);
-                            MysqlController.itemwert = itemwert;
-                        }
+                         
 
                         Frame.Client.GetItemHangar();
                         Frame.Client.GetPrimaryInventoryWindow.ItemHangar.Add(itemZ);                                                               // und füge es dem itemshangar hinzu
@@ -907,6 +832,8 @@ namespace Controllers
                                 return;
                             }
 
+                           
+
                             sellcount = sellcount + 1;
                             Frame.Log("Marketitem Name =  " + marketitem.Name);                                                                                                // Funktion für verkaufen infos
                             Frame.Log("Marketitem Price =  " + marketitem.price);
@@ -918,6 +845,7 @@ namespace Controllers
                             Frame.Log("Marketitem inrange =  " + marketitem.inrange);
                             marketitem.sell(verkaufsintemszahl, itemsZZ);
                             verkaufswertinsg = (marketitem.price * verkaufsintemszahl);
+                            itemwert = (itemwert + verkaufswertinsg);
                             Frame.Log("Verkaufswert =   " + verkaufswertinsg);
                             Frame.Log("setze marketitem wieder auf null");
                             marketitem = null;
