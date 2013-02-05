@@ -63,7 +63,7 @@ namespace EBotPilot
         //    _States.TravelerState = TravelerState.Initialise;
          //   _States.tutstates = tutstates.wait;
          //   _manager.AddController(new tutcontroller());
-            _States.maincontrollerState = maincontrollerStates.endminingcycle;
+            _States.MiningState = MiningState.warphome;
          //   _States.MiningState = MiningState.unload;
          //   _manager.AddController(new fittingcontroller());
         }

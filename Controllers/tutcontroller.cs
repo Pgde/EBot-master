@@ -37,7 +37,10 @@ namespace Controllers
 
         public override void DoWork()
         {
-
+            if (_localPulse > DateTime.Now || Frame.Client.Session.NextSessionChange > DateTime.Now)
+            {
+                return;
+            }
 
 
             switch (_States.tutstates)

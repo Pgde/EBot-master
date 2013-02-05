@@ -526,7 +526,8 @@ namespace Controllers
 
 
 
-                case MiningState.warphome:                                                                                         // Heimwarpen
+                case MiningState.warphome:     
+                _localPulse = DateTime.Now.AddMilliseconds(GetRandom(4500, 6500));     // Heimwarpen
                     minersactiv = "Aus";
                     if (Frame.Client.getinvopen() == false)
                     {
@@ -651,7 +652,7 @@ namespace Controllers
                             EveEntity station = Frame.Client.Entities.Where(i => i.Group == Group.Station).FirstOrDefault();        // Setze variablen der Station
                             Frame.Log("Docking");                                                                                   // Logbuch
                             station.Dock();                                                                                         // Docke an dieser station/Warp dahin
-                            _localPulse = DateTime.Now.AddMilliseconds(GetRandom(3000, 5000));                                      // Warte zwischen 3 und 5 Sekunden
+                            _localPulse = DateTime.Now.AddMilliseconds(GetRandom(10000, 15000));                                      // Warte zwischen 3 und 5 Sekunden
                                                                                // Setze state auf warphome
    
                         break;
