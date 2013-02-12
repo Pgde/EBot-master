@@ -505,8 +505,7 @@ namespace Controllers
                                       logoutlisteint.Add(aa4);
                                   }
                               }
-                              
-                              int anzahlinliste = logoutliste.Count;
+                                                      int anzahlinliste = logoutliste.Count;
                               string logliststring = logoutliste.FirstOrDefault();
                               int logliststringint = Convert.ToInt32(logliststring);
                               int loglistint = logoutlisteint.FirstOrDefault();

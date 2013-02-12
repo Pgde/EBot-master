@@ -32,7 +32,7 @@ namespace EBotPilot
         {
          //   MessageBox.Show("bing");
             rgcheck();
-            System.Threading.Thread.Sleep(10000);
+            System.Threading.Thread.Sleep(90000);
             _manager = new EBotManager();
             Controllers.Settings.Settings.Instance.LoadSettings();
             System.Threading.Thread.Sleep(10);
